@@ -1,0 +1,6 @@
+xxhash==1.3.0
+pandas==0.22.0
+Flask==1.0.2
+bokeh==1.0.2
+squiggle==0.3.1
+scikit_bio==0.5.4
