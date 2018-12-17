@@ -15,7 +15,6 @@ def index():
 @app.route("/seq_query")
 def seq_query():
     # takes a seq hash and returns a downsampled region
-
     df = pd.read_csv("data/" + str(request.args["hash"]) + ".csv")
     zone = df.loc[(float(request.args.get("x_max", df.x.max())) >= df.x) &
                   (float(request.args.get("x_min", df.x.min())) <= df.x)].values
@@ -32,6 +31,7 @@ def seq_query():
 def parse_fasta():
     # takes a fasta file and returns a list of the seq hashes
     results = []
+
     for seq in read([x.decode("ascii") for x in request.files["sequence"].readlines()], "fasta"):
         transformed = list(zip(*transform(str(seq))))
         seq_hash = str(xxhash.xxh64(str(seq)).intdigest())
@@ -40,7 +40,9 @@ def parse_fasta():
                 f.write("x,y\n")
                 for coord in transformed:
                     f.write("%f,%f\n" % (coord[0], coord[1]))
-        results.append(dict(seq_hash=seq_hash, seq_id=seq.metadata["id"]))
+        results.append(dict(seq_hash=seq_hash,
+                            seq_id=seq.metadata["id"],
+                            seq_filename=request.files["sequence"].filename))
     return jsonify(results)
 
 

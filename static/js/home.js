@@ -1,14 +1,29 @@
 var seqs = [];
 
 
-function getSeries(seq) {
+function getSeries(seq, x_min = null, x_max = null) {
   return axios.get('/seq_query', {
     params: {
       hash: seq.seq_hash,
-      seq_id: seq.seq_id
+      seq_id: seq.seq_id,
+      x_min: x_min,
+      x_max: x_max
     }
   })
 };
+
+function afterSetExtremes(e) {
+
+  var chart = Highcharts.charts[0];
+  chart.showLoading('Loading data...');
+  axios.all(seqs.map(x => getSeries(x, e.min, e.max)))
+    .then(function (results) {
+      console.log(results[0].data)
+      chart.series[0].setData(results[0].data.data);
+      chart.hideLoading();
+    }); // handle response.
+
+}
 
 function renderChart(x) {
   var myChart = Highcharts.chart('container', {
@@ -31,9 +46,7 @@ function renderChart(x) {
         text: 'Base'
       },
       events: {
-        afterSetExtremes: function () {
-          alert("Get data!")
-        }
+        afterSetExtremes: afterSetExtremes
       }
     },
     yAxis: {
