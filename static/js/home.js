@@ -4,7 +4,7 @@ var seqs = [];
 function getSeries(seq, x_min = null, x_max = null) {
   return axios.get('/seq_query', {
     params: {
-      hash: seq.seq_hash,
+      seq_hash: seq.seq_hash,
       seq_id: seq.seq_id,
       x_min: x_min,
       x_max: x_max

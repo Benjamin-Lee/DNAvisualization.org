@@ -19,7 +19,7 @@ def index():
 def seq_query():
     # takes a seq hash and returns a downsampled region
     logging.debug("getting data")
-    df = pd.read_parquet("data/" + str(request.args["hash"]) + ".parquet.sz")
+    df = pd.read_parquet("data/" + str(request.args["seq_hash"]) + ".parquet.sz")
 
     zone = df.loc[(float(request.args.get("x_max", df.x.max())) >= df.x) &
                   (float(request.args.get("x_min", df.x.min())) <= df.x)].values
