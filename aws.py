@@ -42,7 +42,6 @@ def query_x_range(Key, x_min=None, x_max=None):
     for event in event_stream:
         if 'Records' in event:
             data = event['Records']['Payload']
-            # with open(fp, "ab+") as f:
             fp.write(data)
 
         # If we received a progress event, print the details
@@ -52,7 +51,6 @@ def query_x_range(Key, x_min=None, x_max=None):
         # End event indicates that the request finished successfully
         elif 'End' in event:
             end_event_received = True
-            # print(data_bytes.getvalue())
             fp.seek(0)
             df = pd.read_csv(fp, names=["x", "y", "index"]).drop(columns=["index"])
             fp.close()

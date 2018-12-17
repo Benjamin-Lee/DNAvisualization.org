@@ -1,13 +1,16 @@
 #!flask/bin/python
-from flask import Flask, request, jsonify, render_template
-from squiggle import transform
-from skbio.io import read
+import logging
+import os.path
+import tempfile
+
 import pandas as pd
 import xxhash
-import os.path
-import logging
+from flask import Flask, jsonify, render_template, request
+from squiggle import transform
+from werkzeug.utils import secure_filename
 
-from aws import exists_on_s3, upload, query_x_range
+from aws import exists_on_s3, query_x_range, upload
+from readfq import readfq
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('botocore').setLevel(logging.INFO)
@@ -19,6 +22,10 @@ LOCAL = False
 logging.info("Running locally" if LOCAL else "Running on AWS")
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = '/tmp'
+ALLOWED_EXTENSIONS = {'fa', 'fasta', 'fna'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/")
 def index():
@@ -59,10 +66,14 @@ def parse_fasta():
     # takes a fasta file and returns a list of the seq hashes
     results = []
 
-    for seq in read([x.decode("ascii") for x in request.files["sequence"].readlines()], "fasta"):
+    fp = tempfile.TemporaryFile()
+    fp.write(request.files['sequence'].read())
+    fp.seek(0)
+
+    for seq in readfq(fp):
 
         logging.debug("Hashing seq")
-        seq_hash = str(xxhash.xxh64(str(seq)).intdigest())
+        seq_hash = str(xxhash.xxh64(seq[1]).intdigest())
 
         if LOCAL:
             exists = os.path.exists("data/" + seq_hash + ".parquet.sz")
@@ -73,7 +84,7 @@ def parse_fasta():
 
         if not exists:
             logging.debug("No previous transformation found. Transforming...")
-            transformed = transform(str(seq))
+            transformed = transform(seq[1])
 
             logging.debug("Saving transformed data for " + seq.metadata["id"])
             pd.DataFrame(dict(x=transformed[0], y=transformed[1])).to_parquet("data/" + seq_hash + ".parquet.sz")
@@ -83,9 +94,10 @@ def parse_fasta():
                 upload(seq_hash + ".parquet.sz")
 
         results.append(dict(seq_hash=seq_hash,
-                            seq_id=seq.metadata["id"],
+                            seq_id=seq[0],
                             seq_filename=request.files["sequence"].filename))
 
+    fp.close()
     return jsonify(results)
 
 
