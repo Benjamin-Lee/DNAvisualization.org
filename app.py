@@ -15,7 +15,7 @@ def index():
 @app.route("/seq_query")
 def seq_query():
     # takes a seq hash and returns a downsampled region
-    df = pd.read_csv("data/" + str(request.args["hash"]) + ".csv")
+    df = pd.read_parquet("data/" + str(request.args["hash"]) + ".parquet.sz")
     zone = df.loc[(float(request.args.get("x_max", df.x.max())) >= df.x) &
                   (float(request.args.get("x_min", df.x.min())) <= df.x)].values
 
@@ -33,13 +33,10 @@ def parse_fasta():
     results = []
 
     for seq in read([x.decode("ascii") for x in request.files["sequence"].readlines()], "fasta"):
-        transformed = list(zip(*transform(str(seq))))
+        transformed = transform(str(seq))
         seq_hash = str(xxhash.xxh64(str(seq)).intdigest())
-        if not os.path.exists("data/" + seq_hash + ".csv"):
-            with open("data/" + seq_hash + ".csv", "w+") as f:
-                f.write("x,y\n")
-                for coord in transformed:
-                    f.write("%f,%f\n" % (coord[0], coord[1]))
+        if not os.path.exists("data/" + seq_hash + ".parquet.sz"):
+            pd.DataFrame(dict(x=transformed[0], y=transformed[1])).to_parquet("data/" + seq_hash + ".parquet.sz")
         results.append(dict(seq_hash=seq_hash,
                             seq_id=seq.metadata["id"],
                             seq_filename=request.files["sequence"].filename))

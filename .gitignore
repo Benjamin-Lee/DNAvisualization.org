@@ -114,4 +114,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-/data/*.csv
+/data/*.parquet.sz
