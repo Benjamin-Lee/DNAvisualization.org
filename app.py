@@ -6,11 +6,12 @@ import tempfile
 import pandas as pd
 import xxhash
 from flask import Flask, jsonify, render_template, request
-from squiggle import transform
 from werkzeug.utils import secure_filename
 
 from aws import exists_on_s3, query_x_range, upload
 from readfq import readfq
+from squiggle import transform
+
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('botocore').setLevel(logging.INFO)
