@@ -6,6 +6,7 @@
     "project_name": "squiggle-server",
     "runtime": "python3.6",
     "s3_bucket": "zappa-ek4qipppy",
+    "memory_size": 3008,
     "slim_handler": true
   }
 }
