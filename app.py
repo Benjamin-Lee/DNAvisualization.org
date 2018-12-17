@@ -29,7 +29,6 @@ def seq_query():
 
     return jsonify({"name": request.args["seq_id"],
                     "data": zone.tolist(),
-                    "color": "black",
                     "marker": False})
 
 @app.route("/fasta", methods=["POST"])
