@@ -1,10 +1,11 @@
-var series = [];
+var seqs = [];
 
 
-function getSeries(hash) {
+function getSeries(seq) {
   return axios.get('/seq_query', {
     params: {
-      hash: hash,
+      hash: seq.seq_hash,
+      seq_id: seq.seq_id
     }
   })
 };
@@ -52,8 +53,8 @@ function sendFile(file) {
   xhr.open("POST", uri, true);
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
-      series = JSON.parse(xhr.responseText);
-      axios.all(series.map(x => getSeries(x)))
+      seqs = JSON.parse(xhr.responseText);
+      axios.all(seqs.map(x => getSeries(x)))
         .then(function (results) {
           renderChart(results.map(x => x.data));
         }); // handle response.

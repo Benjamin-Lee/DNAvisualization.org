@@ -15,6 +15,7 @@ def index():
 
 @app.route("/seq_query")
 def seq_query():
+    # takes a seq hash and returns a downsampled region
 
     df = pd.read_csv("data/" + str(request.args["hash"]) + ".csv")
     zone = df.loc[(float(request.args.get("x_max", df.x.max())) >= df.x) &
@@ -26,13 +27,14 @@ def seq_query():
     # else:
     #     seq_color = Category10[seq_number + 1 if seq_number > 2 else 3][seq_number]
 
-    return jsonify({"name": request.args["hash"],
+    return jsonify({"name": request.args["seq_id"],
                     "data": zone.tolist(),
                     "color": "black",
                     "marker": False})
 
 @app.route("/fasta", methods=["POST"])
 def parse_fasta():
+    # takes a fasta file and returns a list of the seq hashes
     results = []
     for seq in read([x.decode("ascii") for x in request.files["sequence"].readlines()], "fasta"):
         transformed = list(zip(*transform(str(seq))))
@@ -42,8 +44,7 @@ def parse_fasta():
             for coord in transformed:
                 f.write("%f,%f\n" % (coord[0], coord[1]))
 
-        results.append(seq_hash)
-    # print(sum([len(result["data"]) for result in results]), "points")
+        results.append(dict(seq_hash=seq_hash, seq_id=seq.metadata["id"]))
     return jsonify(results)
 
 
