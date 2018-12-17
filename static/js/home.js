@@ -35,9 +35,9 @@ function renderChart(x) {
       type: 'line',
       zoomType: 'x'
     },
-    boost: {
-      useGPUTranslations: true
-    },
+    // boost: {
+    //   useGPUTranslations: true
+    // },
     title: {
       text: 'Title will go here'
     },
