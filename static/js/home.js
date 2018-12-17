@@ -1,7 +1,7 @@
 var seqs = [];
 
 function getSeries(seq, x_min = null, x_max = null) {
-  return axios.get('/seq_query', {
+  return axios.get("/dev/seq_query", {
     params: {
       seq_hash: seq.seq_hash,
       seq_id: seq.seq_id,
@@ -58,7 +58,7 @@ function renderChart(x) {
 };
 
 function sendFile(file) {
-  var uri = "/fasta";
+  var uri = "/dev/fasta";
   var xhr = new XMLHttpRequest();
   var fd = new FormData();
 
