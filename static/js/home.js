@@ -1,6 +1,5 @@
 var seqs = [];
 
-
 function getSeries(seq, x_min = null, x_max = null) {
   return axios.get('/seq_query', {
     params: {
@@ -13,7 +12,7 @@ function getSeries(seq, x_min = null, x_max = null) {
 };
 
 function afterSetExtremes(e) {
-
+  // upon setting the x range of the graph, get the data for that region
   var chart = Highcharts.charts[0];
   chart.showLoading('Loading data...');
   axios.all(seqs.map(x => getSeries(x, e.min, e.max)))
@@ -66,11 +65,12 @@ function sendFile(file) {
   xhr.open("POST", uri, true);
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
+      // get back a list of the seq hashes, IDs, and filenames
       seqs = JSON.parse(xhr.responseText);
-      axios.all(seqs.map(x => getSeries(x)))
+      axios.all(seqs.map(x => getSeries(x))) // get the data for the seq
         .then(function (results) {
-          renderChart(results.map(x => x.data));
-        }); // handle response.
+          renderChart(results.map(x => x.data)); // plot it
+        });
 
 
     }
@@ -88,7 +88,7 @@ window.onload = function () {
   }
 
   dropzone.ondrop = function (event) {
-    document.getElementById("container").style.display = "block";
+    document.getElementById("container").style.display = "block"; // after dropping, show chart div
     event.stopPropagation();
     event.preventDefault();
 
