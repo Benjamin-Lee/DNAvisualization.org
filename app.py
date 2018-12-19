@@ -109,7 +109,7 @@ def parse_fasta():
             logging.debug("No previous transformation found. Transforming...")
             transformed = transform(seq[1])
 
-            logging.debug("Saving transformed data for " + seq.metadata["id"])
+            logging.debug("Saving transformed data for " + seq[0])
             pd.DataFrame(dict(x=transformed[0], y=transformed[1])).to_parquet("data/" + seq_hash + ".parquet.sz")
 
             if not LOCAL:
