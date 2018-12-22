@@ -89,10 +89,6 @@ def parse_fasta():
 
     return jsonify(True)
 
-@app.route("/test")
-def test():
-    return render_template("test.html")
-
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
