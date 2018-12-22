@@ -1,4 +1,4 @@
-var route = "/dev";
+var route = "";
 
 var seqs = {};
 
@@ -33,7 +33,7 @@ function afterSetExtremes(e) {
   // upon setting the x range of the graph, get the data for that region
   var chart = Highcharts.charts[0];
   chart.showLoading('Loading data...');
-  axios.all(seqs.map(x => getSeries(x, e.min, e.max)))
+  axios.all(Object.keys(seqs).map(x => getSeries(x, e.min, e.max)))
     .then(function (results) {
       console.log(results[0].data)
       chart.series[0].setData(results[0].data.data);
@@ -83,7 +83,6 @@ function renderChart() {
   });
   document.getElementById("container").style.display = "block"; // after dropping, show chart div
 };
-
 
 
 window.onload = function () {
