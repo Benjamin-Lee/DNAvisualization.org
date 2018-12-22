@@ -1,4 +1,4 @@
-var route = "";
+var route = ""; // set to "/dev" for AWS and to "" for local // TODO: automate this
 
 var seqs = {};
 
@@ -95,6 +95,8 @@ window.onload = function () {
     // accept: ".fasta",
     on: {
       load: function (e, file) {
+
+        // load all the parsed seq_ids and seq_hashes into the seqs variable
         var parsed = window.parse_fasta(e.target.result);
         for (seq of parsed) {
           seqs[seq["name"]] = {
@@ -102,6 +104,8 @@ window.onload = function () {
             hash: XXH.h64(seq["sequence"], 0).toString(10)
           };
         }
+
+        // then, transform the seqs, get the downsampled data, and render the viz
         axios.all(parsed.map(x => transform(x.name, x.sequence)))
           .then(function (results) {
             axios.all(Object.keys(seqs).map(k => getSeries(k)))
@@ -116,6 +120,7 @@ window.onload = function () {
     }
   }
 
+  // support for drag-and-drop, copy-pasting, and a file upload button
   FileReaderJS.setupClipboard(document.body, options);
   FileReaderJS.setupInput(document.getElementById('file-input'), options);
   FileReaderJS.setupDrop(document.getElementById('dropzone'), options);
