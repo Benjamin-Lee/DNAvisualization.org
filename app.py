@@ -5,7 +5,7 @@ import tempfile
 
 import pandas as pd
 import xxhash
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
 from aws import exists_on_s3, query_x_range, upload
@@ -122,6 +122,11 @@ def parse_fasta():
 
     fp.close()
     return jsonify(results)
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 if __name__ == '__main__':
