@@ -1,15 +1,31 @@
-var seqs = [];
+var seqs = {};
 
-function getSeries(seq, x_min = null, x_max = null) {
-  return axios.get("/dev/seq_query", {
+function getSeries(seq_id, x_min = null, x_max = null) {
+  return axios.get("/seq_query", {
     params: {
-      seq_hash: seq.seq_hash,
-      seq_id: seq.seq_id,
+      seq_hash: seqs[seq_id]["hash"],
+      seq_id: seq_id,
       x_min: x_min,
       x_max: x_max
     }
-  })
+  });
 };
+
+function transform(seq_id, seq) {
+  var bodyFormData = new FormData();
+  bodyFormData.set('seq_id', seq_id);
+  bodyFormData.set('seq', seq);
+  return axios({
+    method: 'post',
+    url: '/transform',
+    data: bodyFormData,
+    config: {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  })
+}
 
 function afterSetExtremes(e) {
   // upon setting the x range of the graph, get the data for that region
@@ -24,7 +40,15 @@ function afterSetExtremes(e) {
 
 }
 
-function renderChart(x) {
+function renderChart() {
+  let x = [];
+  for (seq_id of Object.keys(seqs)) {
+    x.push({
+      name: seq_id,
+      data: seqs[seq_id]["data"]
+    })
+  }
+  console.log(x);
   var myChart = Highcharts.chart('container', {
     credits: {
       text: "BD Lee, et al. (2019). SquiggleDNA.org",
@@ -55,46 +79,43 @@ function renderChart(x) {
     },
     series: x
   });
+  document.getElementById("container").style.display = "block"; // after dropping, show chart div
 };
 
-function sendFile(file) {
-  var uri = "/dev/fasta";
-  var xhr = new XMLHttpRequest();
-  var fd = new FormData();
 
-  xhr.open("POST", uri, true);
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      // get back a list of the seq hashes, IDs, and filenames
-      seqs = JSON.parse(xhr.responseText);
-      axios.all(seqs.map(x => getSeries(x))) // get the data for the seq
-        .then(function (results) {
-          renderChart(results.map(x => x.data)); // plot it
-        });
-
-
-    }
-  };
-  fd.append('sequence', file);
-  // Initiate a multipart/form-data upload
-  xhr.send(fd);
-}
 
 window.onload = function () {
-  var dropzone = document.getElementById("dropzone");
-  dropzone.ondragover = dropzone.ondragenter = function (event) {
-    event.stopPropagation();
-    event.preventDefault();
-  }
 
-  dropzone.ondrop = function (event) {
-    document.getElementById("container").style.display = "block"; // after dropping, show chart div
-    event.stopPropagation();
-    event.preventDefault();
+  var options = {
+    // CSS Class to add to the drop element when a drag is active
+    readAsDefault: 'Text',
 
-    var filesArray = event.dataTransfer.files;
-    for (var i = 0; i < filesArray.length; i++) {
-      sendFile(filesArray[i]);
+    // A string to match MIME types, for instance
+    // accept: ".fasta",
+    on: {
+      load: function (e, file) {
+        var parsed = window.parse_fasta(e.target.result);
+        for (seq of parsed) {
+          seqs[seq["name"]] = {
+            filename: file.name,
+            hash: XXH.h64(seq["sequence"], 0).toString(10)
+          };
+        }
+        axios.all(parsed.map(x => transform(x.name, x.sequence)))
+          .then(function (results) {
+            axios.all(Object.keys(seqs).map(k => getSeries(k)))
+              .then(function (results) {
+                for (result of results) {
+                  seqs[result.data.name]["data"] = result.data.data;
+                };
+                renderChart();
+              })
+          });
+      }
     }
   }
+
+  FileReaderJS.setupClipboard(document.body, options);
+  FileReaderJS.setupInput(document.getElementById('file-input'), options);
+  FileReaderJS.setupDrop(document.getElementById('dropzone'), options);
 }
