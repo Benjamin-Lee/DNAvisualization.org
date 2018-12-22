@@ -20,13 +20,14 @@ logging.getLogger('s3transfer').setLevel(logging.INFO)
 
 
 LOCAL = "AWS_LAMBDA_FUNCTION_NAME" not in os.environ # determine if running on AWS or not (manually set this variable to override)
+route = "" if LOCAL else "/dev/"
 logging.info("Running locally" if LOCAL else "Running on AWS")
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html", route="/dev" if not LOCAL else "")
+    return render_template("index.html", route=route)
 
 @app.route("/seq_query")
 def seq_query():
