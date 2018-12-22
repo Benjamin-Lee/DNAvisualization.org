@@ -1,7 +1,9 @@
+var route = "/dev";
+
 var seqs = {};
 
 function getSeries(seq_id, x_min = null, x_max = null) {
-  return axios.get("/seq_query", {
+  return axios.get(route + "/seq_query", {
     params: {
       seq_hash: seqs[seq_id]["hash"],
       seq_id: seq_id,
@@ -17,7 +19,7 @@ function transform(seq_id, seq) {
   bodyFormData.set('seq', seq);
   return axios({
     method: 'post',
-    url: '/transform',
+    url: route + '/transform',
     data: bodyFormData,
     config: {
       headers: {

@@ -1,6 +1,7 @@
 #!flask/bin/python
 import logging
 import os.path
+import os
 import tempfile
 
 import pandas as pd
@@ -18,14 +19,10 @@ logging.getLogger('urllib3').setLevel(logging.INFO)
 logging.getLogger('s3transfer').setLevel(logging.INFO)
 
 
-LOCAL = True
+LOCAL = "AWS_LAMBDA_FUNCTION_NAME" not in os.environ # determine if running on AWS or not (manually set this variable to override)
 logging.info("Running locally" if LOCAL else "Running on AWS")
 
 app = Flask(__name__)
-
-UPLOAD_FOLDER = '/tmp'
-ALLOWED_EXTENSIONS = {'fa', 'fasta', 'fna'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/")
 def index():
