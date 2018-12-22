@@ -3,6 +3,7 @@ import boto3
 import io
 import pandas as pd
 import tempfile
+import logging
 
 s3 = boto3.client('s3')
 
@@ -37,12 +38,12 @@ def query_x_range(Key, x_min=None, x_max=None):
                                         OutputSerialization={'CSV': {'RecordDelimiter': '\n'}})
     event_stream = response['Payload']
     end_event_received = False
-    # data_bytes = io.BytesIO()
-    fp = tempfile.TemporaryFile()
+    data_bytes = io.BytesIO()
+    # fp = tempfile.TemporaryFile()
     for event in event_stream:
         if 'Records' in event:
             data = event['Records']['Payload']
-            fp.write(data)
+            data_bytes.write(data)
 
         # If we received a progress event, print the details
         elif 'Progress' in event:
@@ -51,11 +52,11 @@ def query_x_range(Key, x_min=None, x_max=None):
         # End event indicates that the request finished successfully
         elif 'End' in event:
             end_event_received = True
-            fp.seek(0)
-            df = pd.read_csv(fp, names=["x", "y", "index"]).drop(columns=["index"])
-            fp.close()
+            data_bytes.seek(0)
+            df = pd.read_csv(data_bytes, names=["x", "y", "index"]).drop(columns=["index"])
+            logging.debug(f"Query results shape: {df.shape}")
             return df
 
     if not end_event_received:
-        fp.close()
+        # fp.close()
         raise Exception("End event not received, request incomplete.")
