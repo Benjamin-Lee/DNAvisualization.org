@@ -1,5 +1,3 @@
-var route = ""; // set to "/dev" for AWS and to "" for local // TODO: automate this
-
 var seqs = {};
 
 function getSeries(seq_id, x_min = null, x_max = null) {
