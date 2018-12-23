@@ -29,7 +29,7 @@ function transform(seq_id, seq) {
 
 function afterSetExtremes(e) {
   // upon setting the x range of the graph, get the data for that region
-  var chart = Highcharts.charts[0];
+  var chart = Highcharts.charts[Highcharts.charts.length - 1];
   chart.showLoading('Loading data...');
   axios.all(Object.keys(seqs).map(x => getSeries(x, e.min, e.max)))
     .then(function (results) {

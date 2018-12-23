@@ -2,13 +2,11 @@
 import logging
 import os.path
 import os
-import tempfile
 
 import pandas as pd
 import pyarrow
 import xxhash
 from flask import Flask, jsonify, render_template, request, url_for, send_from_directory
-from werkzeug.utils import secure_filename
 
 from aws import exists_on_s3, query_x_range, upload
 from squiggle import transform
