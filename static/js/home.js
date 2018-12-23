@@ -120,4 +120,5 @@ window.onload = function () {
   FileReaderJS.setupClipboard(document.body, options);
   FileReaderJS.setupInput(document.getElementById('file-input'), options);
   FileReaderJS.setupDrop(document.getElementById('dropzone'), options);
+  FileReaderJS.setupDrop(document.body, options);
 }
