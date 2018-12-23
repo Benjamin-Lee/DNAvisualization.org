@@ -91,11 +91,13 @@ window.onload = function () {
       load: function (e, file) {
 
         // load all the parsed seqs_names and seq_hashes into the seqs variable
+        // TODO: only perform this procedure on new seqs (don't allow redragging of files already present)
         var parsed = window.parse_fasta(e.target.result);
         for (seq of parsed) {
           seqs[seq["name"]] = {
             filename: file.name,
-            hash: XXH.h64(seq["sequence"], 0).toString(10)
+            hash: XXH.h64(seq["sequence"], 0).toString(10),
+            length: seq["sequence"].length
           };
         }
 
