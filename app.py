@@ -5,6 +5,7 @@ import os
 import tempfile
 
 import pandas as pd
+import pyarrow
 import xxhash
 from flask import Flask, jsonify, render_template, request, url_for, send_from_directory
 from werkzeug.utils import secure_filename
@@ -75,7 +76,7 @@ def parse_fasta():
         logging.debug(f"Found {seq_hash} on S3")
 
     if not exists:
-        logging.debug("No previous transformation found. Transforming...")
+        logging.debug(f"No previous transformation for {seq_id} found. Transforming...")
         transformed = transform(sequence)
 
         logging.debug("Saving transformed data for " + seq_id)
