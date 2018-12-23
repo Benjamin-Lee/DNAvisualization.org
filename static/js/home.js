@@ -33,7 +33,6 @@ function afterSetExtremes(e) {
   chart.showLoading('Loading data...');
   axios.all(Object.keys(seqs).map(x => getSeries(x, e.min, e.max)))
     .then(function (results) {
-      console.log(results[0].data)
       chart.series[0].setData(results[0].data.data);
       chart.hideLoading();
     }); // handle response.
@@ -48,7 +47,6 @@ function renderChart() {
       data: seqs[seq_id]["data"]
     })
   }
-  console.log(x);
   var myChart = Highcharts.chart('container', {
     credits: {
       text: "BD Lee, et al. (2019). SquiggleDNA.org",
