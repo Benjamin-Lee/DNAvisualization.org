@@ -1,19 +1,55 @@
 var seqs = {};
+var chart = Highcharts.chart('container', {
+  credits: {
+    text: "BD Lee, et al. (2019). SquiggleDNA.org",
+    href: "http://squiggledna.org"
+  },
+  chart: {
+    type: 'line',
+    zoomType: 'x'
+  },
+  // boost: {
+  //   useGPUTranslations: true
+  // },
+  title: {
+    text: 'Title will go here'
+  },
+  xAxis: {
+    title: {
+      text: 'Base'
+    },
+    events: {
+      afterSetExtremes: afterSetExtremes
+    }
+  },
+  yAxis: {
+    title: {
+      text: ''
+    }
+  },
+  series: []
+});
 
-function getSeries(seq_id, x_min = null, x_max = null) {
+
+/* nomenclature
+seq_name = the identifying string of the sequence
+seq = the sequence
+seq_hash = the xx64 hash with seed(0) in base10
+*/
+
+function seqQuery(seq_hash, x_min = null, x_max = null) {
   return axios.get(route + "/seq_query", {
     params: {
-      seq_hash: seqs[seq_id]["hash"],
-      seq_id: seq_id,
+      seq_hash: seq_hash,
       x_min: x_min,
       x_max: x_max
     }
   });
 };
 
-function transform(seq_id, seq) {
+function transform(seq_name, seq) {
   var bodyFormData = new FormData();
-  bodyFormData.set('seq_id', seq_id);
+  bodyFormData.set('seq_name', seq_name);
   bodyFormData.set('seq', seq);
   return axios({
     method: 'post',
@@ -29,56 +65,18 @@ function transform(seq_id, seq) {
 
 function afterSetExtremes(e) {
   // upon setting the x range of the graph, get the data for that region
-  var chart = Highcharts.charts[Highcharts.charts.length - 1];
+  // var chart = Highcharts.charts[Highcharts.charts.length - 1];
   chart.showLoading('Loading data...');
-  axios.all(Object.keys(seqs).map(x => getSeries(x, e.min, e.max)))
+  axios.all(Object.keys(seqs).map(x => seqQuery(seqs[x]["hash"], e.min, e.max)))
     .then(function (results) {
-      chart.series[0].setData(results[0].data.data);
+      console.log(results)
+      for (result of results) {
+        chart.get(result.data[0]).setData(result.data[1]);
+      }
       chart.hideLoading();
     }); // handle response.
 
 }
-
-function renderChart() {
-  let x = [];
-  for (seq_id of Object.keys(seqs)) {
-    x.push({
-      name: seq_id,
-      data: seqs[seq_id]["data"]
-    })
-  }
-  var myChart = Highcharts.chart('container', {
-    credits: {
-      text: "BD Lee, et al. (2019). SquiggleDNA.org",
-      href: "http://squiggledna.org"
-    },
-    chart: {
-      type: 'line',
-      zoomType: 'x'
-    },
-    // boost: {
-    //   useGPUTranslations: true
-    // },
-    title: {
-      text: 'Title will go here'
-    },
-    xAxis: {
-      title: {
-        text: 'Base'
-      },
-      events: {
-        afterSetExtremes: afterSetExtremes
-      }
-    },
-    yAxis: {
-      title: {
-        text: ''
-      }
-    },
-    series: x
-  });
-  document.getElementById("container").style.display = "block"; // after dropping, show chart div
-};
 
 
 window.onload = function () {
@@ -92,7 +90,7 @@ window.onload = function () {
     on: {
       load: function (e, file) {
 
-        // load all the parsed seq_ids and seq_hashes into the seqs variable
+        // load all the parsed seqs_names and seq_hashes into the seqs variable
         var parsed = window.parse_fasta(e.target.result);
         for (seq of parsed) {
           seqs[seq["name"]] = {
@@ -103,15 +101,30 @@ window.onload = function () {
 
         // then, transform the seqs, get the downsampled data, and render the viz
         axios.all(parsed.map(x => transform(x.name, x.sequence)))
-          .then(function (results) {
-            axios.all(Object.keys(seqs).map(k => getSeries(k)))
+          .then(function () {
+            axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"])))
               .then(function (results) {
+
+
                 for (result of results) {
-                  seqs[result.data.name]["data"] = result.data.data;
-                };
-                renderChart();
+
+                  // determine the name associated with the hash
+                  resultName = _.invertBy(seqs, (x) => {
+                    return [x.hash]
+                  })[result.data[0]][0];
+
+                  // add the series to chart (with animation!)
+                  chart.addSeries({
+                    name: resultName,
+                    id: result.data[0],
+                    data: result.data[1]
+                  });
+                }
               })
-          });
+          })
+
+        document.getElementById("container").style.display = "block"; // after dropping, show chart div
+
       }
     }
   }
@@ -121,4 +134,5 @@ window.onload = function () {
   FileReaderJS.setupInput(document.getElementById('file-input'), options);
   FileReaderJS.setupDrop(document.getElementById('dropzone'), options);
   FileReaderJS.setupDrop(document.body, options);
+
 }

@@ -53,15 +53,12 @@ def seq_query():
         logging.debug(f"Downsampling by a factor of {downsample}")
         zone = zone[::downsample]
 
-    return jsonify({"name": request.args["seq_id"],
-                    "data": zone,
-                    # "marker": True # for some reason this generates a ton of errors
-                    })
+    return jsonify((request.args["seq_hash"], zone))
 
 @app.route("/transform", methods=["POST"])
 def parse_fasta():
     sequence = request.form["seq"]
-    seq_id = request.form["seq_id"]
+    seq_name = request.form["seq_name"]
 
     logging.debug("Hashing seq")
     seq_hash = str(xxhash.xxh64(sequence).intdigest())
@@ -74,10 +71,10 @@ def parse_fasta():
         logging.debug(f"Found {seq_hash} on S3")
 
     if not exists:
-        logging.debug(f"No previous transformation for {seq_id} found. Transforming...")
+        logging.debug(f"No previous transformation for {seq_name} found. Transforming...")
         transformed = transform(sequence)
 
-        logging.debug("Saving transformed data for " + seq_id)
+        logging.debug("Saving transformed data for " + seq_name)
         pd.DataFrame(dict(x=transformed[0], y=transformed[1])).to_parquet("data/" + seq_hash + ".parquet.sz")
 
         if not LOCAL:
