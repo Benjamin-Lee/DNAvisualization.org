@@ -1,6 +1,0 @@
-language: python
-python: "3.6"
-script: echo "all tests passing"
-after_success:
-  - pip install -r requirements.txt
-  - zappa update dev
