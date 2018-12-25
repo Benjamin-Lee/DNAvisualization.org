@@ -123,8 +123,8 @@ window.onload = function () {
               })
           })
 
+        document.querySelector(".hide-when-plotting").style.display = "none"; // get rid of the jumbotron
         document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
-
       }
     }
   }
