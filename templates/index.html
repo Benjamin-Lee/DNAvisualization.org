@@ -53,6 +53,7 @@
    <!--  /nav bar -->
 
 
+
     <!-- Show an error if JS is not enabled -->
     <noscript>
       <div class="alert alert-danger" role="alert">
@@ -60,39 +61,44 @@
       </div>
     </noscript>
 
-    <!--  content goes in the container in a row or a column. -->
-    <div class="container">
-       <div class="row justify-content-center">
-         <!-- Main jumbotron for a primary marketing message or call to action -->
-         <div class="jumbotron hide-when-plotting">
-             <h1 class="display-3">Squiggle</h1>
-               Suiggle is a two-dimensional DNA sequence visualization library that
-               can turn FASTA sequence files into gorgeous, interactive
-               visualizations.
-             </p>
-         </div>
-          <div class="col-10">
-             <!--  This is the plot, it is not visible until the user uploads a fasta file -->
-             <div id="hg-container" style="width:100%; height:600px; display: none;"></div>
-          </div>
-          <div class="col-10">
-            <div class="input-group mb-3">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="file-input">
-                    <label class="custom-file-label">Choose file</label>
-                </div>
+    <!--  content goes in the container, then into cols that are in a row -->
+    <div class="container ">
+      <div class="jumbotron jumbotron-fluid" id="hide-when-plotting" style="background:transparent !important">
+        <div class="container">
+            <h1 class="display-4">Squiggle</h1>      
+            <p class="lead">
+            Suiggle is a two-dimensional DNA sequence visualization library that
+            can turn FASTA sequence files into gorgeous, interactive
+            visualizations.
+            </p>
+        </div>
+      </div>
+         
+      <div class="row"> <!--  FYI, col should always be a row! -->
+        <div class="col-10">
+            <!--  This is the plot, it is not visible until the user uploads a fasta file -->
+            <div id="hg-container" style="width:100%; height:600px; display: none;"></div>
+        </div>
+      </div>
+      
+      <div class="row center w-75 border bg-light"> 
+        <div class="col-10">
+          <div class="input-group mb-3">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="file-input">
+                <label class="custom-file-label">Choose file</label>
             </div>
           </div>
-          <div class="col-10">
-             <div id="dropzone" class="center">
-                Or drag & drop your file here...
-             </div>
-          </div>
         </div>
-        <div class="row">
-
-
-         <div class="col-md-410">
+        <div class="col-10">
+            <div id="dropzone" class="center border">
+                Or drag & drop your file here...
+            </div>
+        </div>
+       </div>
+        
+        <div class="row center w-75">
+         <div class="col-10">
                 <h2>Citation</h2>
                 <p>If you use Squiggle, please cite the following paper:</p>
                 <pre>
@@ -100,14 +106,16 @@
                 A. Author, B. Author, C, Author ...
                 </pre>
             </div>
-            </div>
-            <div class="row">
-                <h2>About</h2>
-                <p>
+         </div>
+        <div class="row center w-75 bg-light">
+           <div class="col-10">        
+              <h2>About</h2>
+                 <p>
                 Squiggle is a two-dimensional DNA sequence visualization library
                 that can turn FASTA sequence files into gorgeous, interactive visualizations.
                 Use the form above to upload your FASTA file ..... lots more text.
                 Info about privacy somewhere on the page.
+            </div>
         </div>
         <div class="col-10">
           <style media="">
