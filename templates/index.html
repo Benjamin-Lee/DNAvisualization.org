@@ -2,13 +2,14 @@
 <html lang="en" dir="ltr">
 
 <head>
+  <!--  required meta tags for bootstrap -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Squiggle</title>
   <script>
+    // to tell the JS whether developing locally or on AWS
     var route = '{{ route }}';
   </script>
-  <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
   <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/boost.js"></script>
@@ -17,18 +18,40 @@
   <script type="text/javascript" src="{{ url_for('static', filename='js/filereader.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/parse_fasta_bundle.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/xxhash.min.js') }}"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
-  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-      crossorigin="anonymous">
-  </script> -->
+
+  <!-- bootstrap css should before all other css -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
 
 </head>
 
 <body>
-  <div class="container-fluid">
-    <h1>Squiggle</h1>
+   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <!--  bootstrap requirements -->
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+   <!-- nav bar -->
+   <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+      <a class="navbar-brand" href="/">
+        <img style="max-height: 4vw;" src="{{ url_for('static', filename='images/logo.svg') }}" class="d-inline-block align-top" alt="">
+      </a>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsCollapse" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-md-left" id="navbarsCollapse">
+        <ul class="navbar-nav">
+           <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+           </li>
+        </ul>
+     </div>
+   </nav>
+   <!--  /nav bar -->
+
 
     <!-- Show an error if JS is not enabled -->
     <noscript>
@@ -37,18 +60,68 @@
       </div>
     </noscript>
 
-    <div id="container" style="width:100%; height:600px; display: none;"></div>
-    <input type="file" name="" id="file-input" value="" multiple>
-    <div id="dropzone" class="center" style="width:500px; height:300px; border:3px dotted grey;">Drag & drop your file here...</div>
+    <!--  content goes in the container in a row or a column. -->
+    <div class="container">
+       <div class="row justify-content-center">
+         <!-- Main jumbotron for a primary marketing message or call to action -->
+         <div class="jumbotron hide-when-plotting">
+             <h1 class="display-3">Squiggle</h1>
+               Suiggle is a two-dimensional DNA sequence visualization library that
+               can turn FASTA sequence files into gorgeous, interactive
+               visualizations.
+             </p>
+         </div>
+          <div class="col-10">
+             <!--  This is the plot, it is not visible until the user uploads a fasta file -->
+             <div id="hg-container" style="width:100%; height:600px; display: none;"></div>
+          </div>
+          <div class="col-10">
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file-input">
+                    <label class="custom-file-label">Choose file</label>
+                </div>
+            </div>
+          </div>
+          <div class="col-10">
+             <div id="dropzone" class="center">
+                Or drag & drop your file here...
+             </div>
+          </div>
+        </div>
+        <div class="row">
+
+
+         <div class="col-md-410">
+                <h2>Citation</h2>
+                <p>If you use Squiggle, please cite the following paper:</p>
+                <pre>
+                Squiggle; an awesome Web app for all your DNA needs.
+                A. Author, B. Author, C, Author ...
+                </pre>
+            </div>
+            </div>
+            <div class="row">
+                <h2>About</h2>
+                <p>
+                Squiggle is a two-dimensional DNA sequence visualization library
+                that can turn FASTA sequence files into gorgeous, interactive visualizations.
+                Use the form above to upload your FASTA file ..... lots more text.
+                Info about privacy somewhere on the page.
+        </div>
+        <div class="col-10">
+          <style media="">
+            .center {
+               margin: auto;
+               width: 50%;
+               padding: 10px;
+            }
+          </style>
+          <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
   </div>
-  <style media="screen">
-    .center {
-      margin: auto;
-      width: 50%;
-      padding: 10px;
-    }
-  </style>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
+  </div><!--  /container -->
+
+
 </body>
 
 </html>

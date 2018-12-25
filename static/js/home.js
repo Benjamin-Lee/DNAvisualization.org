@@ -1,5 +1,5 @@
 var seqs = {};
-var chart = Highcharts.chart('container', {
+var chart = Highcharts.chart('hg-container', {
   credits: {
     text: "BD Lee, et al. (2019). SquiggleDNA.org",
     href: "http://squiggledna.org"
@@ -123,8 +123,8 @@ window.onload = function () {
               })
           })
 
-        document.getElementById("container").style.display = "block"; // after dropping, show chart div
-
+        document.querySelector(".hide-when-plotting").style.display = "none"; // get rid of the jumbotron
+        document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
       }
     }
   }

@@ -204,3 +204,14 @@ dmypy.json
 .pyre/
 
 /data/*.parquet.sz
+
+# pydev/eclipse files:
+.project
+.pydevproject
+
+# Emacs files:
+# ignore emacs autosaves and other cruft:
+.~*
+*~*
+\#*\#
+.\#*
