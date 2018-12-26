@@ -139,6 +139,8 @@ window.onload = function () {
   FileReaderJS.setupDrop(document.getElementById('dropzone'), options);
   FileReaderJS.setupDrop(document.body, options);
 
+  $('[data-toggle="tooltip"]').tooltip()
+
   // warn before leaving
   window.onbeforeunload = function (event) {
     if (document.getElementById("hg-container").style.display == "block") {

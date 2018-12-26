@@ -109,6 +109,40 @@
       </div>
     </div>
 
+    <div class="row center w-75 bg-light">
+      <!-- left here for later, since the tooltips don't disappear. See https://stackoverflow.com/q/53930860/8068638-->
+      <!-- <form class="form-inline">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-primary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Fast and acyclic. Shows variations in GC-content and supports non-ATGC bases.">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked>Squiggle
+          </label>
+          <label class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="As, Ts, Cs, and Gs as up, down, left and right, respectively. Cyclic.">
+            <input type="radio" name="options" id="option2" autocomplete="off">Gates
+          </label>
+          <label class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-html="true" title="Bases plotted along a unit vector. <var>x</var>-coordinates do not map to base.">
+            <input type="radio" name="options" id="option3" autocomplete="off">Yau
+          </label>
+          <label class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-html="true" title="Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as bases).">
+            <input type="radio" name="options" id="option2" autocomplete="off">Yau-BP
+          </label>
+        </div>
+      </form> -->
+
+      <form>
+        <div class="form-group row">
+          <label for="method" class="col-6 col-form-label">Visualization Method</label>
+          <div class="col-6">
+            <select id="method" name="method" required="required" class="form-control">
+              <option value="squiggle">Squiggle</option>
+              <option value="gates">Gates</option>
+              <option value="yau">Yau</option>
+              <option value="yau-bp">Yau-BP</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+
     <div class="row center w-75">
       <div class="col-10">
         <h2>Citation</h2>
