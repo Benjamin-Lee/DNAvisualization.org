@@ -135,4 +135,13 @@ window.onload = function () {
   FileReaderJS.setupDrop(document.getElementById('dropzone'), options);
   FileReaderJS.setupDrop(document.body, options);
 
+  // warn before leaving
+  window.onbeforeunload = function (event) {
+    if (document.getElementById("hg-container").style.display == "block") {
+      return "Are you sure you want to leave the page? Your visualization will be lost.";
+    } else {
+      return "";
+    }
+  };
+
 }
