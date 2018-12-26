@@ -19,7 +19,7 @@ var chart = Highcharts.chart('hg-container', {
       text: 'Base'
     },
     events: {
-      afterSetExtremes: afterSetExtremes
+      // afterSetExtremes: afterSetExtremes
     }
   },
   yAxis: {
@@ -83,11 +83,16 @@ window.onload = function () {
     // CSS Class to add to the drop element when a drag is active
     readAsDefault: 'Text',
 
-    // A string to match MIME types, for instance
-    // accept: ".fasta",
     on: {
       load: function (e, file) {
-
+        if (!validateFasta(e.target.result)) {
+          bootbox.alert({
+            size: "large",
+            title: "Bad FASTA file",
+            message: `<pre style="display: inline;">${file.name}</pre> doesn't appear to be a valid FASTA file. Proceeding without parsing it.`,
+          })
+          return false
+        }
         // load all the parsed seqs_names and seq_hashes into the seqs variable
         // TODO: only perform this procedure on new seqs (don't allow redragging of files already present)
         var parsed = window.parse_fasta(e.target.result);
@@ -122,7 +127,6 @@ window.onload = function () {
                 }
               })
           })
-
         document.getElementById("hide-when-plotting").style.display = "none"; // get rid of the jumbotron
         document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
       }
