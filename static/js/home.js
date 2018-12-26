@@ -47,10 +47,11 @@ function seqQuery(seq_hash, x_min = null, x_max = null) {
   });
 };
 
-function transform(seq_name, seq) {
+function transform(seq_name, seq, method) {
   var bodyFormData = new FormData();
   bodyFormData.set('seq_name', seq_name);
   bodyFormData.set('seq', seq);
+  bodyFormData.set('method', method);
   return axios({
     method: 'post',
     url: route + '/transform',
@@ -105,7 +106,7 @@ window.onload = function () {
         }
 
         // then, transform the seqs, get the downsampled data, and render the viz
-        axios.all(parsed.map(x => transform(x.name, x.sequence)))
+        axios.all(parsed.map(x => transform(x.name, x.sequence, $("#method").val())))
           .then(function () {
             axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"])))
               .then(function (results) {
