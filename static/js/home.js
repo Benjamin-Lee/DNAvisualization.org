@@ -116,12 +116,17 @@ window.onload = function () {
           };
         }
 
+        // set the axis labels to reflect the viz method
         chart.xAxis[0].setTitle({
           text: axis_labels[$("#method").val()]["x"]
         })
         chart.yAxis[0].setTitle({
           text: axis_labels[$("#method").val()]["y"]
         })
+
+        // hide the method selector
+        document.getElementById("method").style.display = "none";
+        document.getElementById("method-label").style.display = "none";
 
         // then, transform the seqs, get the downsampled data, and render the viz
         axios.all(parsed.map(x => transform(x.name, x.sequence, $("#method").val())))
