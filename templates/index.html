@@ -10,38 +10,8 @@
     // to tell the JS whether developing locally or on AWS
     var route = '{{ route }}';
   </script>
-
-  <!-- polyfill first -->
-  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
-
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <!--  bootstrap requirements -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
-  <!-- Highcharts -->
-  <script src="https://code.highcharts.com/highcharts.js"></script>
-  <script src="https://code.highcharts.com/modules/boost.js"></script>
-  <script src="https://code.highcharts.com/modules/exporting.js"></script>
-  <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-  <!-- other utilities -->
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
-
-  <!-- locally hosted scripts -->
-  <script type="text/javascript" src="{{ url_for('static', filename='js/filereader.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/parse_fasta_bundle.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/xxhash.min.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/reformat.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/bootbox5-beta.js') }}"></script>
-
-
   <!-- bootstrap css should before all other css -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-
 </head>
 
 <body>
@@ -155,17 +125,51 @@
           Info about privacy somewhere on the page.
       </div>
     </div>
-    <div class="col-10">
-      <style media="">
-        .center {
+
+    <style media="">
+      .center {
                margin: auto;
                width: 50%;
                padding: 10px;
             }
-          </style>
-      <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
-    </div>
+    </style>
   </div><!--  /container -->
+
+  <footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+      <span class="text-muted">Place sticky footer content here.</span>
+    </div>
+  </footer>
+
+  <!-- placed at bottom to speed page loading -->
+  <!-- polyfill first -->
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!--  bootstrap requirements -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <!-- Highcharts -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/boost.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+  <!-- other utilities -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
+
+  <!-- locally hosted scripts -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/filereader.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/parse_fasta_bundle.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/xxhash.min.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/reformat.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/bootbox5-beta.js') }}"></script>
+
+  <!-- last, load the JS for the page -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
 
 
 </body>
