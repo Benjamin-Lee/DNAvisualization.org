@@ -30,13 +30,17 @@ def index():
 
 @app.route("/seq_query")
 def seq_query():
+
+    seq_hash = str(request.args["seq_hash"])
+    method = request.args["method"]
+
     # takes a seq hash and returns a downsampled region
-    logging.debug(f"Getting data for seq ID {request.args['seq_hash']}")
+    logging.debug(f"Getting data for seq ID {seq_hash}")
 
     if LOCAL:
-        df = pd.read_parquet("data/" + str(request.args["seq_hash"]) + ".parquet.sz")
+        df = pd.read_parquet(f"data/{seq_hash}.{method}.parquet.sz")
     else:
-        df = query_x_range(str(request.args["seq_hash"]) + ".parquet.sz",
+        df = query_x_range(f"{seq_hash}.{method}.parquet.sz",
                            request.args.get("x_min"),
                            request.args.get("x_max"))
 
@@ -53,33 +57,35 @@ def seq_query():
         logging.debug(f"Downsampling by a factor of {downsample}")
         zone = zone[::downsample]
 
-    return jsonify((request.args["seq_hash"], zone))
+    return jsonify((seq_hash, zone))
 
 @app.route("/transform", methods=["POST"])
-def parse_fasta():
+def transform_route():
+    print(request.form)
     sequence = request.form["seq"]
     seq_name = request.form["seq_name"]
+    method = request.form["method"]
 
     logging.debug("Hashing seq")
     seq_hash = str(xxhash.xxh64(sequence).intdigest())
 
     if LOCAL:
-        exists = os.path.exists("data/" + seq_hash + ".parquet.sz")
+        exists = os.path.exists(f"data/{seq_hash}.{method}.parquet.sz")
         logging.debug(f"Found {seq_hash} locally")
     else:
-        exists = exists_on_s3(seq_hash + ".parquet.sz")
+        exists = exists_on_s3(f"{seq_hash}.{method}.parquet.sz")
         logging.debug(f"Found {seq_hash} on S3")
 
     if not exists:
         logging.debug(f"No previous transformation for {seq_name} found. Transforming...")
-        transformed = transform(sequence)
+        transformed = transform(sequence, method=method)
 
         logging.debug("Saving transformed data for " + seq_name)
-        pd.DataFrame(dict(x=transformed[0], y=transformed[1])).to_parquet("data/" + seq_hash + ".parquet.sz")
+        pd.DataFrame(dict(x=transformed[0], y=transformed[1])).to_parquet(f"data/{seq_hash}.{method}.parquet.sz")
 
         if not LOCAL:
             logging.debug(f"Uploading {seq_hash} to S3")
-            upload(seq_hash + ".parquet.sz")
+            upload(f"{seq_hash}.{method}.parquet.sz")
 
     return jsonify(True)
 

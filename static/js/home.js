@@ -15,21 +15,31 @@ var chart = Highcharts.chart('hg-container', {
     text: 'Title will go here'
   },
   xAxis: {
-    title: {
-      text: 'Base'
-    },
     events: {
       // afterSetExtremes: afterSetExtremes
-    }
-  },
-  yAxis: {
-    title: {
-      text: ''
     }
   },
   series: []
 });
 
+var axis_labels = {
+  'squiggle': {
+    'x': 'position (BP)',
+    'y': null
+  },
+  'gates': {
+    'x': 'C-G axis',
+    'y': 'A-T axis'
+  },
+  'yau': {
+    'x': null,
+    'y': null
+  },
+  'yau-bp': {
+    'x': 'position (BP)',
+    'y': null
+  }
+};
 
 /* nomenclature
 seq_name = the identifying string of the sequence
@@ -37,10 +47,11 @@ seq = the sequence
 seq_hash = the xx64 hash with seed(0) in base10
 */
 
-function seqQuery(seq_hash, x_min = null, x_max = null) {
+function seqQuery(seq_hash, method, x_min = null, x_max = null) {
   return axios.get(route + "/seq_query", {
     params: {
       seq_hash: seq_hash,
+      method: method,
       x_min: x_min,
       x_max: x_max
     }
@@ -67,7 +78,7 @@ function transform(seq_name, seq, method) {
 function afterSetExtremes(e) {
   // upon setting the x range of the graph, get the data for that region
   chart.showLoading('Loading data...');
-  axios.all(Object.keys(seqs).map(x => seqQuery(seqs[x]["hash"], e.min, e.max)))
+  axios.all(Object.keys(seqs).map(x => seqQuery(seqs[x]["hash"], $("#method").val(), e.min, e.max)))
     .then(function (results) {
       for (result of results) {
         chart.get(result.data[0]).setData(result.data[1]);
@@ -105,10 +116,17 @@ window.onload = function () {
           };
         }
 
+        chart.xAxis[0].setTitle({
+          text: axis_labels[$("#method").val()]["x"]
+        })
+        chart.yAxis[0].setTitle({
+          text: axis_labels[$("#method").val()]["y"]
+        })
+
         // then, transform the seqs, get the downsampled data, and render the viz
         axios.all(parsed.map(x => transform(x.name, x.sequence, $("#method").val())))
           .then(function () {
-            axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"])))
+            axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"], $("#method").val())))
               .then(function (results) {
 
 
