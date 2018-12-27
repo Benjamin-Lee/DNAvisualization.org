@@ -7,3 +7,7 @@ main {
   width: 50%;
   padding: 10px;
 }
+
+.hide-before-plot-shown {
+  display: none
+}

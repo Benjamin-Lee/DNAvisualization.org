@@ -151,8 +151,10 @@ window.onload = function () {
                 }
               })
           })
-        document.getElementById("hide-when-plotting").style.display = "none"; // get rid of the jumbotron
+
+        $(".hide-when-plotting").hide();
         document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
+        document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
       }
     }
   }

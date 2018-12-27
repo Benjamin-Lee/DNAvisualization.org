@@ -18,40 +18,37 @@
 </head>
 
 <body>
-
-  <!-- nav bar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
-    <a class="navbar-brand" href="/">
-      <img style="max-height: 4vw;" src="{{ url_for('static', filename='images/logo.svg') }}" class="d-inline-block align-top" alt="">
-    </a>
-    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsCollapse" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-md-left" id="navbarsCollapse">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  <!--  /nav bar -->
-
-
-
-  <!-- Show an error if JS is not enabled -->
-  <noscript>
-    <div class="alert alert-danger" role="alert">
-      You need to enable JavaScript to run this app.
-    </div>
-  </noscript>
-
-  <!--  content goes in the container, then into cols that are in a row -->
   <main>
 
+    <!-- nav bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+      <a class="navbar-brand" href="/">
+        <img style="max-height: 4vw;" src="{{ url_for('static', filename='images/logo.svg') }}" class="d-inline-block align-top" alt="">
+      </a>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsCollapse" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-md-left" id="navbarsCollapse">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!--  /nav bar -->
+
+    <!--  content goes in the container, then into cols that are in a row -->
 
     <div class="container">
-      <div class="jumbotron jumbotron-fluid" id="hide-when-plotting" style="background:transparent !important">
+      <!-- Show an error if JS is not enabled -->
+
+      <noscript>
+        <div class="alert alert-danger" role="alert">
+          You need to enable JavaScript to run this app.
+        </div>
+      </noscript>
+      <div class="jumbotron jumbotron-fluid hide-when-plotting" style="background:transparent !important">
         <div class="container">
           <h1 class="display-4">Squiggle</h1>
           <p class="lead">
@@ -64,29 +61,26 @@
 
       <div class="row">
         <!--  FYI, col should always be a row! -->
-        <div class="col-10 center">
+        <div class="col-10">
           <!--  This is the plot, it is not visible until the user uploads a fasta file -->
           <div id="hg-container" style="width:100%; height:600px; display: none;"></div>
         </div>
       </div>
 
-      <div class="row center w-75 border bg-light">
+      <div class="row center w-75 border bg-light rounded-top border-bottom-0">
         <div class="col-8 offset-2">
           <div class="input-group mb-3">
-            <div class="custom-file">
+            <div class="custom-file" id="dropzone">
               <input type="file" class="custom-file-input" id="file-input">
-              <label class="custom-file-label">Choose file</label>
+              <label class="custom-file-label">Choose FASTA file or drop anywhere on page...</label>
             </div>
           </div>
         </div>
-        <div class="col-8 offset-2">
-          <div id="dropzone" class="center" style="text-align:center">
-            Or drop your FASTA file here...
-          </div>
+        <div class="col-8 offset-2 hide-when-plotting">
+          <button type="button" class="btn btn-outline-secondary btn-block hide-when-plotting">Load an example file</button>
         </div>
       </div>
-
-      <div class="row center w-75 bg-light">
+      <div class="row center w-75 bg-light border rounded-bottom border-top-0">
         <div class="container" id="controls">
           <!-- control the viz method -->
           <div class="row" id="method">
@@ -110,22 +104,23 @@
               </div>
             </div>
           </div>
-          <br>
-          <div class="row" id="mode">
-            <div class="col-4">
-              <label for="mode">Legend Mode</label>
-            </div>
-            <div class="col-8">
-              <div class="btn-group btn-group-toggle" name="mode" data-toggle="buttons">
-                <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
-                  <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
-                </label>
-                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
-                  <input type="radio" name="mode" id="file" autocomplete="off">File
-                </label>
-                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
-                  <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
-                </label>
+          <div class="hide-before-plot-shown">
+            <div class="row" id="mode">
+              <div class="col-4">
+                <label for="mode">Legend Mode</label>
+              </div>
+              <div class="col-8">
+                <div class="btn-group btn-group-toggle" name="mode" data-toggle="buttons">
+                  <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
+                    <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
+                  </label>
+                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
+                    <input type="radio" name="mode" id="file" autocomplete="off">File
+                  </label>
+                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
+                    <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -159,7 +154,8 @@
       <div class="row center w-75 bg-light">
         <div class="col-10">
           <h2>About</h2>
-          <p> Squiggle is a two-dimensional DNA sequence visualization library that can turn FASTA sequence files into gorgeous, interactive visualizations. Use the form above to upload your FASTA file ..... lots more text. Info about privacy somewhere on the page.</p>
+          <p> Squiggle is a two-dimensional DNA sequence visualization library that can turn FASTA sequence files into gorgeous, interactive visualizations. Use the form above to upload your FASTA file ..... lots more text. Info about privacy
+            somewhere on the page.</p>
         </div>
       </div>
     </div><!--  /container -->
@@ -167,7 +163,7 @@
 
   <footer class="footer py-3 bg-light">
     <div class="container text-center">
-      <a href="https://github.com/Benjamin-Lee/squiggle-server/blob/master/LICENSE" class="text-muted">&copy;2018 IQT Labs LLC</a>
+      <span class="text-muted">&copy;2018 IQT Labs LLC. This content is released under <a class="text-muted" href="https://github.com/Benjamin-Lee/squiggle-server/blob/master/LICENSE"> the Apache 2.0 License.</a></span>
     </div>
   </footer>
 
