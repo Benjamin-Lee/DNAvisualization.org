@@ -24,6 +24,7 @@
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/boost.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="http://code.highcharts.com/modules/export-data.js"></script>
 
   <!-- other utilities -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -111,32 +112,25 @@
 
     <div class="row center w-75 bg-light">
       <!-- left here for later, since the tooltips don't disappear. See https://stackoverflow.com/q/53930860/8068638-->
-      <!-- <form class="form-inline">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-primary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Fast and acyclic. Shows variations in GC-content and supports non-ATGC bases.">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked>Squiggle
-          </label>
-          <label class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="As, Ts, Cs, and Gs as up, down, left and right, respectively. Cyclic.">
-            <input type="radio" name="options" id="option2" autocomplete="off">Gates
-          </label>
-          <label class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-html="true" title="Bases plotted along a unit vector. <var>x</var>-coordinates do not map to base.">
-            <input type="radio" name="options" id="option3" autocomplete="off">Yau
-          </label>
-          <label class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-html="true" title="Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as bases).">
-            <input type="radio" name="options" id="option2" autocomplete="off">Yau-BP
-          </label>
+      <div class="row" id="method">
+        <div class="col-4">
+          <label for="method" >Visualization Method</label>
         </div>
-      </form> -->
-
-      <div class="form-group row">
-        <label for="method" id="method-label" class="col-6 col-form-label">Visualization Method</label>
-        <div class="col-6">
-          <select id="method" name="method" required="required" class="form-control">
-            <option value="squiggle">Squiggle</option>
-            <option value="gates">Gates</option>
-            <option value="yau">Yau</option>
-            <option value="yau-bp">Yau-BP</option>
-          </select>
+        <div class="col-8">
+          <div class="btn-group btn-group-toggle" name="method" data-toggle="buttons">
+            <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Fast and acyclic. Shows variations in GC-content and supports non-ATGC bases.">
+              <input type="radio" name="method" id="squiggle" autocomplete="off" checked>Squiggle
+            </label>
+            <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="As, Ts, Cs, and Gs as up, down, left and right, respectively. Cyclic.">
+              <input type="radio" name="method" id="gates" autocomplete="off">Gates
+            </label>
+            <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Bases plotted along a unit vector. <var>x</var>-coordinates do not map to base position.">
+              <input type="radio" name="method" id="yau" autocomplete="off">Yau
+            </label>
+            <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as base positions).">
+              <input type="radio" name="method" id="yau-bp" autocomplete="off">Yau-BP
+            </label>
+          </div>
         </div>
       </div>
     </div>

@@ -40,6 +40,7 @@ var axis_labels = {
     'y': null
   }
 };
+var method = "squiggle"; // default method is squiggle
 
 /* nomenclature
 seq_name = the identifying string of the sequence
@@ -47,7 +48,7 @@ seq = the sequence
 seq_hash = the xx64 hash with seed(0) in base10
 */
 
-function seqQuery(seq_hash, method, x_min = null, x_max = null) {
+function seqQuery(seq_hash, x_min = null, x_max = null) {
   return axios.get(route + "/seq_query", {
     params: {
       seq_hash: seq_hash,
@@ -58,7 +59,7 @@ function seqQuery(seq_hash, method, x_min = null, x_max = null) {
   });
 };
 
-function transform(seq_name, seq, method) {
+function transform(seq_name, seq) {
   var bodyFormData = new FormData();
   bodyFormData.set('seq_name', seq_name);
   bodyFormData.set('seq', seq);
@@ -78,7 +79,7 @@ function transform(seq_name, seq, method) {
 function afterSetExtremes(e) {
   // upon setting the x range of the graph, get the data for that region
   chart.showLoading('Loading data...');
-  axios.all(Object.keys(seqs).map(x => seqQuery(seqs[x]["hash"], $("#method").val(), e.min, e.max)))
+  axios.all(Object.keys(seqs).map(x => seqQuery(seqs[x]["hash"], e.min, e.max)))
     .then(function (results) {
       for (result of results) {
         chart.get(result.data[0]).setData(result.data[1]);
@@ -118,20 +119,19 @@ window.onload = function () {
 
         // set the axis labels to reflect the viz method
         chart.xAxis[0].setTitle({
-          text: axis_labels[$("#method").val()]["x"]
+          text: axis_labels[method]["x"]
         })
         chart.yAxis[0].setTitle({
-          text: axis_labels[$("#method").val()]["y"]
+          text: axis_labels[method]["y"]
         })
 
         // hide the method selector
         document.getElementById("method").style.display = "none";
-        document.getElementById("method-label").style.display = "none";
 
         // then, transform the seqs, get the downsampled data, and render the viz
-        axios.all(parsed.map(x => transform(x.name, x.sequence, $("#method").val())))
+        axios.all(parsed.map(x => transform(x.name, x.sequence)))
           .then(function () {
-            axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"], $("#method").val())))
+            axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"])))
               .then(function (results) {
 
 
@@ -163,7 +163,18 @@ window.onload = function () {
   FileReaderJS.setupDrop(document.getElementById('dropzone'), options);
   FileReaderJS.setupDrop(document.body, options);
 
+  // render all tooltips
   $('[data-toggle="tooltip"]').tooltip()
+
+  // bind the viz method button to the method variable
+  $('input[name=method]').change(function () {
+    method = $(this).attr('id');
+  });
+  $('#method').click(function () {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+  })
+
+
 
   // warn before leaving
   window.onbeforeunload = function (event) {
