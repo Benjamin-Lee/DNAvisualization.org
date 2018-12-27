@@ -113,26 +113,74 @@
 
         <!-- viz controls during plotting -->
         <div class="container center pad-bottom hide-before-plot-shown" id="mode">
-          <div class="row" id="mode">
-            <div class="row center">
-              <label for="method">Legend Mode</label>
+          <div class="row">
+            <div class="col-4">
+
+              <div class="row" id="mode">
+                <div class="row center">
+                  <label for="method">Legend Mode</label>
+                </div>
+              </div>
+              <div class="row center">
+                <div class="btn-group btn-group-toggle center" name="mode" data-toggle="buttons">
+                  <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
+                    <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
+                  </label>
+                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
+                    <input type="radio" name="mode" id="file" autocomplete="off">File
+                  </label>
+                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
+                    <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="row center">
-            <div class="btn-group btn-group-toggle center" name="mode" data-toggle="buttons">
-              <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
-                <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
-              </label>
-              <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
-                <input type="radio" name="mode" id="file" autocomplete="off">File
-              </label>
-              <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
-                <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
-              </label>
+            <div class="col-4">
+
+              <div class="row" id="mode">
+                <div class="row center">
+                  <label for="method">Legend Mode</label>
+                </div>
+              </div>
+              <div class="row center">
+                <div class="btn-group btn-group-toggle center" name="mode" data-toggle="buttons">
+                  <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
+                    <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
+                  </label>
+                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
+                    <input type="radio" name="mode" id="file" autocomplete="off">File
+                  </label>
+                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
+                    <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+
+              <div class="row" id="mode">
+                <div class="row center">
+                  <label for="method">Legend Mode</label>
+                </div>
+              </div>
+              <div class="row center">
+                <div class="btn-group btn-group-toggle center" name="mode" data-toggle="buttons">
+                  <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
+                    <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
+                  </label>
+                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
+                    <input type="radio" name="mode" id="file" autocomplete="off">File
+                  </label>
+                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
+                    <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
 
       <div class="row pad-top">
         <div class="col">
