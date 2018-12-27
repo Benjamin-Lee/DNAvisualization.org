@@ -12,6 +12,7 @@
   </script>
   <!-- bootstrap css should before all other css -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{url_for('static',  filename='css/home.css')}}">
 </head>
 
 <body>
@@ -44,77 +45,101 @@
   </noscript>
 
   <!--  content goes in the container, then into cols that are in a row -->
-  <div class="container ">
-    <div class="jumbotron jumbotron-fluid" id="hide-when-plotting" style="background:transparent !important">
-      <div class="container">
-        <h1 class="display-4">Squiggle</h1>
-        <p class="lead">
-          Suiggle is a two-dimensional DNA sequence visualization library that
-          can turn FASTA sequence files into gorgeous, interactive
-          visualizations.
-        </p>
-      </div>
-    </div>
+  <main>
 
-    <div class="row">
-      <!--  FYI, col should always be a row! -->
-      <div class="col-10 center">
-        <!--  This is the plot, it is not visible until the user uploads a fasta file -->
-        <div id="hg-container" style="width:100%; height:600px; display: none;"></div>
-      </div>
-    </div>
 
-    <div class="row center w-75 border bg-light">
-      <div class="col-10">
-        <div class="input-group mb-3">
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="file-input">
-            <label class="custom-file-label">Choose file</label>
+    <div class="container">
+      <div class="jumbotron jumbotron-fluid" id="hide-when-plotting" style="background:transparent !important">
+        <div class="container">
+          <h1 class="display-4">Squiggle</h1>
+          <p class="lead">
+            Suiggle is a two-dimensional DNA sequence visualization library that
+            can turn FASTA sequence files into gorgeous, interactive
+            visualizations.
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <!--  FYI, col should always be a row! -->
+        <div class="col-10 center">
+          <!--  This is the plot, it is not visible until the user uploads a fasta file -->
+          <div id="hg-container" style="width:100%; height:600px; display: none;"></div>
+        </div>
+      </div>
+
+      <div class="row center w-75 border bg-light">
+        <div class="col-8 offset-2">
+          <div class="input-group mb-3">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="file-input">
+              <label class="custom-file-label">Choose file</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-8 offset-2">
+          <div id="dropzone" class="center" style="text-align:center">
+            Or drop your FASTA file here...
           </div>
         </div>
       </div>
-      <div class="col-10">
-        <div id="dropzone">
-          Or drag & drop your file here...
-        </div>
-      </div>
-    </div>
 
-    <div class="row center w-75 bg-light">
-      <!-- left here for later, since the tooltips don't disappear. See https://stackoverflow.com/q/53930860/8068638-->
-      <div class="row" id="method">
-        <div class="col-4">
-          <label for="method" >Visualization Method</label>
-        </div>
-        <div class="col-8">
-          <div class="btn-group btn-group-toggle" name="method" data-toggle="buttons">
-            <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Fast and acyclic. Shows variations in GC-content and supports non-ATGC bases.">
-              <input type="radio" name="method" id="squiggle" autocomplete="off" checked>Squiggle
-            </label>
-            <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="As, Ts, Cs, and Gs as up, down, left and right, respectively. Cyclic.">
-              <input type="radio" name="method" id="gates" autocomplete="off">Gates
-            </label>
-            <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Bases plotted along a unit vector. <var>x</var>-coordinates do not map to base position.">
-              <input type="radio" name="method" id="yau" autocomplete="off">Yau
-            </label>
-            <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as base positions).">
-              <input type="radio" name="method" id="yau-bp" autocomplete="off">Yau-BP
-            </label>
+      <div class="row center w-75 bg-light">
+        <div class="container" id="controls">
+          <!-- control the viz method -->
+          <div class="row" id="method">
+            <div class="col-4">
+              <label for="method">Visualization Method</label>
+            </div>
+            <div class="col-8">
+              <div class="btn-group btn-group-toggle" name="method" data-toggle="buttons">
+                <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Fast and acyclic. Shows variations in GC-content and supports non-ATGC bases.">
+                  <input type="radio" name="method" id="squiggle" autocomplete="off" checked>Squiggle
+                </label>
+                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="As, Ts, Cs, and Gs as up, down, left and right, respectively. Cyclic.">
+                  <input type="radio" name="method" id="gates" autocomplete="off">Gates
+                </label>
+                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Bases plotted along a unit vector. <var>x</var>-coordinates do not map to base position.">
+                  <input type="radio" name="method" id="yau" autocomplete="off">Yau
+                </label>
+                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as base positions).">
+                  <input type="radio" name="method" id="yau-bp" autocomplete="off">Yau-BP
+                </label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" id="mode">
+            <div class="col-4">
+              <label for="mode">Legend Mode</label>
+            </div>
+            <div class="col-8">
+              <div class="btn-group btn-group-toggle" name="mode" data-toggle="buttons">
+                <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
+                  <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
+                </label>
+                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
+                  <input type="radio" name="mode" id="file" autocomplete="off">File
+                </label>
+                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
+                  <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="row center w-75">
-      <div class="col-10">
-        <h2>Citation</h2>
-        <p>If you use Squiggle, please cite the following paper <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty807/5104938?guestAccessKey=306f0370-1281-428b-aa8a-757d3c49d801">(full text)</a>:</p>
-        <ul>
-          <li> Lee, B. D. (2018). Squiggle: a user-friendly two-dimensional DNA sequence visualization tool. <span style="font-style: italic">Bioinformatics</span>. doi:<a href="https://doi.org/10.1093/bioinformatics/bty807">10.1093/bioinformatics/bty807</a>.</li>
+      <div class="row center w-75">
+        <div class="col-10">
+          <h2>Citation</h2>
+          <p>If you use Squiggle, please cite the following paper <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty807/5104938?guestAccessKey=306f0370-1281-428b-aa8a-757d3c49d801">(full text)</a>:</p>
+          <ul>
+            <li> Lee, B. D. (2018). Squiggle: a user-friendly two-dimensional DNA sequence visualization tool. <span style="font-style: italic">Bioinformatics</span>. doi:<a href="https://doi.org/10.1093/bioinformatics/bty807">10.1093/bioinformatics/bty807</a>.</li>
 
-        </ul>
-        <p>Or, if BibTeX is more your style:</p>
-        <pre>
+          </ul>
+          <p>Or, if BibTeX is more your style:</p>
+          <pre>
           @article{Lee2018,
             doi = {10.1093/bioinformatics/bty807},
             url = {https://doi.org/10.1093/bioinformatics/bty807},
@@ -127,31 +152,24 @@
             journal = {Bioinformatics}
           }
         </pre>
+        </div>
       </div>
-    </div>
-    <div class="row center w-75 bg-light">
-      <div class="col-10">
-        <h2>About</h2>
-        <p>
-          Squiggle is a two-dimensional DNA sequence visualization library
-          that can turn FASTA sequence files into gorgeous, interactive visualizations.
-          Use the form above to upload your FASTA file ..... lots more text.
-          Info about privacy somewhere on the page.
+      <div class="row center w-75 bg-light">
+        <div class="col-10">
+          <h2>About</h2>
+          <p>
+            Squiggle is a two-dimensional DNA sequence visualization library
+            that can turn FASTA sequence files into gorgeous, interactive visualizations.
+            Use the form above to upload your FASTA file ..... lots more text.
+            Info about privacy somewhere on the page.
+        </div>
       </div>
-    </div>
+    </div><!--  /container -->
+  </main>
 
-    <style media="">
-      .center {
-               margin: auto;
-               width: 50%;
-               padding: 10px;
-            }
-    </style>
-  </div><!--  /container -->
-
-  <footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-      <span class="text-muted">Place sticky footer content here.</span>
+  <footer class="footer py-3 bg-light">
+    <div class="container text-center">
+      <a href="https://github.com/Benjamin-Lee/squiggle-server/blob/master/LICENSE" class="text-muted">&copy;2018 IQT Labs LLC</a>
     </div>
   </footer>
 

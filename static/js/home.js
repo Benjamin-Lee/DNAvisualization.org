@@ -170,19 +170,21 @@ window.onload = function () {
   $('input[name=method]').change(function () {
     method = $(this).attr('id');
   });
-  $('#method').click(function () {
+
+  // once the user has clicked a control, hide the tooltip
+  $('#controls').click(function () {
     $('[data-toggle="tooltip"]').tooltip("hide");
   })
 
 
 
   // warn before leaving
-  window.onbeforeunload = function (event) {
-    if (document.getElementById("hg-container").style.display == "block") {
-      return "Are you sure you want to leave the page? Your visualization will be lost.";
-    } else {
-      return "";
-    }
-  };
+  // window.onbeforeunload = function (event) {
+  //   if (document.getElementById("hg-container").style.display == "block") {
+  //     return "Are you sure you want to leave the page? Your visualization will be lost.";
+  //   } else {
+  //     return "";
+  //   }
+  // };
 
 }
