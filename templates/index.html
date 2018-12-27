@@ -61,74 +61,81 @@
 
       <div class="row">
         <!--  FYI, col should always be a row! -->
-        <div class="col-10">
+        <div class="col center">
           <!--  This is the plot, it is not visible until the user uploads a fasta file -->
-          <div id="hg-container" style="width:100%; height:600px; display: none;"></div>
+          <div id="hg-container" style="width:100%; height:600px; display: none;" class="pad-bottom"></div>
         </div>
       </div>
 
-      <div class="row center w-75 border bg-light rounded-top border-bottom-0">
-        <div class="col-8 offset-2">
-          <div class="input-group mb-3">
+      <!--the file adding section -->
+      <div class="row border bg-light rounded-top border-bottom-0 pad-top">
+        <div class="col-10 offset-1">
+          <div class="input-group mb-3 pad-top">
             <div class="custom-file" id="dropzone">
               <input type="file" class="custom-file-input" id="file-input">
               <label class="custom-file-label">Choose FASTA file or drop anywhere on page...</label>
             </div>
           </div>
         </div>
-        <div class="col-8 offset-2 hide-when-plotting">
+        <div class="col-10 offset-1 hide-when-plotting">
           <button type="button" class="btn btn-outline-secondary btn-block hide-when-plotting">Load an example file</button>
         </div>
       </div>
-      <div class="row center w-75 bg-light border rounded-bottom border-top-0">
-        <div class="container" id="controls">
+
+      <!-- the control section -->
+      <div class="row bg-light border rounded-bottom border-top-0" id="controls">
+
+        <!-- the viz method -->
+        <div class="container center pad-top pad-bottom hide-when-plotting">
           <!-- control the viz method -->
           <div class="row" id="method">
-            <div class="col-4">
+            <div class="row center">
               <label for="method">Visualization Method</label>
             </div>
-            <div class="col-8">
-              <div class="btn-group btn-group-toggle" name="method" data-toggle="buttons">
-                <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Fast and acyclic. Shows variations in GC-content and supports non-ATGC bases.">
-                  <input type="radio" name="method" id="squiggle" autocomplete="off" checked>Squiggle
-                </label>
-                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="As, Ts, Cs, and Gs as up, down, left and right, respectively. Cyclic.">
-                  <input type="radio" name="method" id="gates" autocomplete="off">Gates
-                </label>
-                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Bases plotted along a unit vector. <var>x</var>-coordinates do not map to base position.">
-                  <input type="radio" name="method" id="yau" autocomplete="off">Yau
-                </label>
-                <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as base positions).">
-                  <input type="radio" name="method" id="yau-bp" autocomplete="off">Yau-BP
-                </label>
-              </div>
+          </div>
+          <div class="row center">
+            <div class="btn-group btn-group-toggle center" name="method" data-toggle="buttons">
+              <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Fast and acyclic. Shows variations in GC-content and supports non-ATGC bases.">
+                <input type="radio" name="method" id="squiggle" autocomplete="off" checked>Squiggle
+              </label>
+              <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="As, Ts, Cs, and Gs as up, down, left and right, respectively. Cyclic.">
+                <input type="radio" name="method" id="gates" autocomplete="off">Gates
+              </label>
+              <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Bases plotted along a unit vector. <var>x</var>-coordinates do not map to base position.">
+                <input type="radio" name="method" id="yau" autocomplete="off">Yau
+              </label>
+              <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as base positions).">
+                <input type="radio" name="method" id="yau-bp" autocomplete="off">Yau-BP
+              </label>
             </div>
           </div>
-          <div class="hide-before-plot-shown">
-            <div class="row" id="mode">
-              <div class="col-4">
-                <label for="mode">Legend Mode</label>
-              </div>
-              <div class="col-8">
-                <div class="btn-group btn-group-toggle" name="mode" data-toggle="buttons">
-                  <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
-                    <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
-                  </label>
-                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
-                    <input type="radio" name="mode" id="file" autocomplete="off">File
-                  </label>
-                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
-                    <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
-                  </label>
-                </div>
-              </div>
+        </div>
+
+        <!-- viz controls during plotting -->
+        <div class="container center pad-bottom hide-before-plot-shown" id="mode">
+          <div class="row" id="mode">
+            <div class="row center">
+              <label for="method">Legend Mode</label>
+            </div>
+          </div>
+          <div class="row center">
+            <div class="btn-group btn-group-toggle center" name="mode" data-toggle="buttons">
+              <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
+                <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
+              </label>
+              <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
+                <input type="radio" name="mode" id="file" autocomplete="off">File
+              </label>
+              <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
+                <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
+              </label>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row center w-75">
-        <div class="col-10">
+      <div class="row pad-top">
+        <div class="col">
           <h2>Citation</h2>
           <p>If you use Squiggle, please cite the following paper <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty807/5104938?guestAccessKey=306f0370-1281-428b-aa8a-757d3c49d801">(full text)</a>:</p>
           <ul>
@@ -151,8 +158,8 @@
         </pre>
         </div>
       </div>
-      <div class="row center w-75 bg-light">
-        <div class="col-10">
+      <div class="row">
+        <div class="col">
           <h2>About</h2>
           <p> Squiggle is a two-dimensional DNA sequence visualization library that can turn FASTA sequence files into gorgeous, interactive visualizations. Use the form above to upload your FASTA file ..... lots more text. Info about privacy
             somewhere on the page.</p>

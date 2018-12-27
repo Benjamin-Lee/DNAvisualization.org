@@ -4,10 +4,16 @@ main {
 
 .center {
   margin: auto;
-  width: 50%;
-  padding: 10px;
 }
 
 .hide-before-plot-shown {
   display: none
+}
+
+.pad-bottom {
+    padding-bottom: 10px;
+}
+
+.pad-top {
+    padding-top: 10px;
 }
