@@ -7,6 +7,11 @@ let chart = Highcharts.chart('hg-container', {
   chart: {
     type: 'line',
     zoomType: 'x',
+    resetZoomButton: {
+      theme: {
+        display: 'none'
+      }
+    }
   },
   // boost: {
   //   useGPUTranslations: true
@@ -59,6 +64,9 @@ let dialog = bootbox.dialog({
   closeButton: false,
   show: false
 });
+// so that the reset button knows what zoom to reset to
+let originalExtremesX = {};
+let originalExtremesY = {};
 
 /* nomenclature
 seq_name = the identifying string of the sequence
@@ -141,6 +149,11 @@ function plotSequence(fastaString, filename) {
           data: result.data[1]
         });
       };
+
+      // save the iriginal dimensions
+      originalExtremesX = chart.xAxis[0].getExtremes();
+      originalExtremesY = chart.yAxis[0].getExtremes();
+
       document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
       document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
       $(".hide-when-plotting").hide();
@@ -151,8 +164,17 @@ function plotSequence(fastaString, filename) {
 
   // make the subtitle reflect the plotting method
   chart.setTitle(null, {
-    text: `Plotted using the ${method_name} method.`
+    text: `Visualized using the ${method_name} method`
   });
+}
+
+function resetChart() {
+  for (let i = 0; i < chart.series.length; i++) {
+    let name = chart.series[i].userOptions.name;
+    chart.series[i].setData(seqs[name].overviewData)
+  }
+  chart.xAxis[0].setExtremes(originalExtremesX.min, originalExtremesX.max);
+  chart.yAxis[0].setExtremes(originalExtremesY.min, originalExtremesY.max);
 }
 
 function seqQuery(seq_hash, x_min = null, x_max = null) {
