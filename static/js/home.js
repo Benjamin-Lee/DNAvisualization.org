@@ -16,12 +16,11 @@ let chart = Highcharts.chart('hg-container', {
   },
   xAxis: {
     events: {
-      // afterSetExtremes: afterSetExtremes
+      afterSetExtremes: afterSetExtremes
     }
   },
   series: []
 });
-
 let axis_labels = {
   'squiggle': {
     'x': 'position (BP)',
@@ -132,6 +131,9 @@ function plotSequence(fastaString, filename) {
           return [x.hash]
         })[result.data[0]][0];
 
+        // store the downsampled shape
+        seqs[resultName]["overviewData"] = result.data[1];
+
         // add the series to chart (with animation!)
         chart.addSeries({
           name: resultName,
@@ -184,14 +186,26 @@ function transform(seq_name, seq) {
 function afterSetExtremes(e) {
   // upon setting the x range of the graph, get the data for that region
   chart.showLoading('Loading data...');
-  axios.all(Object.keys(seqs).map(x => seqQuery(seqs[x]["hash"], e.min, e.max)))
-    .then(function (results) {
-      for (result of results) {
-        chart.get(result.data[0]).setData(result.data[1]);
-      }
-      chart.hideLoading();
-    }); // handle response.
 
+  for (key of Object.keys(seqs)) {
+    // console.log([key, seqs[key].overviewData]);
+    if (seqs[key].overviewData == null) {
+      continue;
+    }
+    if ((e.max < seqs[key].overviewData[seqs[key].overviewData.length - 1][0]) &&
+      (e.min > seqs[key].overviewData[0][0])) {
+      console.log(`getting data for ${seqs[key]["hash"]}`);
+      seqQuery(seqs[key]["hash"], e.min, e.max)
+        .then(function (results) {
+          console.log(results);
+          chart.get(results.data[0]).setData(results.data[1]);
+        })
+    }
+  }
+
+
+
+  chart.hideLoading();
 }
 
 
