@@ -173,24 +173,25 @@
             </div>
             <div class="col-4">
 
-              <div class="row" id="mode">
-                <div class="row center">
-                  <label for="method">Legend Mode</label>
+              <div class="row justify-content-center" id="mode">
+                <div class="col text-center">
+                  <div class="row justify-content-center">
+                    <div class="col text-center">
+                      <label for="method">Zoom <i class="far fa-question-circle" data-toggle="tooltip" data-placement="top" data-html="true" title="Drag on a region to zoom in and click below to zoom out. Loading the data may take a few moments."></i></label>
+                    </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col text-center">
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-outline-secondary" id="zoom-out" onclick="zoom(0.5)"><i class="fas fa-search-minus"></i></button>
+                        <button type="button" class="btn btn-outline-secondary" id="reset-zoom" onclick="resetChart()">Reset</button>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
               </div>
-              <div class="row center">
-                <div class="btn-group btn-group-toggle center" name="mode" data-toggle="buttons">
-                  <label class="btn btn-outline-secondary active" data-toggle="tooltip" data-placement="top" title="(Recommended) Automatically decide between file and sequence mode.">
-                    <input type="radio" name="mode" id="auto" autocomplete="off" checked>Auto
-                  </label>
-                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Plot each file in its own color.">
-                    <input type="radio" name="mode" id="file" autocomplete="off">File
-                  </label>
-                  <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Plot each sequence in its own color.">
-                    <input type="radio" name="mode" id="sequence" autocomplete="off">Sequence
-                  </label>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>

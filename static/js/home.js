@@ -11,7 +11,8 @@ let chart = Highcharts.chart('hg-container', {
       theme: {
         display: 'none'
       }
-    }
+    },
+    panKey: "alt"
   },
   // boost: {
   //   useGPUTranslations: true
@@ -146,7 +147,8 @@ function plotSequence(fastaString, filename) {
         chart.addSeries({
           name: resultName,
           id: result.data[0],
-          data: result.data[1]
+          data: result.data[1],
+          marker: false
         });
       };
 
@@ -168,6 +170,7 @@ function plotSequence(fastaString, filename) {
   });
 }
 
+// reset the chart back to its original zoom
 function resetChart() {
   for (let i = 0; i < chart.series.length; i++) {
     let name = chart.series[i].userOptions.name;
@@ -175,6 +178,14 @@ function resetChart() {
   }
   chart.xAxis[0].setExtremes(originalExtremesX.min, originalExtremesX.max);
   chart.yAxis[0].setExtremes(originalExtremesY.min, originalExtremesY.max);
+}
+
+// for manually controlling the zoom
+function zoom(factor) {
+  xRange = chart.xAxis[0].getExtremes().max - chart.xAxis[0].getExtremes().min;
+  yRange = chart.yAxis[0].getExtremes().max - chart.yAxis[0].getExtremes().min;
+  chart.xAxis[0].setExtremes(chart.xAxis[0].getExtremes().min - (xRange * factor), chart.xAxis[0].getExtremes().max + (xRange * factor));
+  chart.yAxis[0].setExtremes(chart.yAxis[0].getExtremes().min - (yRange * factor), chart.yAxis[0].getExtremes().max + (yRange * factor));
 }
 
 function seqQuery(seq_hash, x_min = null, x_max = null) {
