@@ -48,6 +48,66 @@ seq = the sequence
 seq_hash = the xx64 hash with seed(0) in base10
 */
 
+function plotSequence(fastaString, filename) {
+  if (!validateFasta(fastaString)) {
+    bootbox.alert({
+      size: "large",
+      title: "Bad FASTA file",
+      message: `<pre style="display: inline;">${filename}</pre> doesn't appear to be a valid FASTA file. Proceeding without parsing it.`,
+    })
+    return false
+  }
+  // load all the parsed seqs_names and seq_hashes into the seqs variable
+  // TODO: only perform this procedure on new seqs (don't allow redragging of files already present)
+  var parsed = window.parse_fasta(fastaString);
+  for (seq of parsed) {
+    seqs[seq["name"]] = {
+      filename: filename,
+      hash: XXH.h64(seq["sequence"], 0).toString(10),
+      length: seq["sequence"].length
+    };
+  }
+
+  // set the axis labels to reflect the viz method
+  chart.xAxis[0].setTitle({
+    text: axis_labels[method]["x"]
+  })
+  chart.yAxis[0].setTitle({
+    text: axis_labels[method]["y"]
+  })
+
+  // hide the method selector
+  document.getElementById("method").style.display = "none";
+
+  // then, transform the seqs, get the downsampled data, and render the viz
+  axios.all(parsed.map(x => transform(x.name, x.sequence)))
+    .then(function () {
+      axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"])))
+        .then(function (results) {
+
+
+          for (result of results) {
+
+            // determine the name associated with the hash
+            resultName = _.invertBy(seqs, (x) => {
+              return [x.hash]
+            })[result.data[0]][0];
+
+            // add the series to chart (with animation!)
+            chart.addSeries({
+              name: resultName,
+              id: result.data[0],
+              data: result.data[1]
+            });
+          }
+        })
+    })
+
+  $(".hide-when-plotting").hide();
+  document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
+  document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
+}
+
 function seqQuery(seq_hash, x_min = null, x_max = null) {
   return axios.get(route + "/seq_query", {
     params: {
@@ -98,63 +158,7 @@ window.onload = function () {
 
     on: {
       load: function (e, file) {
-        if (!validateFasta(e.target.result)) {
-          bootbox.alert({
-            size: "large",
-            title: "Bad FASTA file",
-            message: `<pre style="display: inline;">${file.name}</pre> doesn't appear to be a valid FASTA file. Proceeding without parsing it.`,
-          })
-          return false
-        }
-        // load all the parsed seqs_names and seq_hashes into the seqs variable
-        // TODO: only perform this procedure on new seqs (don't allow redragging of files already present)
-        var parsed = window.parse_fasta(e.target.result);
-        for (seq of parsed) {
-          seqs[seq["name"]] = {
-            filename: file.name,
-            hash: XXH.h64(seq["sequence"], 0).toString(10),
-            length: seq["sequence"].length
-          };
-        }
-
-        // set the axis labels to reflect the viz method
-        chart.xAxis[0].setTitle({
-          text: axis_labels[method]["x"]
-        })
-        chart.yAxis[0].setTitle({
-          text: axis_labels[method]["y"]
-        })
-
-        // hide the method selector
-        document.getElementById("method").style.display = "none";
-
-        // then, transform the seqs, get the downsampled data, and render the viz
-        axios.all(parsed.map(x => transform(x.name, x.sequence)))
-          .then(function () {
-            axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"])))
-              .then(function (results) {
-
-
-                for (result of results) {
-
-                  // determine the name associated with the hash
-                  resultName = _.invertBy(seqs, (x) => {
-                    return [x.hash]
-                  })[result.data[0]][0];
-
-                  // add the series to chart (with animation!)
-                  chart.addSeries({
-                    name: resultName,
-                    id: result.data[0],
-                    data: result.data[1]
-                  });
-                }
-              })
-          })
-
-        $(".hide-when-plotting").hide();
-        document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
-        document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
+        plotSequence(e.target.result, file.name)
       }
     }
   }
@@ -184,7 +188,7 @@ window.onload = function () {
       inputType: 'textarea',
       backdrop: true,
       callback: function (result) {
-        console.log(result);
+        plotSequence(result, "");
       },
       size: "large",
       buttons: {
