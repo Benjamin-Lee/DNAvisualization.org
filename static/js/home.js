@@ -7,13 +7,6 @@ let chart = Highcharts.chart('hg-container', {
   chart: {
     type: 'line',
     zoomType: 'x',
-    events: {
-      addSeries: function () {
-        setTimeout(function () {
-          dialog.modal("hide");
-        }, 1000)
-      }
-    }
   },
   // boost: {
   //   useGPUTranslations: true
@@ -149,6 +142,9 @@ function plotSequence(fastaString, filename) {
           document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
           document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
           $(".hide-when-plotting").hide();
+          setTimeout(function () {
+            dialog.modal("hide");
+          }, 750);
         })
     })
 
