@@ -41,6 +41,7 @@ var axis_labels = {
   }
 };
 var method = "squiggle"; // default method is squiggle
+var method_name = "Squiggle"
 
 /* nomenclature
 seq_name = the identifying string of the sequence
@@ -64,12 +65,30 @@ function plotSequence(fastaString, filename) {
   }
   // load all the parsed seqs_names and seq_hashes into the seqs variable
   // TODO: only perform this procedure on new seqs (don't allow redragging of files already present)
-  var parsed = window.parse_fasta(fastaString);
+  var parsed = fasta2json(fastaString);
+  console.log(parsed);
+  if (method != "squiggle") {
+    if (!validateDNA(parsed)) {
+      bootbox.alert({
+        size: "large",
+        title: "Incompatible method",
+        message: filename ? `<pre style="display: inline;">${filename}</pre> appears to have non-ATGC bases in it. The ${method_name} method doesn't support non-ATGC bases, so plotting using Squiggle instead.` : `This sequences has non-ATGC bases in it. The ${method_name} method doesn't support non-ATGC bases, so plotting using Squiggle instead.`,
+        buttons: {
+          ok: {
+            className: 'btn-secondary',
+          }
+        }
+      });
+      method = "squiggle";
+      method_name = "Squiggle"
+    }
+  }
+
   for (seq of parsed) {
     seqs[seq["name"]] = {
       filename: filename,
-      hash: XXH.h64(seq["sequence"], 0).toString(10),
-      length: seq["sequence"].length
+      hash: XXH.h64(seq["seq"], 0).toString(10),
+      length: seq["seq"].length
     };
   }
 
@@ -85,7 +104,7 @@ function plotSequence(fastaString, filename) {
   document.getElementById("method").style.display = "none";
 
   // then, transform the seqs, get the downsampled data, and render the viz
-  axios.all(parsed.map(x => transform(x.name, x.sequence)))
+  axios.all(parsed.map(x => transform(x.name, x.seq)))
     .then(function () {
       axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"])))
         .then(function (results) {
@@ -107,6 +126,10 @@ function plotSequence(fastaString, filename) {
           }
         })
     })
+
+  chart.setTitle(null, {
+    text: `Plotted using the ${method_name} method.`
+  });
 
   $(".hide-when-plotting").hide();
   document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
@@ -179,7 +202,14 @@ window.onload = function () {
 
   // bind the viz method button to the method variable
   $('input[name=method]').change(function () {
+    var methods = {
+      squiggle: "Squiggle",
+      gates: "Gates",
+      yau: "Yau",
+      "yau-bp": "Yau-BP"
+    }
     method = $(this).attr('id');
+    method_name = methods[method];
   });
 
   // once the user has clicked a control, hide the tooltip
@@ -193,6 +223,9 @@ window.onload = function () {
       inputType: 'textarea',
       backdrop: true,
       callback: function (result) {
+        if (!result) {
+          return
+        }
         plotSequence(result, "");
       },
       size: "large",
