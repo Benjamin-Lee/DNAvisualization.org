@@ -61,7 +61,6 @@ def seq_query():
 
 @app.route("/transform", methods=["POST"])
 def transform_route():
-    print(request.form)
     sequence = request.form["seq"]
     seq_name = request.form["seq_name"]
     method = request.form["method"]

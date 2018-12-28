@@ -1,12 +1,19 @@
-var seqs = {};
-var chart = Highcharts.chart('hg-container', {
+let seqs = {};
+let chart = Highcharts.chart('hg-container', {
   credits: {
     text: "BD Lee, et al. (2019). SquiggleDNA.org",
     href: "http://squiggledna.org"
   },
   chart: {
     type: 'line',
-    zoomType: 'x'
+    zoomType: 'x',
+    events: {
+      addSeries: function () {
+        setTimeout(function () {
+          dialog.modal("hide");
+        }, 1000)
+      }
+    }
   },
   // boost: {
   //   useGPUTranslations: true
@@ -22,7 +29,7 @@ var chart = Highcharts.chart('hg-container', {
   series: []
 });
 
-var axis_labels = {
+let axis_labels = {
   'squiggle': {
     'x': 'position (BP)',
     'y': null
@@ -40,8 +47,26 @@ var axis_labels = {
     'y': null
   }
 };
-var method = "squiggle"; // default method is squiggle
-var method_name = "Squiggle"
+let method = "squiggle"; // default method is squiggle
+let method_name = "Squiggle"
+let dialog = bootbox.dialog({
+  message: `
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col text-center pad-top">
+          <i class="fa fa-spin fa-circle-notch fa-3x"></i>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col text-center pad-top">
+          <p id="loading-modal-message">Getting things ready...</p>
+        </div>
+      </div>
+    </div>
+  `,
+  closeButton: false,
+  show: false
+});
 
 /* nomenclature
 seq_name = the identifying string of the sequence
@@ -50,6 +75,7 @@ seq_hash = the xx64 hash with seed(0) in base10
 */
 
 function plotSequence(fastaString, filename) {
+  dialog.modal("show");
   if (!validateFasta(fastaString)) {
     bootbox.alert({
       size: "large",
@@ -63,10 +89,9 @@ function plotSequence(fastaString, filename) {
     });
     return false
   }
-  // load all the parsed seqs_names and seq_hashes into the seqs variable
+  // load all the parsed seqs_names and seq_hashes into the seqs iable
   // TODO: only perform this procedure on new seqs (don't allow redragging of files already present)
-  var parsed = fasta2json(fastaString);
-  console.log(parsed);
+  let parsed = fasta2json(fastaString);
   if (method != "squiggle") {
     if (!validateDNA(parsed)) {
       bootbox.alert({
@@ -100,16 +125,13 @@ function plotSequence(fastaString, filename) {
     text: axis_labels[method]["y"]
   })
 
-  // hide the method selector
-  document.getElementById("method").style.display = "none";
-
   // then, transform the seqs, get the downsampled data, and render the viz
+  $("#loading-modal-message").text("Visualizing your data...");
   axios.all(parsed.map(x => transform(x.name, x.seq)))
     .then(function () {
+      $("#loading-modal-message").text("Retrieving your data..."); // update the status message
       axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"])))
         .then(function (results) {
-
-
           for (result of results) {
 
             // determine the name associated with the hash
@@ -123,17 +145,17 @@ function plotSequence(fastaString, filename) {
               id: result.data[0],
               data: result.data[1]
             });
-          }
+          };
+          document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
+          document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
+          $(".hide-when-plotting").hide();
         })
     })
 
+  // make the subtitle reflect the plotting method
   chart.setTitle(null, {
     text: `Plotted using the ${method_name} method.`
   });
-
-  $(".hide-when-plotting").hide();
-  document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
-  document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
 }
 
 function seqQuery(seq_hash, x_min = null, x_max = null) {
@@ -148,7 +170,7 @@ function seqQuery(seq_hash, x_min = null, x_max = null) {
 };
 
 function transform(seq_name, seq) {
-  var bodyFormData = new FormData();
+  let bodyFormData = new FormData();
   bodyFormData.set('seq_name', seq_name);
   bodyFormData.set('seq', seq);
   bodyFormData.set('method', method);
@@ -180,13 +202,13 @@ function afterSetExtremes(e) {
 
 window.onload = function () {
 
-  var options = {
+  let options = {
     // CSS Class to add to the drop element when a drag is active
     readAsDefault: 'Text',
 
     on: {
       load: function (e, file) {
-        plotSequence(e.target.result, file.name)
+        plotSequence(e.target.result, file.name);
       }
     }
   }
@@ -200,9 +222,9 @@ window.onload = function () {
   // render all tooltips
   $('[data-toggle="tooltip"]').tooltip()
 
-  // bind the viz method button to the method variable
+  // bind the viz method button to the method iable
   $('input[name=method]').change(function () {
-    var methods = {
+    let methods = {
       squiggle: "Squiggle",
       gates: "Gates",
       yau: "Yau",
