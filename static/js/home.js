@@ -6,13 +6,14 @@ let chart = Highcharts.chart('hg-container', {
   },
   chart: {
     type: 'line',
-    zoomType: 'x',
+    zoomType: 'xy',
     resetZoomButton: {
       theme: {
         display: 'none'
       }
     },
-    panKey: "alt"
+    panKey: "shift",
+    panning: true,
   },
   // boost: {
   //   useGPUTranslations: true
@@ -147,8 +148,7 @@ function plotSequence(fastaString, filename) {
         chart.addSeries({
           name: resultName,
           id: result.data[0],
-          data: result.data[1],
-          marker: false
+          data: result.data[1]
         });
       };
 
