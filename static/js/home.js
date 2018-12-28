@@ -178,6 +178,26 @@ window.onload = function () {
     $('[data-toggle="tooltip"]').tooltip("hide");
   })
 
+  $("#paste-sequence").click(function () {
+    bootbox.prompt({
+      title: "Paste a FASTA-formatted sequence",
+      inputType: 'textarea',
+      backdrop: true,
+      callback: function (result) {
+        console.log(result);
+      },
+      size: "large",
+      buttons: {
+        cancel: {
+          className: 'btn-outline-secondary',
+        },
+        confirm: {
+          className: 'btn-secondary',
+        }
+      }
+    });
+
+  })
 
 
   // warn before leaving
