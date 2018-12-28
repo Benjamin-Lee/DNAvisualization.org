@@ -69,17 +69,32 @@
 
       <!--the file adding section -->
       <div class="row border bg-light rounded-top border-bottom-0 pad-top">
-        <div class="col-10 offset-1">
-          <div class="input-group mb-3 pad-top">
-            <div class="custom-file" id="dropzone">
-              <input type="file" class="custom-file-input" id="file-input">
-              <label class="custom-file-label">Choose FASTA file or drop anywhere on page...</label>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-8 offset-1">
+              <div class="input-group mb-3 pad-top">
+                <div class="custom-file" id="dropzone">
+                  <input type="file" class="custom-file-input" id="file-input">
+                  <label class="custom-file-label">Choose FASTA file or drop anywhere on page...</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="pad-top">
+                <button type="button" class="btn btn-outline-secondary btn-block"><i class="fas fa-paste"></i> Paste sequence</button>
+
+              </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-10 offset-1 hide-when-plotting">
+              <button type="button" class="btn btn-outline-secondary btn-block hide-when-plotting">Load an example file</button>
+            </div>
+          </div>
+
         </div>
-        <div class="col-10 offset-1 hide-when-plotting">
-          <button type="button" class="btn btn-outline-secondary btn-block hide-when-plotting">Load an example file</button>
-        </div>
+
+
       </div>
 
       <!-- the control section -->
