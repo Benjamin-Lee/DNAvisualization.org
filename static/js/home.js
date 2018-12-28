@@ -203,6 +203,10 @@ window.onload = function () {
 
   })
 
+  $("#load-example").click(function () {
+    plotSequence(hbb, "hbb.fasta")
+  });
+
 
   // warn before leaving
   // window.onbeforeunload = function (event) {
