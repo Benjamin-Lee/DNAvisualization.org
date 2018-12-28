@@ -54,7 +54,12 @@ function plotSequence(fastaString, filename) {
       size: "large",
       title: "Bad FASTA file",
       message: `<pre style="display: inline;">${filename}</pre> doesn't appear to be a valid FASTA file. Proceeding without parsing it.`,
-    })
+      buttons: {
+        ok: {
+          className: 'btn-secondary',
+        }
+      }
+    });
     return false
   }
   // load all the parsed seqs_names and seq_hashes into the seqs variable
