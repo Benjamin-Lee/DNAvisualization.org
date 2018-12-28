@@ -10,6 +10,7 @@ from flask import Flask, jsonify, render_template, request, url_for, send_from_d
 
 from aws import exists_on_s3, query_x_range, upload
 from squiggle import transform
+from helpers import downsample
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -47,17 +48,8 @@ def seq_query():
     logging.debug("Got the data")
 
     zone = df.loc[(float(request.args.get("x_max", df.x.max())) >= df.x) &
-                  (float(request.args.get("x_min", df.x.min())) <= df.x)].values
-    zone = zone.tolist()
-
-    # downsample if > 5000 points
-    # TODO: ensure that the first and last data points in the range are included
-    if len(zone) > 5000:
-        downsample = int(len(zone) / 5000)
-        logging.debug(f"Downsampling by a factor of {downsample}")
-        zone = zone[::downsample]
-
-    return jsonify((seq_hash, zone))
+                  (float(request.args.get("x_min", df.x.min())) <= df.x)].values.tolist()
+    return jsonify((seq_hash, downsample(zone)))
 
 @app.route("/transform", methods=["POST"])
 def transform_route():
@@ -75,18 +67,30 @@ def transform_route():
         exists = exists_on_s3(f"{seq_hash}.{method}.parquet.sz")
         logging.debug(f"Found {seq_hash} on S3")
 
-    if not exists:
+    if exists:
+        if LOCAL:
+            df = pd.read_parquet(f"data/{seq_hash}.{method}.parquet.sz")
+        else:
+            df = query_x_range(f"{seq_hash}.{method}.parquet.sz",
+                               request.args.get("x_min"),
+                               request.args.get("x_max"))
+
+    else:
         logging.debug(f"No previous transformation for {seq_name} found. Transforming...")
         transformed = transform(sequence, method=method)
 
         logging.debug("Saving transformed data for " + seq_name)
-        pd.DataFrame(dict(x=transformed[0], y=transformed[1])).to_parquet(f"data/{seq_hash}.{method}.parquet.sz")
+        df = pd.DataFrame(dict(x=transformed[0], y=transformed[1]))
+        df.to_parquet(f"data/{seq_hash}.{method}.parquet.sz")
 
         if not LOCAL:
             logging.debug(f"Uploading {seq_hash} to S3")
             upload(f"{seq_hash}.{method}.parquet.sz")
 
-    return jsonify(True)
+    logging.debug(f"Got the overview data for {seq_hash}")
+
+    zone = df.values.tolist()
+    return jsonify((seq_hash, downsample(zone)))
 
 @app.route('/favicon.ico')
 def favicon():

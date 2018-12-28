@@ -124,31 +124,27 @@ function plotSequence(fastaString, filename) {
   // then, transform the seqs, get the downsampled data, and render the viz
   $("#loading-modal-message").text("Visualizing your data...");
   axios.all(parsed.map(x => transform(x.name, x.seq)))
-    .then(function () {
-      $("#loading-modal-message").text("Retrieving your data..."); // update the status message
-      axios.all(parsed.map(k => seqQuery(seqs[k["name"]]["hash"])))
-        .then(function (results) {
-          for (result of results) {
+    .then(function (results) {
+      for (result of results) {
 
-            // determine the name associated with the hash
-            resultName = _.invertBy(seqs, (x) => {
-              return [x.hash]
-            })[result.data[0]][0];
+        // determine the name associated with the hash
+        resultName = _.invertBy(seqs, (x) => {
+          return [x.hash]
+        })[result.data[0]][0];
 
-            // add the series to chart (with animation!)
-            chart.addSeries({
-              name: resultName,
-              id: result.data[0],
-              data: result.data[1]
-            });
-          };
-          document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
-          document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
-          $(".hide-when-plotting").hide();
-          setTimeout(function () {
-            dialog.modal("hide");
-          }, 750);
-        })
+        // add the series to chart (with animation!)
+        chart.addSeries({
+          name: resultName,
+          id: result.data[0],
+          data: result.data[1]
+        });
+      };
+      document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
+      document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
+      $(".hide-when-plotting").hide();
+      setTimeout(function () {
+        dialog.modal("hide");
+      }, 750);
     })
 
   // make the subtitle reflect the plotting method
