@@ -73,13 +73,16 @@ function plotSequence(fastaString, filename) {
     bootbox.alert({
       size: "large",
       title: filename ? "Bad FASTA file" : "Invalid submission.",
-      message: filename ? `<pre style="display: inline;">${filename}</pre> doesn't appear to be a valid FASTA file. Proceeding without parsing it.` : `This doesn't appear to be a valid FASTA-formatted sequence.`,
+      message: filename ? `<pre style="display: inline;">${filename}</pre> doesn't appear to be a valid FASTA file.` : `This doesn't appear to be a valid FASTA-formatted sequence.`,
       buttons: {
         ok: {
           className: 'btn-secondary',
         }
       }
     });
+    setTimeout(function () {
+      dialog.modal("hide");
+    }, 500);
     return false
   }
   // load all the parsed seqs_names and seq_hashes into the seqs iable
