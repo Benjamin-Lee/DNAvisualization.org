@@ -52,8 +52,8 @@ function plotSequence(fastaString, filename) {
   if (!validateFasta(fastaString)) {
     bootbox.alert({
       size: "large",
-      title: "Bad FASTA file",
-      message: `<pre style="display: inline;">${filename}</pre> doesn't appear to be a valid FASTA file. Proceeding without parsing it.`,
+      title: filename ? "Bad FASTA file" : "Invalid submission.",
+      message: filename ? `<pre style="display: inline;">${filename}</pre> doesn't appear to be a valid FASTA file. Proceeding without parsing it.` : `This doesn't appear to be a valid FASTA-formatted sequence.`,
       buttons: {
         ok: {
           className: 'btn-secondary',
