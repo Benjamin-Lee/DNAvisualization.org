@@ -187,10 +187,24 @@ function plotSequence(fastaString, filename) {
       }, 750);
     })
 
+  let filenames = _.uniq(Object.values(seqs).map(x => x.filename))
+  if (filenames.length != 1) {
+    var title = `${method_name} DNA Visualization`;
+    var subtitle = null;
+  } else if (filenames.length == 1) {
+    var title = `${filenames[0]} Visualization`;
+    var subtitle = ` Via the ${method_name} method`;
+  }
+
   // make the subtitle reflect the plotting method
-  chart.setTitle(null, {
-    text: `Visualized using the ${method_name} method`
+  chart.setTitle({
+    text: title
+  }, {
+    text: subtitle
   });
+
+  // render all tooltips
+  $('[data-toggle="tooltip"]').tooltip()
 }
 
 // reset the chart back to its original zoom
@@ -284,8 +298,6 @@ window.onload = function () {
   FileReaderJS.setupDrop(document.getElementById('dropzone'), options);
   FileReaderJS.setupDrop(document.body, options);
 
-  // render all tooltips
-  $('[data-toggle="tooltip"]').tooltip()
 
   // bind the viz method button to the method iable
   $('input[name=method]').change(function () {
@@ -341,6 +353,9 @@ window.onload = function () {
   document.addEventListener("dragster:leave", function (e) {
     dropModal.modal("hide");
   }, false);
+
+  // render all tooltips
+  $('[data-toggle="tooltip"]').tooltip()
 
 
   // warn before leaving
