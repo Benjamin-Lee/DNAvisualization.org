@@ -192,7 +192,7 @@ function plotSequence(fastaString, filename) {
     var title = `${method_name} DNA Visualization`;
     var subtitle = null;
   } else if (filenames.length == 1) {
-    var title = `${filenames[0]} Visualization`;
+    var title = `Visualization of ${filenames[0]}`;
     var subtitle = ` Via the ${method_name} method`;
   }
 
