@@ -74,9 +74,7 @@ def transform_route():
         if LOCAL:
             df = pd.read_parquet(f"data/{seq_hash}.{method}.parquet.sz")
         else:
-            df = query_x_range(f"{seq_hash}.{method}.parquet.sz",
-                               request.args.get("x_min"),
-                               request.args.get("x_max"))
+            df = query_x_range(f"{seq_hash}.{method}.parquet.sz")
 
     else:
         logging.debug(f"No previous transformation for {seq_name} found. Transforming...")
