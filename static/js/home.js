@@ -1,8 +1,8 @@
 let seqs = {};
 let chart = Highcharts.chart('hg-container', {
   credits: {
-    text: "BD Lee, et al. (2019). SquiggleDNA.org",
-    href: "http://squiggledna.org"
+    text: "BD Lee, et al. (2019). DNAvisualization.org",
+    href: "http://DNAvisualization.org"
   },
   chart: {
     type: 'line',
