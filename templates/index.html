@@ -31,7 +31,13 @@
       <div class="collapse navbar-collapse justify-content-md-left" id="navbarsCollapse">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#lab41">Lab41</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#citation">Citation</a>
           </li>
         </ul>
       </div>
@@ -196,11 +202,23 @@
           </div>
         </div>
       </div>
+      <br>
 
 
-      <div class="row pad-top">
+      <div class="row">
         <div class="col">
-          <h2>Citation</h2>
+          <h2 id="about">About</h2>
+          <p> Squiggle is a two-dimensional DNA sequence visualization library that can turn FASTA sequence files into gorgeous, interactive visualizations. Use the form above to upload your FASTA file ..... lots more text. Info about privacy
+            somewhere on the page. </p>
+          <h2 id="lab41">A Lab41 Project</h2>
+          <a href="https://lab41.org"><img src="{{ url_for('static', filename='images/Lab41.eps') }}" height="75" style="float:right;padding-left: 6px;"></a>
+          <p>In-Q-Tel (IQT) is the not-for-profit strategic investor for the Central Intelligence Agency and the broader U.S. Intelligence Community (IC). Founded in 1999, IQT connects government, startups, and the venture capital community to accelerate innovation to further the IC mission. </p>
+          <p>IQT Labs represent strategic initiatives established to explore new and disruptive technologies, uncover solutions, and demonstrate the art of the possible in a variety of technology areas. Lab41 is a Silicon Valley research lab where experts from the IC, academia, industry, and IQT come together to gain a better understanding of how to work with – and ultimately use – data analytics.</p>
+
+      </div>
+      <div class="row">
+        <div class="col">
+          <h2 id="citation">Citation</h2>
           <p>If you use Squiggle, please cite the following paper <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty807/5104938?guestAccessKey=306f0370-1281-428b-aa8a-757d3c49d801">(full text)</a>:</p>
           <ul>
             <li> Lee, B. D. (2018). Squiggle: a user-friendly two-dimensional DNA sequence visualization tool. <span style="font-style: italic">Bioinformatics</span>. doi:<a href="https://doi.org/10.1093/bioinformatics/bty807">10.1093/bioinformatics/bty807</a>.</li>
@@ -221,17 +239,6 @@
           }
         </pre>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h2>About</h2>
-          <p> Squiggle is a two-dimensional DNA sequence visualization library that can turn FASTA sequence files into gorgeous, interactive visualizations. Use the form above to upload your FASTA file ..... lots more text. Info about privacy
-            somewhere on the page. </p>
-          <h2>A Lab41 Project</h2>
-          <a href="https://lab41.org"><img src="{{ url_for('static', filename='images/Lab41.eps') }}" height="75" style="float:right;padding-left: 6px;"></a>
-          <p>In-Q-Tel (IQT) is the independent, strategic investor for the Central Intelligence Agency and the broader U.S. Intelligence Community. Founded in 1999, IQT connects government, startups, and the Venture Capital community to accelerate innovation to further the IC mission. </p>
-          <p>IQT Labs represent strategic initiatives established to explore new and disruptive technologies, uncover solutions, and demonstrate the art of the possible in a variety of technology areas. Lab41 is a Silicon Valley research lab where experts from the U.S. Intelligence Community (IC), academia, industry, and In-Q-Tel come together to gain a better understanding of how to work with – and ultimately use – data analytics. IQT Labs LLC is a wholly owned research venture of In-Q-Tel, Inc.</p>
-
       </div>
     </div><!--  /container -->
   </main>
