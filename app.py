@@ -30,7 +30,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html", route=ROUTE)
+    return render_template("index.html", route=ROUTE, STAGE=STAGE)
 
 @app.route("/seq_query")
 def seq_query():
