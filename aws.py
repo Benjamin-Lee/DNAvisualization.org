@@ -4,10 +4,13 @@ import io
 import pandas as pd
 import tempfile
 import logging
+import os
+
+stage = os.environ.get("STAGE")
 
 s3 = boto3.client('s3')
 
-def exists_on_s3(key, client=s3, bucket="squiggle-data"):
+def exists_on_s3(key, client=s3, bucket=f"dnavisualization-data-{stage}"):
     """return the key's size if it exist, else None"""
     response = client.list_objects_v2(
         Bucket=bucket,
@@ -20,7 +23,7 @@ def exists_on_s3(key, client=s3, bucket="squiggle-data"):
 
 def upload(filename):
     return s3.upload_file("data/" + filename,
-                          "squiggle-data",
+                          f"dnavisualization-data-{stage}",
                           filename)
 
 def query_x_range(Key, x_min=None, x_max=None):
@@ -30,7 +33,7 @@ def query_x_range(Key, x_min=None, x_max=None):
     else:
         Expression = "select * from s3object s;"
 
-    response = s3.select_object_content(Bucket="squiggle-data",
+    response = s3.select_object_content(Bucket=f"dnavisualization-data-{stage}",
                                         Key=Key,
                                         Expression=Expression,
                                         ExpressionType="SQL",

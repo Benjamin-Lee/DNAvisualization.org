@@ -12,22 +12,25 @@ from aws import exists_on_s3, query_x_range, upload
 from squiggle import transform
 from helpers import downsample
 
+LOCAL = "AWS_LAMBDA_FUNCTION_NAME" not in os.environ # determine if running on AWS or not (manually set this variable to override)
+STAGE = os.environ.get("STAGE")
+ROUTE = "" if LOCAL or STAGE == "production" else "/dev"
 
+# Log environment info
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('botocore').setLevel(logging.INFO)
 logging.getLogger('urllib3').setLevel(logging.INFO)
 logging.getLogger('s3transfer').setLevel(logging.INFO)
-
-
-LOCAL = "AWS_LAMBDA_FUNCTION_NAME" not in os.environ # determine if running on AWS or not (manually set this variable to override)
-route = "" if LOCAL else "/dev"
-logging.info("Running locally" if LOCAL else "Running on AWS")
+logging.debug("Running locally" if LOCAL else "Running on AWS")
+logging.debug(f"Environment: {os.environ}")
+logging.debug(f"Stage: {STAGE}")
+logging.debug(f"Route: {ROUTE}")
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html", route=route)
+    return render_template("index.html", route=ROUTE)
 
 @app.route("/seq_query")
 def seq_query():
