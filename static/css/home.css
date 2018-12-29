@@ -6,7 +6,7 @@ main {
   margin: auto;
 }
 
-.hide-before-plot-shown {
+.show-when-plotting {
   display: none
 }
 

@@ -140,7 +140,7 @@ function plotSequence(fastaString, filename) {
     bootbox.alert({
       size: "large",
       title: filename ? "Bad FASTA file" : "Invalid submission.",
-      message: filename ? `<pre style="display: inline;">${filename}</pre> doesn't appear to be a valid FASTA file.` : `This doesn't appear to be a valid FASTA-formatted sequence.`,
+      message: filename ? `<span class="text-monospace"">${filename}</span> doesn't appear to be a valid FASTA file.` : `This doesn't appear to be a valid FASTA-formatted sequence.`,
       buttons: {
         ok: {
           className: 'btn-secondary',
@@ -160,7 +160,7 @@ function plotSequence(fastaString, filename) {
       bootbox.alert({
         size: "large",
         title: "Incompatible method",
-        message: filename ? `<pre style="display: inline;">${filename}</pre> appears to have non-ATGC bases in it. The ${method_name} method doesn't support non-ATGC bases, so plotting using Squiggle instead.` : `This sequences has non-ATGC bases in it. The ${method_name} method doesn't support non-ATGC bases, so plotting using Squiggle instead.`,
+        message: filename ? `<span class="text-monospace">${filename}</span> appears to have non-ATGC bases in it. The ${method_name} method doesn't support non-ATGC bases, so plotting using Squiggle instead.` : `This sequences has non-ATGC bases in it. The ${method_name} method doesn't support non-ATGC bases, so plotting using Squiggle instead.`,
         buttons: {
           ok: {
             className: 'btn-secondary',
@@ -214,15 +214,15 @@ function plotSequence(fastaString, filename) {
       originalExtremesX = chart.xAxis[0].getExtremes();
       originalExtremesY = chart.yAxis[0].getExtremes();
 
-      document.getElementById("hg-container").style.display = "block"; // after dropping, show chart div
-      document.querySelector(".hide-before-plot-shown").style.display = "block"; // after dropping, show chart div
+      $(".show-when-plotting").show()
       $(".hide-when-plotting").hide();
       setTimeout(function () {
         dialog.modal("hide");
       }, 750);
     })
 
-  let filenames = _.uniq(Object.values(seqs).map(x => x.filename))
+  // decide on a name for the plot based on how many files there are
+  let filenames = _.uniq(Object.values(seqs).map(x => x.filename));
   if (filenames.length != 1) {
     var title = `${method_name} DNA Visualization`;
     var subtitle = null;
@@ -339,7 +339,7 @@ window.onload = function () {
       load: function (e, file) {
         setTimeout(function () {
           dropModal.modal("hide");
-        }, 100);
+        }, 150);
         plotSequence(e.target.result, file.name);
       }
     }
@@ -431,6 +431,55 @@ window.onload = function () {
       type: 'application/pdf'
     });
   })
+
+  // control the remove sequence button
+  $("#remove").click(function () {
+    let filenames = _.uniq(Object.values(seqs).map(x => x.filename)).sort();
+    filenames = filenames.map(function (filename) {
+      return {
+        text: `<span class="text-monospace">${filename}</span>`,
+        value: filename
+      }
+    });
+    bootbox.prompt({
+      title: "This is a prompt with a set of checkbox inputs!",
+      inputType: 'checkbox',
+      inputOptions: filenames,
+      callback: function (result) {
+        if (!result) {
+          this.modal("hide");
+          return;
+        }
+
+        // remove from the graph
+        let seqHashesToRemove = Object.values(seqs).filter(x => result.includes(x.filename)).map(x => x.hash);
+        for (seqHash of seqHashesToRemove) {
+          chart.get(seqHash).remove();
+        }
+        // remove from the seqs object
+        let seqNamesToRemove = Object.entries(seqs).filter(x => result.includes(x[1].filename)).map(x => x[0]);
+        for (seqName of seqNamesToRemove) {
+          delete seqs[seqName];
+        }
+
+        // reset the vie
+        if (!Object.entries(seqs).length) {
+          $(".hide-when-plotting").show();
+          $(".show-when-plotting").hide();
+        }
+      },
+      buttons: {
+        confirm: {
+          className: 'btn-secondary',
+        },
+        cancel: {
+          className: 'btn-outline-secondary',
+        }
+      },
+      backdrop: true,
+      closeButton: true
+    });
+  });
 
 
   // warn before leaving

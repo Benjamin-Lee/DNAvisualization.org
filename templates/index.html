@@ -73,7 +73,7 @@
         <!--  FYI, col should always be a row! -->
         <div class="col" align="center">
           <!--  This is the plot, it is not visible until the user uploads a fasta file -->
-          <div id="hg-container" style="width:100%; height:600px; display: none;" class="pad-bottom pad-top center"></div>
+          <div id="hg-container" style="width:100%; height:600px; display: none;" class=" show-when-plotting pad-bottom pad-top center"></div>
         </div>
       </div>
       <!--the file adding section -->
@@ -130,7 +130,7 @@
         </div>
 
         <!-- viz controls during plotting -->
-        <div class="container center pad-bottom hide-before-plot-shown" id="mode">
+        <div class="container center pad-bottom show-when-plotting" id="mode">
           <div class="row">
             <div class="col-lg-3 pad-bottom">
               <div class="row" id="mode">
@@ -163,7 +163,7 @@
                   <div class="row justify-content-center">
                     <div class="col text-center">
                       <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-outline-secondary" id="remove" data-toggle="tooltip" data-placement="top" title="Remove sequences"><i class="fas fa-trash"></i></button>
+                        <button type="button" class="btn btn-outline-secondary" id="remove" data-toggle="tooltip" data-placement="top" title="Remove files"><i class="fas fa-trash"></i></button>
                         <button type="button" class="btn btn-outline-secondary" id="changeTitle" onclick="showTitleModal()" data-toggle="tooltip" data-placement="top" title="Change title and subtitle"><i class="fas fa-bars"></i></button>
                         <div class="btn-group " role="group">
                           <button id="export" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -256,7 +256,7 @@
             <p>If you use the Squiggle visualization method, please cite the following paper <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty807/5104938?guestAccessKey=306f0370-1281-428b-aa8a-757d3c49d801">(full
                 text)</a>:</p>
             <ul>
-              <li> Lee, B. D. (2018). Squiggle: a user-friendly two-dimensional DNA sequence visualization tool. <span style="font-style: italic">Bioinformatics</span>. doi:<a href="https://doi.org/10.1093/bioinformatics/bty807">10.1093/bioinformatics/bty807</a>.</li>
+              <li> Lee, B. D. (2018). Squiggle: a user-friendly two-dimensional DNA sequence visualization tool. <span class="font-italic">Bioinformatics</span>. doi:<a href="https://doi.org/10.1093/bioinformatics/bty807">10.1093/bioinformatics/bty807</a>.</li>
             </ul>
           </details>
           <details>
@@ -264,15 +264,15 @@
             <p>If you use the Yau visualization method, please cite the following paper <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC162336/">(full
                 text)</a>:</p>
             <ul>
-              <li>Yau, S. S., Wang, J., Niknejad, A., Lu, C., Jin, N., & Ho, Y. K. (2003). DNA sequence representation without degeneracy. <span style="font-style: italic">Nucleic acids research, 31</span>(12), 3078-80.</li>
+              <li>Yau, S. S., Wang, J., Niknejad, A., Lu, C., Jin, N., & Ho, Y. K. (2003). DNA sequence representation without degeneracy. <span class="font-italic">Nucleic acids research, 31</span>(12), 3078-80.</li>
             </ul>
           </details>
           <details>
             <summary>Yau-BP</summary>
             <p>If you use the Yau-BP visualization method, please cite the following papers:</p>
             <ul>
-              <li> Lee, B. D. (2018). Squiggle: a user-friendly two-dimensional DNA sequence visualization tool. <span style="font-style: italic">Bioinformatics</span>. doi:<a href="https://doi.org/10.1093/bioinformatics/bty807">10.1093/bioinformatics/bty807</a>.</li>
-              <li>Yau, S. S., Wang, J., Niknejad, A., Lu, C., Jin, N., & Ho, Y. K. (2003). DNA sequence representation without degeneracy. <span style="font-style: italic">Nucleic acids research, 31</span>(12), 3078-80.</li>
+              <li> Lee, B. D. (2018). Squiggle: a user-friendly two-dimensional DNA sequence visualization tool. <span class="font-italic">Bioinformatics</span>. doi:<a href="https://doi.org/10.1093/bioinformatics/bty807">10.1093/bioinformatics/bty807</a>.</li>
+              <li>Yau, S. S., Wang, J., Niknejad, A., Lu, C., Jin, N., & Ho, Y. K. (2003). DNA sequence representation without degeneracy. <span class="font-italic">Nucleic acids research, 31</span>(12), 3078-80.</li>
             </ul>
           </details>
 
