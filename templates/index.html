@@ -18,7 +18,6 @@
 
 <body>
   <main>
-
     <!-- nav bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
       <a class="navbar-brand" href="/">
@@ -41,13 +40,8 @@
         </ul>
       </div>
     </nav>
-    <!--  /nav bar -->
-
-    <!--  content goes in the container, then into cols that are in a row -->
-
     <div class="container">
       <!-- Show an error if JS is not enabled -->
-
       <noscript>
         <div class="alert alert-danger" role="alert">
           You need to enable JavaScript to run this app.
@@ -63,7 +57,6 @@
           </p>
         </div>
       </div>
-
       <div class="row">
         <!--  FYI, col should always be a row! -->
         <div class="col center">
@@ -71,7 +64,6 @@
           <div id="hg-container" style="width:100%; height:600px; display: none;" class="pad-bottom center"></div>
         </div>
       </div>
-
       <!--the file adding section -->
       <div class="row border bg-light rounded-top border-bottom-0 pad-top">
         <div class="col-12">
@@ -85,10 +77,7 @@
               </div>
             </div>
             <div class="col-lg-2">
-              <!-- <div class="pad-top"> -->
               <button type="button" class="btn btn-outline-secondary btn-block" id="paste-sequence"><i class="fas fa-paste"></i> Paste FASTA</button>
-
-              <!-- </div> -->
             </div>
           </div>
           <div class="row pad-top">
@@ -96,14 +85,11 @@
               <button type="button" class="btn btn-outline-secondary btn-block hide-when-plotting" id="load-example"><i class="fas fa-dna"></i> Load an example file</button>
             </div>
           </div>
-
         </div>
-
-
       </div>
 
       <!-- the control section -->
-      <div class="row bg-light border rounded-bottom border-top-0" id="controls">
+      <div class="row bg-light border pad-bottom rounded-bottom border-top-0" id="controls">
 
         <!-- the viz method -->
         <div class="container center pad-top pad-bottom hide-when-plotting">
@@ -189,19 +175,16 @@
                         <button type="button" class="btn btn-outline-secondary" id="reset-zoom" onclick="resetChart()">Reset</button>
                       </div>
                     </div>
-
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
-      <br>
 
-
-      <div class="row">
+      <!-- the about section -->
+      <div class="row pad-top">
         <div class="col">
           <h2 id="about">About</h2>
           <p> Squiggle is a two-dimensional DNA sequence visualization library that can turn FASTA sequence files into gorgeous, interactive visualizations. Use the form above to upload your FASTA file ..... lots more text. Info about privacy
