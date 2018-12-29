@@ -130,7 +130,7 @@
         <!-- viz controls during plotting -->
         <div class="container center pad-bottom hide-before-plot-shown" id="mode">
           <div class="row">
-            <div class="col-md-4 pad-bottom">
+            <div class="col-lg-3 pad-bottom">
               <div class="row" id="mode">
                 <div class="row center">
                   <label for="method">Legend Mode</label>
@@ -150,7 +150,28 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4 pad-bottom">
+            <div class="col-lg-3 pad-bottom">
+              <div class="row justify-content-center" id="mode">
+                <div class="col text-center">
+                  <div class="row justify-content-center">
+                    <div class="col text-center">
+                      <label for="method">Options</label>
+                    </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col text-center">
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-outline-secondary" id="remove" data-toggle="tooltip" data-placement="top" title="Remove sequences"><i class="fas fa-trash"></i></button>
+                        <button type="button" class="btn btn-outline-secondary" id="changeTitle" onclick="resetChart()" data-toggle="tooltip" data-placement="top" title="Change title"><i class="fas fa-bars"></i></button>
+                        <button type="button" class="btn btn-outline-secondary" id="export" onclick="resetChart()" data-toggle="tooltip" data-placement="top" title="Export visualization"><i class="fas fa-file-export"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 pad-bottom">
               <div class="row" id="mode">
                 <div class="row center">
                   <label for="method">Legend Mode</label>
@@ -170,7 +191,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4 pad-bottom">
+            <div class="col-lg-3 pad-bottom">
               <div class="row justify-content-center" id="mode">
                 <div class="col text-center">
                   <div class="row justify-content-center">
@@ -189,6 +210,7 @@
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -245,7 +267,7 @@
 
   <footer class="footer py-3 bg-light">
     <div class="container text-center">
-      <span class="text-muted">&copy;2018 IQT Labs LLC, a wholly owned research venture of <a class="text-muted" href="https://iqt.org">In-Q-Tel, Inc.</a> This content is released under <a class="text-muted" href="https://github.com/Benjamin-Lee/squiggle-server/blob/master/LICENSE">
+      <span class="text-muted">&copy;2018 IQT Labs LLC, a wholly owned research venture of <a class="text-muted" href="https://iqt.org">In-Q-Tel, Inc.</a> This content is released under <a class="text-muted" target="_blank" href="https://github.com/Benjamin-Lee/DNAvisualization.org/blob/master/LICENSE">
           the Apache 2.0 License.</a></span>
     </div>
   </footer>
