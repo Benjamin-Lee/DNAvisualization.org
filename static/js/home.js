@@ -258,9 +258,6 @@ function afterSetExtremes(e) {
         })
     }
   }
-
-
-
   chart.hideLoading();
 }
 
