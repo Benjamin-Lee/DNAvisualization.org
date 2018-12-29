@@ -442,7 +442,7 @@ window.onload = function () {
       }
     });
     bootbox.prompt({
-      title: "This is a prompt with a set of checkbox inputs!",
+      title: "Remove FASTA files",
       inputType: 'checkbox',
       inputOptions: filenames,
       callback: function (result) {
