@@ -89,6 +89,36 @@ let dropModal = bootbox.dialog({
   show: false,
   size: "large"
 });
+let titleModal = bootbox.dialog({
+  message: `
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col pad-top">
+          <div class="form-label-group">
+            <input type="text" id="title" class="form-control" placeholder="Title" required autofocus>
+            <label for="title">Title</label>
+          </div>
+          <div class="form-label-group">
+            <input type="text" id="subtitle" class="form-control" placeholder="Subtitle" required autofocus>
+            <label for="subtitle">Subtitle</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  title: "Plot options",
+  closeButton: true,
+  backdrop: true,
+  show: false,
+  buttons: {
+    cancel: {
+      className: 'btn-outline-secondary',
+    },
+    confirm: {
+      className: 'btn-secondary',
+    },
+  }
+});
 // so that the reset button knows what zoom to reset to
 let originalExtremesX = {};
 let originalExtremesY = {};
@@ -193,7 +223,7 @@ function plotSequence(fastaString, filename) {
     var subtitle = null;
   } else if (filenames.length == 1) {
     var title = `Visualization of ${filenames[0]}`;
-    var subtitle = ` Via the ${method_name} method`;
+    var subtitle = `Via the ${method_name} method`;
   }
 
   // make the subtitle reflect the plotting method
@@ -273,6 +303,24 @@ function afterSetExtremes(e) {
     }
   }
   chart.hideLoading();
+}
+
+function showTitleModal() {
+  $("#title").val(chart.title.textStr);
+  $("#subtitle").val(chart.subtitle.textStr);
+  titleModal.modal("show");
+  setTimeout(function () {
+    $(".bootbox-cancel").click(function () {
+      titleModal.modal("hide");
+    });
+    $(".bootbox-accept").click(function () {
+      chart.setTitle({
+        text: $("#title").val()
+      }, {
+        text: $("#subtitle").val()
+      });
+    })
+  }, 200);
 }
 
 
