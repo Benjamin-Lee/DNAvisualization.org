@@ -13,7 +13,6 @@
   <!-- bootstrap css should before all other css -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="{{url_for('static',  filename='css/home.css')}}">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 </head>
 
@@ -81,13 +80,13 @@
               <div class="input-group mb-3">
                 <div class="custom-file" id="dropzone">
                   <input type="file" class="custom-file-input" id="file-input" multiple accept=".fa,.fasta,.fna,.txt">
-                  <label class="custom-file-label"><i class="fas fa-file-alt"></i> Choose FASTA file or drop anywhere on page...</label>
+                  <label class="custom-file-label"><i class="fas fa-file"></i> Choose FASTA file or drop anywhere on page...</label>
                 </div>
               </div>
             </div>
             <div class="col-lg-2">
               <!-- <div class="pad-top"> -->
-                <button type="button" class="btn btn-outline-secondary btn-block" id="paste-sequence"><i class="fas fa-paste"></i> Paste FASTA</button>
+              <button type="button" class="btn btn-outline-secondary btn-block" id="paste-sequence"><i class="fas fa-paste"></i> Paste FASTA</button>
 
               <!-- </div> -->
             </div>
@@ -212,20 +211,21 @@
             somewhere on the page. </p>
           <h2 id="lab41">A Lab41 Project</h2>
           <a href="https://lab41.org"><img src="{{ url_for('static', filename='images/Lab41.eps') }}" height="75" style="float:right;padding-left: 6px;"></a>
-          <p>In-Q-Tel (IQT) is the not-for-profit strategic investor for the Central Intelligence Agency and the broader U.S. Intelligence Community (IC). Founded in 1999, IQT connects government, startups, and the venture capital community to accelerate innovation to further the IC mission. </p>
-          <p>IQT Labs represent strategic initiatives established to explore new and disruptive technologies, uncover solutions, and demonstrate the art of the possible in a variety of technology areas. Lab41 is a Silicon Valley research lab where experts from the IC, academia, industry, and IQT come together to gain a better understanding of how to work with – and ultimately use – data analytics.</p>
+          <p>In-Q-Tel (IQT) is the not-for-profit strategic investor for the Central Intelligence Agency and the broader U.S. Intelligence Community (IC). Founded in 1999, IQT connects government, startups, and the venture capital community to
+            accelerate innovation to further the IC mission. </p>
+          <p>IQT Labs represent strategic initiatives established to explore new and disruptive technologies, uncover solutions, and demonstrate the art of the possible in a variety of technology areas. Lab41 is a Silicon Valley research lab where
+            experts from the IC, academia, industry, and IQT come together to gain a better understanding of how to work with – and ultimately use – data analytics.</p>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h2 id="citation">Citation</h2>
+            <p>If you use Squiggle, please cite the following paper <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty807/5104938?guestAccessKey=306f0370-1281-428b-aa8a-757d3c49d801">(full text)</a>:</p>
+            <ul>
+              <li> Lee, B. D. (2018). Squiggle: a user-friendly two-dimensional DNA sequence visualization tool. <span style="font-style: italic">Bioinformatics</span>. doi:<a href="https://doi.org/10.1093/bioinformatics/bty807">10.1093/bioinformatics/bty807</a>.</li>
 
-      </div>
-      <div class="row">
-        <div class="col">
-          <h2 id="citation">Citation</h2>
-          <p>If you use Squiggle, please cite the following paper <a href="https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/bty807/5104938?guestAccessKey=306f0370-1281-428b-aa8a-757d3c49d801">(full text)</a>:</p>
-          <ul>
-            <li> Lee, B. D. (2018). Squiggle: a user-friendly two-dimensional DNA sequence visualization tool. <span style="font-style: italic">Bioinformatics</span>. doi:<a href="https://doi.org/10.1093/bioinformatics/bty807">10.1093/bioinformatics/bty807</a>.</li>
-
-          </ul>
-          <p>Or, if BibTeX is more your style:</p>
-          <pre>
+            </ul>
+            <p>Or, if BibTeX is more your style:</p>
+            <pre>
           @article{Lee2018,
             doi = {10.1093/bioinformatics/bty807},
             url = {https://doi.org/10.1093/bioinformatics/bty807},
@@ -238,14 +238,15 @@
             journal = {Bioinformatics}
           }
         </pre>
+          </div>
         </div>
-      </div>
-    </div><!--  /container -->
+      </div><!--  /container -->
   </main>
 
   <footer class="footer py-3 bg-light">
     <div class="container text-center">
-      <span class="text-muted">&copy;2018 IQT Labs LLC, a wholly owned research venture of <a class="text-muted" href="https://iqt.org">In-Q-Tel, Inc.</a> This content is released under <a class="text-muted" href="https://github.com/Benjamin-Lee/squiggle-server/blob/master/LICENSE"> the Apache 2.0 License.</a></span>
+      <span class="text-muted">&copy;2018 IQT Labs LLC, a wholly owned research venture of <a class="text-muted" href="https://iqt.org">In-Q-Tel, Inc.</a> This content is released under <a class="text-muted" href="https://github.com/Benjamin-Lee/squiggle-server/blob/master/LICENSE">
+          the Apache 2.0 License.</a></span>
     </div>
   </footer>
 
@@ -268,12 +269,15 @@
   <!-- other utilities -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/all.js" integrity="sha384-EIHISlAOj4zgYieurP0SdoiBYfGJKkgWedPHH4jCzpCXLmzVsw1ouK59MuUtP4a1" crossorigin="anonymous"></script>
 
   <!-- locally hosted scripts -->
   <script type="text/javascript" src="{{ url_for('static', filename='js/filereader.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/xxhash.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/reformat.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/bootbox5-beta.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/dragster.js') }}"></script>
+
 
   <!-- last, load the JS for the page -->
   <script type="text/javascript" src="{{ url_for('static', filename='js/hbb.js') }}"></script>

@@ -66,6 +66,29 @@ let dialog = bootbox.dialog({
   closeButton: false,
   show: false
 });
+let dropModal = bootbox.dialog({
+  message: `
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col text-center pad-top">
+          <span class="fa-layers fa-4x">
+            <i class="fas fa-file"></i>
+            <i class="fa-inverse fas fa-dna" data-fa-transform="shrink-10 down-2"></i>
+          </span>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col text-center pad-top">
+          <p id="loading-modal-message">Drop your FASTA file anywhere on the page!</p>
+        </div>
+      </div>
+    </div>
+  `,
+  closeButton: false,
+  backdrop: true,
+  show: false,
+  size: "large"
+});
 // so that the reset button knows what zoom to reset to
 let originalExtremesX = {};
 let originalExtremesY = {};
@@ -250,6 +273,9 @@ window.onload = function () {
 
     on: {
       load: function (e, file) {
+        setTimeout(function () {
+          dropModal.modal("hide");
+        }, 100);
         plotSequence(e.target.result, file.name);
       }
     }
@@ -305,9 +331,19 @@ window.onload = function () {
 
   })
 
+  // make the demo button show HBB
   $("#load-example").click(function () {
     plotSequence(hbb, "hbb.fasta")
   });
+
+  // Show modal when dragging
+  new Dragster(document.body);
+  document.addEventListener("dragster:enter", function (e) {
+    dropModal.modal("show");
+  }, false);
+  document.addEventListener("dragster:leave", function (e) {
+    dropModal.modal("hide");
+  }, false);
 
 
   // warn before leaving
