@@ -21,3 +21,7 @@ main {
 a {
   color: #be202e
 }
+
+.dropdown-toggle::after {
+    display:none;
+}

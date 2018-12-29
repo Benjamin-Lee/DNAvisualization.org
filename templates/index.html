@@ -165,7 +165,19 @@
                       <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-outline-secondary" id="remove" data-toggle="tooltip" data-placement="top" title="Remove sequences"><i class="fas fa-trash"></i></button>
                         <button type="button" class="btn btn-outline-secondary" id="changeTitle" onclick="showTitleModal()" data-toggle="tooltip" data-placement="top" title="Change title and subtitle"><i class="fas fa-bars"></i></button>
-                        <button type="button" class="btn btn-outline-secondary" id="export" onclick="resetChart()" data-toggle="tooltip" data-placement="top" title="Export visualization"><i class="fas fa-file-export"></i></button>
+                        <div class="btn-group " role="group">
+                          <button id="export" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-file-export"></i>
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="export">
+                            <a class="dropdown-item" href="#" onclick="chart.print()"><i class="fas fa-print"></i> Print chart</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" id="png"><i class="fas fa-file-image"></i> Download PNG image</a>
+                            <a class="dropdown-item" href="#" id="jpeg"><i class="fas fa-file-image"></i> Download JPEG image</a>
+                            <a class="dropdown-item" href="#" id="pdf"><i class="fas fa-file-pdf"></i> Download PDF document</a>
+                            <a class="dropdown-item" href="#" id="svg"><i class="fas fa-file-code"></i> Download SVG vector image</a>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -290,7 +302,6 @@
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/boost.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
-  <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
   <!-- other utilities -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

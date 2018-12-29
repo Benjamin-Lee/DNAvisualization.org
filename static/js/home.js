@@ -26,7 +26,12 @@ let chart = Highcharts.chart('hg-container', {
       afterSetExtremes: afterSetExtremes
     }
   },
-  series: []
+  series: [],
+  navigation: {
+    buttonOptions: {
+      enabled: false
+    }
+  }
 });
 let axis_labels = {
   'squiggle': {
@@ -404,6 +409,28 @@ window.onload = function () {
 
   // render all tooltips
   $('[data-toggle="tooltip"]').tooltip()
+
+  // support for exporting
+  $("#png").click(function () {
+    chart.exportChart({
+      type: 'image/png'
+    });
+  });
+  $("#jpeg").click(function () {
+    chart.exportChart({
+      type: 'image/jpeg'
+    });
+  });
+  $("#svg").click(function () {
+    chart.exportChart({
+      type: 'image/svg+xml'
+    });
+  });
+  $("#pdf").click(function () {
+    chart.exportChart({
+      type: 'application/pdf'
+    });
+  })
 
 
   // warn before leaving
