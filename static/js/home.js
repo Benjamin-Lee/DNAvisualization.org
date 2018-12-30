@@ -84,7 +84,7 @@ let dropModal = bootbox.dialog({
       </div>
       <div class="row justify-content-center">
         <div class="col text-center pad-top">
-          <p id="loading-modal-message">Drop your FASTA file anywhere on the page!</p>
+          <p>Drop your FASTA file anywhere on the page!</p>
         </div>
       </div>
     </div>
