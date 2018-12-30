@@ -294,16 +294,14 @@ function afterSetExtremes(e) {
   chart.showLoading('Loading data...');
 
   for (key of Object.keys(seqs)) {
-    // console.log([key, seqs[key].overviewData]);
+
     if (seqs[key].overviewData == null) {
       continue;
     }
     if ((e.max < seqs[key].overviewData[seqs[key].overviewData.length - 1][0]) &&
       (e.min > seqs[key].overviewData[0][0])) {
-      console.log(`getting data for ${seqs[key]["hash"]}`);
       seqQuery(seqs[key]["hash"], e.min, e.max)
         .then(function (results) {
-          console.log(results);
           chart.get(results.data[0]).setData(results.data[1]);
         })
     }
