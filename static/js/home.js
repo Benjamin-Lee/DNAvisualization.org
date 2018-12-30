@@ -1,4 +1,5 @@
 const SEQ_NUMBER_LIMIT = 30;
+const SEQ_LENGTH_LIMIT = 4500000;
 
 let seqs = {};
 let chart = Highcharts.chart('hg-container', {
@@ -142,9 +143,9 @@ function plotSequence(fastaString, filename) {
   dialog.modal("show");
   if (!validateFasta(fastaString)) {
     bootbox.alert({
-      size: "large",
-      title: filename ? "Bad FASTA file" : "Invalid submission.",
+      title: filename ? "Error: Bad FASTA file" : "Error: Invalid submission.",
       message: filename ? `<span class="text-monospace"">${filename}</span> doesn't appear to be a valid FASTA file.` : `This doesn't appear to be a valid FASTA-formatted sequence.`,
+      backdrop: true,
       buttons: {
         ok: {
           className: 'btn-secondary',
@@ -160,12 +161,35 @@ function plotSequence(fastaString, filename) {
   // TODO: only perform this procedure on new seqs (don't allow redragging of files already present)
   let parsed = fasta2json(fastaString);
 
+  let addedCount = 0;
   for (seq of parsed) {
-    seqs[seq["name"]] = {
-      filename: filename,
-      hash: XXH.h64(seq["seq"], 0).toString(10),
-      length: seq["seq"].length
-    };
+    if (seq["seq"].length < SEQ_LENGTH_LIMIT) {
+      seqs[seq["name"]] = {
+        filename: filename,
+        hash: XXH.h64(seq["seq"], 0).toString(10),
+        length: seq["seq"].length
+      };
+      addedCount++;
+    } else {
+      bootbox.alert({
+        title: "Error: Sequence is too long",
+        message: `We were unable to visualize <span class="text-monospace"">${seq["name"]}</span> because its length (${seq["seq"].length} bp) is greater than our limit of ${SEQ_LENGTH_LIMIT} bp. If this is a feature your require, use the downloadable <a href="https://github.com/Lab41/squiggle">Squiggle software package.`,
+        backdrop: true,
+        buttons: {
+          ok: {
+            className: 'btn-secondary',
+          }
+        }
+      });
+    }
+  }
+
+  // if all the seqs are too long, give up
+  if (!addedCount) {
+    setTimeout(function () {
+      dialog.modal("hide");
+    }, 500);
+    return false;
   }
 
   // don't allow users to overload Highcharts
@@ -175,6 +199,7 @@ function plotSequence(fastaString, filename) {
       delete seqs[seq["name"]]
     };
     bootbox.alert({
+      title: "Error: Too many sequences",
       message: `Currently, this website is unable to visualize more than ${SEQ_NUMBER_LIMIT} sequences at a time. We are aware of this issue and actively working on fixing it. To see the status of this issue, click <a href="https://github.com/highcharts/highcharts/issues/9766">here</a>. If this is a feature your require, use the downloadable <a href="https://github.com/Lab41/squiggle">Squiggle software package.`,
       backdrop: true,
       buttons: {
@@ -193,7 +218,8 @@ function plotSequence(fastaString, filename) {
     if (!validateDNA(parsed)) {
       bootbox.alert({
         size: "large",
-        title: "Incompatible method",
+        title: "Error: Incompatible method",
+        backdrop: true,
         message: filename ? `<span class="text-monospace">${filename}</span> appears to have non-ATGC bases in it. The ${method_name} method doesn't support non-ATGC bases, so plotting using Squiggle instead.` : `This sequences has non-ATGC bases in it. The ${method_name} method doesn't support non-ATGC bases, so plotting using Squiggle instead.`,
         buttons: {
           ok: {
