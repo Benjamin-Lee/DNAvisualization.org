@@ -421,9 +421,9 @@ window.onload = function () {
 
     on: {
       load: function (e, file) {
-        setTimeout(function () {
-          dropModal.modal("hide");
-        }, 175);
+        // setTimeout(function () {
+        //   dropModal.modal("hide");
+        // }, 175);
         plotSequence(e.target.result, file.name);
       }
     }
@@ -484,13 +484,13 @@ window.onload = function () {
   });
 
   // Show modal when dragging
-  new Dragster(document.body);
-  document.addEventListener("dragster:enter", function (e) {
-    dropModal.modal("show");
-  }, false);
-  document.addEventListener("dragster:leave", function (e) {
-    dropModal.modal("hide");
-  }, false);
+  // new Dragster(document.body);
+  // document.addEventListener("dragster:enter", function (e) {
+  //   dropModal.modal("show");
+  // }, false);
+  // document.addEventListener("dragster:leave", function (e) {
+  //   dropModal.modal("hide");
+  // }, false);
 
   // render all tooltips
   $('[data-toggle="tooltip"]').tooltip()
