@@ -163,7 +163,7 @@ function plotSequence(fastaString, filename) {
 
   let addedCount = 0;
   for (seq of parsed) {
-    if (seq["seq"].length < SEQ_LENGTH_LIMIT) {
+    if (seq["seq"].length <= SEQ_LENGTH_LIMIT) {
       seqs[seq["name"]] = {
         filename: filename,
         hash: XXH.h64(seq["seq"], 0).toString(10),
