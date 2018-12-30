@@ -5,7 +5,7 @@
   <!--  required meta tags for bootstrap -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>DNA Visualization</title>
+  <title>DNAvisualization.org</title>
   <script>
     // to tell the JS whether developing locally or on AWS
     var route = '{{ route }}';
@@ -48,6 +48,9 @@
             <a class="nav-link" href="#lab41">Lab41</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="#architecture">Architecture</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="#citation">Citation</a>
           </li>
           <li class="nav-item">
@@ -83,7 +86,7 @@
         <!--  FYI, col should always be a row! -->
         <div class="col" align="center">
           <!--  This is the plot, it is not visible until the user uploads a fasta file -->
-          <div id="hg-container" style="width:100%; height:600px; display: none;" class=" show-when-plotting pad-bottom pad-top center"></div>
+          <div id="hg-container" style="width:100%; height:600px;" class="show-when-plotting pad-bottom pad-top center"></div>
         </div>
       </div>
       <!--the file adding section -->
@@ -144,7 +147,7 @@
         </div>
 
         <!-- viz controls during plotting -->
-        <div class="container center pad-bottom show-when-plotting" id="mode">
+        <div class="container center show-when-plotting" id="mode">
           <div class="row">
             <div class="col-lg-4 pad-bottom">
               <div class="row" id="mode">
@@ -224,7 +227,7 @@
       </div>
 
       <!-- the about section -->
-      <div class="row pad-top">
+      <div class="row pt-3">
         <div class="col">
           <h2 id="about">About</h2>
 
@@ -283,7 +286,28 @@
             bioinformatics research or working with us? <a href="mailto:info@lab41.org?subject=Reaching%20Out%20About%20Bioinformatics">We’d
               love to hear from you.</a></p>
 
-          <h2 id="citation">Citation</h2>
+          <h2 id="architecture">Architecture</h2>
+
+          <p>DNAvisualization.org is built on an entirelesly serverless
+            architecture. Due to the inherently parallelizable nature of DNA
+            sequence transformation (the transformation of one sequence has no
+            effect on the transformation of another), this design yields a
+            significant performance increase at a lower cost compared to a
+            traditional architecture.</p>
+
+          <p>This website uses <a href="http://flask.pocoo.org">Flask</a> as a
+            lightweight Python web framework and <a href="https://www.zappa.io">Zappa</a> to automate deployment to Amazon
+            Web Service's (AWS) <a href="https://aws.amazon.com/lambda">Lambda</a>
+            serverless computing platform. Additionally, it takes advantace of <a href="https://aws.amazon.com/s3/"> AWS S3</a> for serverless data
+            storage and querying. All stored data are automatically deleted after 24 hours.</p>
+
+          <p>For a full overview of the architecture, take a look at the sequence diagram below:</p>
+
+          <div class="mermaid text-center">
+            {% include "test.mmd" without context %}
+          </div>
+
+          <h2 id="citation" class="pt-2">Citation</h2>
 
           <p>If you use this website in your research, please cite is as:</p>
           <ul>
@@ -325,18 +349,13 @@
                 3078-80.</li>
             </ul>
           </details>
-          <h2 id="contact">Contact</h2>
+          <h2 id="contact" class="pt-2">Contact</h2>
 
           <p>Have an idea for another way to turn a DNA sequence into a
             two-dimensional visualization? Let us know over on the <a href="https://github.com/Lab41/squiggle"> Squiggle repository</a>.
             (DNAvisualization.org uses a stripped-down version of the Squiggle
             library for to transform sequences.)
           </p>
-
-          <h2>Architechture</h2>
-          <div class="mermaid text-center">
-            {% include "test.mmd" without context %}
-          </div>
 
         </div>
       </div>

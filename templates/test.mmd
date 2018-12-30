@@ -20,9 +20,9 @@ sequenceDiagram
     loop Every uploaded sequence hash
         C-xL: Async sequence query
         activate L
-        L->>S: S3 Select query data
+        L->>S: S3 Select query
         activate S
-        S->>L: S3 Select query data
+        S->>L: Selected data as CSV
         deactivate S
         L->>C: Downsampled JSON
         deactivate L
