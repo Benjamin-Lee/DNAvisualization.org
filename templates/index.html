@@ -295,7 +295,7 @@
                 text)</a>:</p>
             <ul>
               <li>Yau, S. S., Wang, J., Niknejad, A., Lu, C., Jin, N., & Ho, Y.
-                K. (2003). DNA sequence representation without degeneracy. <span class="font-italic">Nucleic acids research, 31</span>(12),
+                K. (2003). DNA sequence representation without degener. <span class="font-italic">Nucleic acids research, 31</span>(12),
                 3078-80.</li>
             </ul>
           </details>
@@ -316,7 +316,13 @@
           <p>Have an idea for another way to turn a DNA sequence into a
             two-dimensional visualization? Let us know over on the <a href="https://github.com/Lab41/squiggle"> Squiggle repository</a>.
             (DNAvisualization.org uses a stripped-down version of the Squiggle
-            library for to transform sequences.)</p>
+            library for to transform sequences.)
+          </p>
+
+          <h2>Architechture</h2>
+          <div class="mermaid text-center">
+            {% include "test.mmd" without context %}
+          </div>
 
         </div>
       </div>
@@ -349,7 +355,8 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/all.js" integrity="sha384-EIHISlAOj4zgYieurP0SdoiBYfGJKkgWedPHH4jCzpCXLmzVsw1ouK59MuUtP4a1" crossorigin="anonymous"></script>
-
+  <script src="https://unpkg.com/mermaid@8.0.0/dist/mermaid.min.js"></script>
+  </script>
   <!-- locally hosted scripts -->
   <script type="text/javascript" src="{{ url_for('static', filename='js/filereader.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/xxhash.min.js') }}"></script>

@@ -1,0 +1,29 @@
+sequenceDiagram
+    participant C as Client
+    participant L as AWS Lambda
+    participant S as AWS S3
+    note over C: User uploads FASTA
+    loop Every sequence in uploaded FASTA files
+
+            C-xL:Submit sequence async
+
+            activate L
+        opt Not already saved?
+            L->>S: Save transformed data
+        end
+
+            L->>C:  Downsampled JSON
+            deactivate L
+    end
+                    note right of S: Data deleted in 24h
+    note over C: User zooms in
+    loop Every uploaded sequence hash
+        C-xL: Async sequence query
+        activate L
+        L->>S: S3 Select query data
+        activate S
+        S->>L: S3 Select query data
+        deactivate S
+        L->>C: Downsampled JSON
+        deactivate L
+    end
