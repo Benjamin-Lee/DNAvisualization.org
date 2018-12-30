@@ -128,6 +128,7 @@ let titleModal = bootbox.dialog({
 let originalExtremesX = {};
 let originalExtremesY = {};
 let pastedFASTACount = 0; // so that we can individually remove pasted FASTA seqs
+let mode = "auto" // default to auto legend labeling mode
 
 /* nomenclature
 seq_name = the identifying string of the sequence
@@ -223,6 +224,7 @@ function plotSequence(fastaString, filename) {
       setTimeout(function () {
         dialog.modal("hide");
       }, 750);
+      changeMode();
     })
 
   // decide on a name for the plot based on how many files there are
@@ -330,6 +332,85 @@ function showTitleModal() {
   }, 200);
 }
 
+function activateFileMode() {
+  let state = [];
+  let filenames = _.keys(_.invertBy(seqs, seq => seq.filename));
+  for (let i = 0; i < filenames.length; i++) {
+    state.push({
+      name: filenames[i],
+      id: filenames[i],
+      color: Highcharts.getOptions().colors[i % Highcharts.getOptions().colors.length],
+      marker: {
+        enabled: false
+      },
+    })
+  }
+
+  _.map(seqs, (v, k) => { // k = key, v = value
+    state.push({
+      name: k,
+      id: v.hash,
+      data: v.overviewData,
+      marker: {
+        enabled: false
+      },
+      linkedTo: v.filename,
+      color: Highcharts.getOptions().colors[filenames.indexOf(v.filename) % Highcharts.getOptions().colors.length]
+    })
+  })
+
+  updateChartFromArray(state);
+}
+
+function updateChartFromArray(seriesArray) {
+  while (chart.series.length > 0) {
+    chart.series[0].remove(false, false);
+  };
+  for (let seq of seriesArray) {
+    chart.addSeries(seq)
+  };
+}
+
+function activateSequenceMode() {
+  updateChartFromArray(
+    _.map(seqs, (v, k) => { // k = key, v = value
+      {
+        return {
+          name: k,
+          id: v.hash,
+          data: v.overviewData,
+          marker: {
+            enabled: false
+          },
+        }
+      }
+    })
+  );
+}
+
+// decides whether file or sequence mode is warranted based on how many sequences there are
+// todo: if all files are single seqs, plot sequence-wise
+function chooseMode() {
+  if (_.keys(seqs).length > Highcharts.getOptions().colors.length) {
+    return "file"
+  } else {
+    return "sequence"
+  }
+}
+
+function changeMode() {
+  let chosenMode = mode;
+
+  if (chosenMode == "auto") {
+    chosenMode = chooseMode()
+  };
+
+  if (chosenMode == "file") {
+    activateFileMode()
+  } else if (chosenMode == "sequence") {
+    activateSequenceMode()
+  }
+}
 
 window.onload = function () {
 
@@ -341,7 +422,7 @@ window.onload = function () {
       load: function (e, file) {
         setTimeout(function () {
           dropModal.modal("hide");
-        }, 150);
+        }, 175);
         plotSequence(e.target.result, file.name);
       }
     }
@@ -482,6 +563,15 @@ window.onload = function () {
       backdrop: true,
       closeButton: true
     });
+  });
+
+
+
+
+  // bind the mode button to the mode variable
+  $('input[name=mode]').change(function () {
+    mode = $(this).attr('id');
+    changeMode();
   });
 
 
