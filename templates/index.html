@@ -65,7 +65,14 @@
       </noscript>
       <div class="jumbotron jumbotron-fluid hide-when-plotting" style="background:transparent !important">
         <div class="container">
-          <h1 class="display-4">Turn <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/emojipedia/132/dna-double-helix_1f9ec.png" alt="">into <span class="align-middle" style="font-size:200%">📈</span>.</h1>
+          <!-- responsive rendering for the jumbotron -->
+          <span class="d-none d-md-block">
+            <h1 class="display-4">Turn <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/emojipedia/132/dna-double-helix_1f9ec.png" alt="">into <span class="align-middle" style="font-size:200%">📈</span>.</h1>
+          </span>
+          <span class="d-block d-md-none">
+            <h1 class="display-4">Turn <img class="w-25" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/emojipedia/132/dna-double-helix_1f9ec.png" alt=""></h1>
+            <h1 class="display-4">into <span class="align-middle w-25">📈</span>.</h1>
+          </span>
           <p class="lead">
             DNAvisualization.org turns DNA sequences into gorgeous, interactive
             two-dimensional visualizations to enable their exploration.
