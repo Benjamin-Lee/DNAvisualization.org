@@ -207,7 +207,10 @@ function plotSequence(fastaString, filename) {
         chart.addSeries({
           name: resultName,
           id: result.data[0],
-          data: result.data[1]
+          data: result.data[1],
+          marker: {
+            enabled: false
+          }
         });
       };
 
