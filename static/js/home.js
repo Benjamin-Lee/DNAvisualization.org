@@ -212,9 +212,9 @@ function plotSequence(fastaString, filename) {
           marker: {
             enabled: false
           }
-        });
+        }, false);
       };
-
+      chart.redraw();
       // save the iriginal dimensions
       originalExtremesX = chart.xAxis[0].getExtremes();
       originalExtremesY = chart.yAxis[0].getExtremes();
@@ -310,6 +310,8 @@ function afterSetExtremes(e) {
           chart.get(results.data[0]).setData(results.data[1]);
           chart.hideLoading();
         })
+    } else {
+      chart.hideLoading();
     }
   }
 
@@ -368,8 +370,9 @@ function updateChartFromArray(seriesArray) {
     chart.series[0].remove(false, false);
   };
   for (let seq of seriesArray) {
-    chart.addSeries(seq)
+    chart.addSeries(seq, false)
   };
+  chart.redraw();
 }
 
 function activateSequenceMode() {
