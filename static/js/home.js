@@ -276,7 +276,13 @@ function plotSequence(fastaString, filename) {
 function resetChart() {
   for (let i = 0; i < chart.series.length; i++) {
     let name = chart.series[i].userOptions.name;
-    chart.series[i].setData(seqs[name].overviewData)
+    try {
+      chart.series[i].setData(seqs[name].overviewData)
+
+
+    } catch (e) {
+
+    }
   }
   chart.xAxis[0].setExtremes(originalExtremesX.min, originalExtremesX.max);
   chart.yAxis[0].setExtremes(originalExtremesY.min, originalExtremesY.max);
