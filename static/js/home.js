@@ -127,6 +127,7 @@ let titleModal = bootbox.dialog({
 // so that the reset button knows what zoom to reset to
 let originalExtremesX = {};
 let originalExtremesY = {};
+let pastedFASTACount = 0; // so that we can individually remove pasted FASTA seqs
 
 /* nomenclature
 seq_name = the identifying string of the sequence
@@ -227,7 +228,7 @@ function plotSequence(fastaString, filename) {
     var title = `${method_name} DNA Visualization`;
     var subtitle = null;
   } else if (filenames.length == 1) {
-    var title = `Visualization of ${filenames[0]}`;
+    var title = filenames[0] != "Pasted Sequence #1" ? `Visualization of ${filenames[0]}` : "DNA Sequence Visualization";
     var subtitle = `Via the ${method_name} method`;
   }
 
@@ -370,6 +371,7 @@ window.onload = function () {
   })
 
   $("#paste-sequence").click(function () {
+    pastedFASTACount += 1;
     bootbox.prompt({
       title: "Paste a FASTA-formatted sequence",
       inputType: 'textarea',
@@ -378,7 +380,7 @@ window.onload = function () {
         if (!result) {
           return
         }
-        plotSequence(result, "");
+        plotSequence(result, `Pasted Sequence #${pastedFASTACount}`);
       },
       size: "large",
       buttons: {
