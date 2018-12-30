@@ -625,9 +625,6 @@ window.onload = function () {
     });
   });
 
-  // start mermaid
-  mermaid.initialize();
-
 
   // bind the mode button to the mode variable
   $('input[name=mode]').change(function () {
