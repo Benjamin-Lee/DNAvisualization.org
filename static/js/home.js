@@ -1,3 +1,5 @@
+const SEQ_NUMBER_LIMIT = 30;
+
 let seqs = {};
 let chart = Highcharts.chart('hg-container', {
   credits: {
@@ -157,6 +159,36 @@ function plotSequence(fastaString, filename) {
   // load all the parsed seqs_names and seq_hashes into the seqs iable
   // TODO: only perform this procedure on new seqs (don't allow redragging of files already present)
   let parsed = fasta2json(fastaString);
+
+  for (seq of parsed) {
+    seqs[seq["name"]] = {
+      filename: filename,
+      hash: XXH.h64(seq["seq"], 0).toString(10),
+      length: seq["seq"].length
+    };
+  }
+
+  // don't allow users to overload Highcharts
+  // https://github.com/highcharts/highcharts/issues/9766
+  if (_.keys(seqs).length > SEQ_NUMBER_LIMIT) {
+    for (seq of parsed) {
+      delete seqs[seq["name"]]
+    };
+    bootbox.alert({
+      message: `Currently, this website is unable to visualize more than ${SEQ_NUMBER_LIMIT} sequences at a time. We are aware of this issue and actively working on fixing it. To see the status of this issue, click <a href="https://github.com/highcharts/highcharts/issues/9766">here</a>. If this is a feature your require, use the downloadable <a href="https://github.com/Lab41/squiggle">Squiggle software package.`,
+      backdrop: true,
+      buttons: {
+        ok: {
+          className: 'btn-secondary'
+        },
+      }
+    })
+    setTimeout(function () {
+      dialog.modal("hide");
+    }, 500);
+    return false
+  };
+
   if (method != "squiggle") {
     if (!validateDNA(parsed)) {
       bootbox.alert({
@@ -172,14 +204,6 @@ function plotSequence(fastaString, filename) {
       method = "squiggle";
       method_name = "Squiggle"
     }
-  }
-
-  for (seq of parsed) {
-    seqs[seq["name"]] = {
-      filename: filename,
-      hash: XXH.h64(seq["seq"], 0).toString(10),
-      length: seq["seq"].length
-    };
   }
 
   // set the axis labels to reflect the viz method
