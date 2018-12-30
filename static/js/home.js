@@ -308,10 +308,11 @@ function afterSetExtremes(e) {
       seqQuery(seqs[key]["hash"], e.min, e.max)
         .then(function (results) {
           chart.get(results.data[0]).setData(results.data[1]);
+          chart.hideLoading();
         })
     }
   }
-  chart.hideLoading();
+
 }
 
 function showTitleModal() {
