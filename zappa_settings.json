@@ -7,7 +7,9 @@
     "s3_bucket": "dnavisualization-server-dev",
     "memory_size": 3008,
     "slim_handler": true,
-    "exclude": ["*.sz"],
+    "exclude": ["*.sz", "*.fasta"],
+    "timeout_seconds": 60,
+
   },
   "production": {
     "app_function": "app.app",
@@ -17,8 +19,10 @@
     "s3_bucket": "dnavisualization-server-production",
     "memory_size": 3008,
     "slim_handler": true,
-    "exclude": ["*.sz"],
+    "exclude": ["*.sz", "*.fasta"],
     "domain": "dnavisualization.org",
-    "certificate_arn": "arn:aws:acm:us-east-1:882244499562:certificate/17f1b089-42e3-41a0-bd66-2a8a73a05cd2"
+    "certificate_arn": "arn:aws:acm:us-east-1:882244499562:certificate/17f1b089-42e3-41a0-bd66-2a8a73a05cd2",
+    "timeout_seconds": 60,
+
   }
 }
