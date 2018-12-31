@@ -25,3 +25,8 @@ a {
 .dropdown-toggle::after {
     display:none;
 }
+
+/* override jumbotron default padding of 4rem 2rem */
+.jumbotron {
+    padding: 1rem 2rem; 
+}
