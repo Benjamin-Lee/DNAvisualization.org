@@ -148,6 +148,12 @@
               <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as base positions). No support for non-ATGC bases.">
                 <input type="radio" name="method" id="yau-bp" autocomplete="off">Yau-BP
               </label>
+              <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Like tablature, with As, Ts, Cs, and Gs assigned a <var>y</var>-coordinate. No support for non-ATGC bases. Not recommended.">
+                <input type="radio" name="method" id="randic" autocomplete="off">Randic
+              </label>
+              <label class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" data-html="true" title="Same as Randic, except with dinucleotides instead of bases. Not recommended.">
+                <input type="radio" name="method" id="qi" autocomplete="off">Qi
+              </label>
             </div>
           </div>
         </div>
@@ -387,7 +393,7 @@
                 3078-80.</li>
             </ul>
           </details>
-          <details class="pb-3">
+          <details>
             <summary>Yau-BP</summary>
             <p>If you use the Yau-BP visualization method, please cite the
               following papers:</p>
@@ -397,6 +403,24 @@
               <li>Yau, S. S., Wang, J., Niknejad, A., Lu, C., Jin, N., & Ho, Y.
                 K. (2003). DNA sequence representation without degeneracy. <span class="font-italic">Nucleic acids research, 31</span>(12),
                 3078-80.</li>
+            </ul>
+          </details>
+          <details>
+            <summary>Randic</summary>
+            <p>If you use the Randic visualization method, please cite the
+              following paper:</p>
+            <ul>
+              <li>Randić, M., Vračko, M., Lerš, N., & Plavšić, D. (2003). Novel 2-D graphical representation of DNA sequences and their numerical characterization. <span class="font-italic">Chemical Physics Letters, 368</span>(1–2), 1–6. doi:<a href="https://doi.org/10.1016/s0009-2614(02)01784-0">10.1016/s0009-2614(02)01784-0"</a></li>
+            </ul>
+          </details>
+          <details class="pb-3">
+            <summary>Qi</summary>
+            <p>If you use the Qi visualization method, please cite the
+              following paper:</p>
+            <ul>
+              <li>Qi, Z., & Qi, X. (2007). Novel 2D graphical representation of
+                DNA sequence based on dual nucleotides. <span class="font-italic">Chemical Physics Letters, 440</span>(1–3),
+                139–144. doi:<a href="https://doi.org/10.1016/j.cplett.2007.03.107">10.1016/j.cplett.2007.03.107</a>/.</li>
             </ul>
           </details>
           <h2 id="contact">Contact Us</h2>

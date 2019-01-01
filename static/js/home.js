@@ -52,6 +52,14 @@ let axis_labels = {
   'yau-bp': {
     'x': 'position (BP)',
     'y': null
+  },
+  "randic": {
+    "x": "position (BP)",
+    "y": "nucleotide"
+  },
+  "qi": {
+    "x": "position (BP)",
+    "y": "dinucleotide"
   }
 };
 let method = "squiggle"; // default method is squiggle
@@ -240,6 +248,13 @@ function plotSequence(fastaString, filename) {
     text: axis_labels[method]["y"]
   })
 
+  if (method == "randic") {
+    chart.yAxis[0].categories = ["A", "T", "G", "C"];
+    chart.yAxis[0].options.tickInterval = 1;
+  } else if (method == "qi") {
+    chart.yAxis[0].categories = ['AG', 'GA', 'CT', 'TC', 'AC', 'CA', 'GT', 'TG', 'AT', 'TA', 'CG', 'GC', 'AA', 'CC', 'GG', 'TT'];
+    chart.yAxis[0].options.tickInterval = 1;
+  }
   // then, transform the seqs, get the downsampled data, and render the viz
   $("#loading-modal-message").text("Visualizing your data...");
   axios.all(parsed.map(x => transform(x.name, x.seq)))
@@ -501,7 +516,9 @@ window.onload = function () {
       squiggle: "Squiggle",
       gates: "Gates",
       yau: "Yau",
-      "yau-bp": "Yau-BP"
+      "yau-bp": "Yau-BP",
+      randic: "Randic",
+      qi: "Qi"
     }
     method = $(this).attr('id');
     method_name = methods[method];
