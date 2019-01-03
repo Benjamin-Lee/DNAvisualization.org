@@ -215,3 +215,6 @@ dmypy.json
 *~*
 \#*\#
 .\#*
+
+# From rendering the paper
+outfile.*
