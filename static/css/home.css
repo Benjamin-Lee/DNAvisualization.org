@@ -2,20 +2,8 @@ main {
   padding-bottom: 100px;
 }
 
-.center {
-  margin: auto;
-}
-
 .show-when-plotting {
   display: none
-}
-
-.pad-bottom {
-    padding-bottom: 10px;
-}
-
-.pad-top {
-    padding-top: 10px;
 }
 
 a {
@@ -28,5 +16,5 @@ a {
 
 /* override jumbotron default padding of 4rem 2rem */
 .jumbotron {
-    padding: 1rem 2rem; 
+    padding: 1rem 2rem;
 }
