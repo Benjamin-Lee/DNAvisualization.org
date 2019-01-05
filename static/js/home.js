@@ -1,6 +1,15 @@
 const SEQ_NUMBER_LIMIT = 30;
 const SEQ_LENGTH_LIMIT = 4500000;
 
+// to match the bootstrap look
+Highcharts.setOptions({
+  chart: {
+    style: {
+      fontFamily: 'Helvetica neue'
+    }
+  }
+});
+
 let seqs = {};
 let chart = Highcharts.chart('hg-container', {
   credits: {
