@@ -31,16 +31,18 @@
 <body>
   <main>
     <!-- nav bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded sticky-top">
       <a class="navbar-brand" href="/">
-        <!-- <img style="max-height: 4vw;" src="{{ url_for('static', filename='images/logo.svg') }}" class="d-inline-block align-top" alt=""> -->
-        DNAvisualization.org
+        <img style="max-height: 40px;" src="{{url_for('static', filename='images/logo.svg')}}" alt="DNAvisualization.org">
+      </a>
+      <a class="navbar-brand d-lg-block d-none" href="/">
+        <img style="max-height: 20px;" src="{{url_for('static', filename='images/words.svg')}}">
       </a>
       <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsCollapse" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-md-left" id="navbarsCollapse">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
           <li class="nav-item">
             <a class="nav-link" href="#about">About</a>
           </li>
