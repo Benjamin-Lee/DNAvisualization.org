@@ -216,7 +216,7 @@
 
           <!--the file adding section -->
           <div class="row">
-            <div class="col-12 my-2">
+            <div class="col-12 mt-2">
               <div class="row hide-when-plotting">
                 <div class="col text-center">
                   <label>Then, paste or upload a FASTA file:</label>
@@ -225,7 +225,7 @@
               <div class="row">
                 <div class="col-lg-8 offset-lg-1">
                   <div class="input-group">
-                    <div class="custom-file" id="dropzone">
+                    <div class="custom-file mb-2" id="dropzone">
                       <input type="file" class="custom-file-input" id="file-input" multiple accept=".fa,.fasta,.fna,.txt">
                       <label class="custom-file-label"><i class="fas fa-file"></i> <span class="d-none d-sm-inline">Choose FASTA file or drop anywhere on page...</span><span class="d-xs-inline d-sm-none">Choose FASTA file...</span>
                       </label>
@@ -236,11 +236,11 @@
                   <button type="button" class="btn btn-outline-secondary btn-block" id="paste-sequence"><i class="fas fa-paste"></i> Paste FASTA</button>
                 </div>
               </div>
-              <div class="row hide-when-plotting pt-2">
-                <div class="col-lg-7 offset-lg-1">
+              <div class="row hide-when-plotting mt-2">
+                <div class="col-lg-7 offset-lg-1 mb-2">
                   <button type="button" class="btn btn-outline-secondary btn-block hide-when-plotting" id="load-example"><i class="fas fa-dna"></i> Load an example file</button>
                 </div>
-                <div class="col-lg-3 ">
+                <div class="col-lg-3 mb-2">
                   <a href="{{url_for('static',  filename='files/hbb.fna')}}" class="btn btn-outline-secondary btn-block hide-when-plotting" id="download-example"><i class="fas fa-file-download"></i> Download example file</a>
                 </div>
               </div>
