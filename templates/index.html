@@ -78,11 +78,11 @@
         <div class="container">
           <!-- responsive rendering for the jumbotron -->
           <span class="d-none d-md-block">
-            <h1 class="display-4">Turn <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/emojipedia/132/dna-double-helix_1f9ec.png" alt="">into <span class="align-middle" style="font-size:200%">📈</span>.</h1>
+            <h1 class="display-4">Turn <img src="{{url_for('static', filename='images/dna.svg')}}"> into <img src=" {{url_for('static', filename='images/viz.svg')}}">.</h1>
           </span>
-          <span class="d-block d-md-none">
-            <h1 class="display-4">Turn <img class="w-25" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/emojipedia/132/dna-double-helix_1f9ec.png" alt=""></h1>
-            <h1 class="display-4">into <span class="align-middle w-25">📈</span>.</h1>
+          <span class=" d-block d-md-none">
+            <h1 class="display-4">Turn <img src="{{url_for('static', filename='images/dna.svg')}}"></h1>
+            <h1 class="display-4">into <img src="{{url_for('static', filename='images/viz.svg')}}">.</h1>
           </span>
           <p class="lead">
             DNAvisualization.org turns DNA sequences into gorgeous, interactive
@@ -459,7 +459,7 @@
   <footer class="footer py-3 bg-light">
     <div class="container text-center">
       <span class="text-muted">&copy;2018 IQT Labs LLC, a wholly owned research venture of <a class="text-muted" href="https://iqt.org">In-Q-Tel, Inc.</a> This content is released under <a class="text-muted" target="_blank" href="https://github.com/Benjamin-Lee/DNAvisualization.org/blob/master/LICENSE">
-          the Apache 2.0 License.</a></span>
+          the Apache 2.0 License</a>, except for the DNA and chart icons, which are licensed under <a href="https://creativecommons.org/licenses/by-nd/3.0/" class="text-muted">CC BY-ND 3.0</a> by <a class="text-muted" href="https://icons8.com">Icons8</a>.</span>
     </div>
   </footer>
 
