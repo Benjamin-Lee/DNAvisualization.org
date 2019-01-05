@@ -487,6 +487,19 @@ function changeMode() {
   }
 }
 
+function resizeMethodBtnGroup() {
+  var ww = document.body.clientWidth;
+  if (ww >= 374) {
+    $('#method').removeClass('btn-group-sm');
+  } else {
+    $('#method').addClass('btn-group-sm');
+  };
+};
+
+$(window).resize(function () {
+  resizeMethodBtnGroup();
+});
+
 window.onload = function () {
 
   let options = {
@@ -648,6 +661,9 @@ window.onload = function () {
     mode = $(this).attr('id');
     changeMode();
   });
+
+  // Ensure that the method button group fits on the page (fix for small screens):
+  resizeMethodBtnGroup();
 
 
   // warn before leaving
