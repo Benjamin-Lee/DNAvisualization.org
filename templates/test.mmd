@@ -9,7 +9,7 @@ sequenceDiagram
 
             activate L
         opt Not already saved?
-            L->>S: Save transformed data
+            L->>S: Transform and save parquet.sz
         end
 
             L->>C:  Downsampled JSON
