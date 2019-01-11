@@ -93,10 +93,9 @@ def transform_route():
     zone = df.values.tolist()
     return jsonify((seq_hash, downsample(zone)))
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'images/favicon.ico', mimetype='image/vnd.microsoft.icon')
+@app.route('/icons/<path:path>')
+def icons(path):
+    return send_from_directory(os.path.join(app.root_path, 'static/icons'), path)
 
 
 if __name__ == '__main__':
