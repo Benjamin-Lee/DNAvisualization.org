@@ -5,7 +5,7 @@ const SEQ_LENGTH_LIMIT = 4500000;
 Highcharts.setOptions({
   chart: {
     style: {
-      fontFamily: 'Helvetica neue'
+      "fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Roboto\", \"Helvetica Neue\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\" !default"
     }
   }
 });
