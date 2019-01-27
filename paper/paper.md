@@ -71,7 +71,11 @@ DNAvisualization.org is built atop Amazon Web Services (AWS) due to their genero
 
 ## Performance
 
+## Limitations
 
+The primary limitation of this architecture is necessity for a short duration of computation (currently on the scale of seconds) or, failing that, the ability to parallelize the computation and the data. In addition, memory constraints on the scale of megabytes to several gigabytes must also be respected. Applications which violate these requirements will need significant modifications to this architecture in order to function. As the capabilities of serverless computing increase, the burden of these limitations will decrease.
+
+These limitations were bypassed by this tool in several ways, which may be of interest to readers attempting to implement similar architectures in the future. When implementing parallelization, we were faced with a choice between higher file-level parallelization (parsing and transforming each file's sequences in a separate Lambda function invocation) and lower sequence-level parallelization (parsing the files in the browser and invoking a Lambda function to transform each sequence individually). We initially chose the former but quickly ran into memory issues, even when opting to use the most generous memory allocation available (3,008 MB at the time of writing [^1]). To reduce memory demands, we switched to sequence-level parallelism and eliminated as many dependencies as possible. As a result sequences in length of up to 4.5 MBp may be transformed for visualization in a single function invocation. In the future, we aim to increase this limit by taking advantage of further optimizations in memory management during transformation and increases in the total available amount of memory available to function invocations.
 
 # Conclusion
 
@@ -80,3 +84,5 @@ DNAvisualization.org is built atop Amazon Web Services (AWS) due to their genero
 The website is freely accessible at [https://DNAvisualization.org](https://dnavisualization.org).
 
 # References
+
+[^1]: This total includes all of the function's code as well as the data on which it is invoked.
