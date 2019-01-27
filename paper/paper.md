@@ -28,10 +28,6 @@ institute:
   - SBGrid:
       name: "SBGrid"
 bibliography: DNAvisualization.org.bib
-project:
-    title: Pandoc Scholar Example
-    zip-url: https://github.com/pandoc-scholar/pandoc-scholar/releases
-    github-url: https://github.com/pandoc-scholar/pandoc-scholar/
 ---
 
 # Abstract
