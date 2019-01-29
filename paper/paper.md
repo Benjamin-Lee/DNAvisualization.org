@@ -113,6 +113,7 @@ The primary limitation of this architecture is necessity for a short duration of
 In addition, memory constraints on the scale of megabytes to several gigabytes must also be respected.
 Applications which violate these requirements will need significant modifications to this architecture in order to function.
 As the capabilities of serverless computing increase, the burden of these limitations will decrease.
+For more information about the limitations of serverless computing, see @hellersteinServerlessComputingOne2019.
 
 These limitations were bypassed by this tool in several ways, which may be of interest to readers attempting to implement similar architectures in the future.
 When implementing parallelization, we were faced with a choice between higher file-level parallelization (parsing and transforming each file's sequences in a separate Lambda function invocation) and lower sequence-level parallelization (parsing the files in the browser and invoking a Lambda function to transform each sequence individually).
