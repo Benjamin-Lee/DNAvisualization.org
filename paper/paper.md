@@ -14,6 +14,7 @@ author:
         - HMS
         - SBGrid
   - Pablo Ruiz:
+      email: test@test.com
       institute: SEAS
 institute:
   - Lab41:
@@ -32,7 +33,9 @@ bibliography: DNAvisualization.org.bib
 
 # Abstract
 
-Raw DNA sequences contain an immense amount of meaningful biological information. However, these sequences are hard for humans to intuitively interpret. To solve this problem, a number of methods have been proposed to transform DNA sequences into two-dimensional visualizations.
+Raw DNA sequences contain an immense amount of meaningful biological information.
+However, these sequences are hard for humans to intuitively interpret.
+To solve this problem, a number of methods have been proposed to transform DNA sequences into two-dimensional visualizations.
 DNAvisualization.org implements several of these methods in a cost effective and high-performance manner via a novel entirely serverless architecture.
 By taking advantage of recent advances in serverless parallel computing and selective data retrieval, the website is able to offer users the ability to visualize up to thirty 4.5 Mbp DNA sequences simultaneously in seconds using one of five supported methods.
 
@@ -95,13 +98,27 @@ This results in the website being able to instantly scale to use exactly the res
 
 DNAvisualization.org is built atop Amazon Web Services (AWS) due to their generous free tier that, at the time of this writing, allows for one million free function invocations per month using their Lambda serverless compute platform, which is anticipated to easily meet the demand for the site.
 In the event that the free tier is exceeded, the AWS Lambda's pricing is very affordable.
+
+For DNAvisualization.org, we use AWS Lambda to serverlessly transform submitted DNA sequences into their visualizations in parallel, in addition to serving the static assets (_i.e._ HTML, Javascript, and CSS files) to the user.
 The site uses Python's Flask web framework and has its deployment to AWS Lambda seamlessly automated by the Zappa tool.
 
 It must be noted that using a serverless architecture to host a website is not novel by itself.
 Rather, the novelty of the architecture lies in its combination of serverless computing for request handling with query-in-place data retrieval.
 As mentioned previously, a normal web architecture would use a server running a RDBMS to handle data storage.
-In the case of DNA visualization, the database would be used to persist the transformed DNA sequences as $x$- and $y$-coordinates that may be queried when zooming in on a region.
-However, using a database server creates many of the same issues as using a server for web hosting.
+In the case of DNA visualization, the database would be used to persist the transformed DNA sequences as $x$ and $y$ coordinates that may be queried when zooming in on a region.
+However, using a database server creates many of the same issues as using a server for web hosting, such as scalability, cost, and parallelism.
+Instead of using an RDBMS, we used the S3 cloud storage platform combined with the S3 Select query-in-place functionality offered by AWS.
+In essence, this service allows one to upload a compressed tabular file to S3 and then submit a SQL query to be executed against the tabular data.
+In this paradigm, pricing is based on the amount and duration of data storage, the amount of scanned during querying, and the amount of data returned by query.
+
+For DNAvisualization.org, each submitted sequence's transformation is stored on AWS S3 in the open-source Apache Parquet tabular data format using Snappy columnar compression.
+Then, when a user zooms in on a region, a request is sent to AWS Lambda, which submits a SQL query to S3 Select, which in turn scans the file for data in the region.
+The matching data is then returned to the Lambda function, which downsamples the data if necessary (to prevent wasting users' memory with more data points than can be show) and returns it to the browser, which in turn updates the visualization.
+This process happens entirely in parallel for each sequence the user has submitted, regardless of how much demand there is on the website, showcasing the usefulness of serverless computing.
+
+![A sequence diagram demonstrating the interactions between the client's browser, AWS Lambda, and AWS S3. There are two sets of interactions: initial sequence transformation and sequence querying. Each of these interactions happens in parallel for each sequence.](architecture.png){#fig:architecture width=4.25in}
+
+An overview of the architecture is presented in +@fig:architecture.
 
 # Results and Discussion
 
@@ -119,7 +136,7 @@ These limitations were bypassed by this tool in several ways, which may be of in
 When implementing parallelization, we were faced with a choice between higher file-level parallelization (parsing and transforming each file's sequences in a separate Lambda function invocation) and lower sequence-level parallelization (parsing the files in the browser and invoking a Lambda function to transform each sequence individually).
 We initially chose the former but quickly ran into memory issues, even when opting to use the most generous memory allocation available (3,008 MB at the time of writing [^1]).
 To reduce memory demands, we switched to sequence-level parallelism and eliminated as many dependencies as possible.
-As a result sequences in length of up to 4.5 MBp may be transformed for visualization in a single function invocation.
+As a result sequences in length of up to 4.5 Mbp may be transformed for visualization in a single function invocation.
 In the future, we aim to increase this limit by taking advantage of further optimizations in memory management during transformation and increases in the total available amount of memory available to function invocations.
 
 # Conclusion
