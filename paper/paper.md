@@ -69,9 +69,15 @@ After the data processing is complete, the loading spinner is replaced with the 
 The initial view is such that the entirety of each sequence's visualization is visible: every part of every sequence can be seen.
 This poses an immediate challenge, as comparing sequences of vastly different lengths will result in the smaller sequence being so small as to be essentially invisible.
 To solve this problem, the tool allows users to toggle the visibility of sequences by clicking on the corresponding legend entry, which will automatically rescale the visualization's axes to fit the displayed sequences.
+The legend coloring is dynamic as well.
+The user may decide to color code the legend either with each sequence or each file in its own color and toggle between options after the data has been plotted, allowing for both inter- and intra-file comparisons.
 
 To inspect a region of the visualization more closely, a user may click and drag over it to zoom in.
 When zooming in, a more detailed visualization is shown by asynchronously retrieving data for the region, allowing for base-pair resolution analysis.
+With a single click, the axis scaling may be reset to the default zoom level.
+
+The title and subtitle of the visualization are dynamically set but may be overridden at any time by the user.
+If the user wishes, their visualization may be downloaded in one of several formats suitable for publication such as SVG, PDF, JPG, and PNG.
 
 ## Implementation
 
