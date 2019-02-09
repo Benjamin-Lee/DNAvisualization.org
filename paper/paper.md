@@ -137,7 +137,7 @@ These limitations were bypassed by this tool in several ways, which may be of in
 When implementing parallelization, we were faced with a choice between higher file-level parallelization (parsing and transforming each file's sequences in a separate Lambda function invocation) and lower sequence-level parallelization (parsing the files in the browser and invoking a Lambda function to transform each sequence individually).
 We initially chose the former but quickly ran into memory issues, even when opting to use the most generous memory allocation available (3,008 MB at the time of writing [^1]).
 To reduce memory demands, we switched to sequence-level parallelism and eliminated as many dependencies as possible.
-As a result sequences in length of up to 4.5 Mbp may be transformed for visualization in a single function invocation.
+As a result, sequences in length of up to 4.5 Mbp may be transformed for visualization in a single function invocation.
 In the future, we aim to increase this limit by taking advantage of further optimizations in memory management during transformation and increases in the total available amount of memory available to function invocations.
 
 # Conclusion
