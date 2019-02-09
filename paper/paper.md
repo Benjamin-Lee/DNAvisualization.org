@@ -36,7 +36,7 @@ bibliography: DNAvisualization.org.bib
 Raw DNA sequences contain an immense amount of meaningful biological information.
 However, these sequences are hard for humans to intuitively interpret.
 To solve this problem, a number of methods have been proposed to transform DNA sequences into two-dimensional visualizations.
-DNAvisualization.org implements several of these methods in a cost effective and high-performance manner via a novel entirely serverless architecture.
+DNAvisualization.org implements several of these methods in a cost effective and high-performance manner via a novel, entirely serverless architecture.
 By taking advantage of recent advances in serverless parallel computing and selective data retrieval, the website is able to offer users the ability to visualize up to thirty 4.5 Mbp DNA sequences simultaneously in seconds using one of five supported methods.
 
 
@@ -55,13 +55,14 @@ All of these methods share a single feature: they map each nucleotide in a DNA s
 One effect of mapping each base to at least one point is that the number of points grows linearly with the length of the DNA sequence.
 This poses a technological challenge, as the technology to sequence DNA has vastly outpaced tools to visualize it.
 Indeed, there is currently a dearth of DNA visualization tools capable of implementing the variety of methods that have been introduced in the literature [@thomasGraphDNAJavaProgram2007; @arakawaGenomeProjectorZoomable2009; @leeSquiggleUserfriendlyTwodimensional2018].
+Taking inspiration from DNAsonification.org [@templeAuditoryDisplayTool2017], which allows for the auditory inspection of DNA sequences, we propose DNAvisualization.org to fill this gap in the web-based visualization toolset.
 
 # Methods
 
 ## Interface
 
 The user interface for the tool is deliberately simple.
-A user first selects a visualization method from one of the five currently supported methods [@yauDNASequenceRepresentation2003;@gatesSimpleWayLook1986;@leeSquiggleUserfriendlyTwodimensional2018;@qiNovel2DGraphical2007], then provides FASTA-formatted sequence data to visualize, either by using the operating system's file input prompt, dragging-and-dropping files onto the window, pasting files, clicking a button to load example data, or pasting the raw data into a text prompt.
+A user first selects a visualization method from one of the five currently supported methods [@yauDNASequenceRepresentation2003;@gatesSimpleWayLook1986;@leeSquiggleUserfriendlyTwodimensional2018;@qiNovel2DGraphical2007] and then provides FASTA-formatted sequence data to visualize, either by using the operating system's file input prompt, dragging-and-dropping files onto the window, pasting files, clicking a button to load example data, or pasting the raw data into a text prompt.
 Upon receipt of sequence data, a loading spinner indicates that the system is processing the data.
 After the data processing is complete, the loading spinner is replaced with the two-dimensional visualization.
 
@@ -105,7 +106,7 @@ The site uses Python's Flask web framework and has its deployment to AWS Lambda 
 It must be noted that using a serverless architecture to host a website is not novel by itself.
 Rather, the novelty of the architecture lies in its combination of serverless computing for request handling with query-in-place data retrieval.
 As mentioned previously, a normal web architecture would use a server running a RDBMS to handle data storage.
-In the case of DNA visualization, the database would be used to persist the transformed DNA sequences as $x$ and $y$ coordinates that may be queried when zooming in on a region.
+In the case of DNA visualization, the database would be used to persist the transformed DNA sequences as $x$- and $y$-coordinates that may be queried when zooming in on a region.
 However, using a database server creates many of the same issues as using a server for web hosting, such as scalability, cost, and parallelism.
 Instead of using an RDBMS, we used the S3 cloud storage platform combined with the S3 Select query-in-place functionality offered by AWS.
 In essence, this service allows one to upload a compressed tabular file to S3 and then submit a SQL query to be executed against the tabular data.
@@ -114,7 +115,7 @@ In this paradigm, pricing is based on the amount and duration of data storage, t
 For DNAvisualization.org, each submitted sequence's transformation is stored on AWS S3 in the open-source Apache Parquet tabular data format using Snappy columnar compression.
 Then, when a user zooms in on a region, a request is sent to AWS Lambda, which submits a SQL query to S3 Select, which in turn scans the file for data in the region.
 The matching data is then returned to the Lambda function, which downsamples the data if necessary (to prevent wasting users' memory with more data points than can be show) and returns it to the browser, which in turn updates the visualization.
-This process happens entirely in parallel for each sequence the user has submitted, regardless of how much demand there is on the website, showcasing the usefulness of serverless computing.
+This process happens entirely in parallel for each sequence the user has submitted, regardless of how much demand there is on the website, showcasing the usefulness of serverless computing. The S3 buckets (_i.e._ folders) containing the cached DNA transformations are configured such that twenty-four hours after a user has submitted a sequence for visualization, its transformation is automatically deleted, thereby further reducing the cost of the website's operation.
 
 ![A sequence diagram demonstrating the interactions between the client's browser, AWS Lambda, and AWS S3. There are two sets of interactions: initial sequence transformation and sequence querying. Each of these interactions happens in parallel for each sequence.](architecture.png){#fig:architecture width=4.25in}
 
