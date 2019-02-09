@@ -31,7 +31,7 @@ let chart = Highcharts.chart('hg-container', {
   //   useGPUTranslations: true
   // },
   title: {
-    text: 'Title will go here'
+    text: 'vis'
   },
   xAxis: {
     events: {
