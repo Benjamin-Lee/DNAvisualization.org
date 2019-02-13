@@ -70,7 +70,7 @@ The initial view is such that the entirety of each sequence's visualization is v
 This poses an immediate challenge, as comparing sequences of vastly different lengths will result in the smaller sequence being so small as to be essentially invisible.
 To solve this problem, the tool allows users to toggle the visibility of sequences by clicking on the corresponding legend entry, which will automatically rescale the visualization's axes to fit the displayed sequences.
 The legend coloring is dynamic as well.
-The user may decide to color code the legend either with each sequence or each file in its own color and toggle between options after the data has been plotted, allowing for both inter- and intra-file comparisons.
+The user may decide to color code the legend either with each sequence (shown in +@fig:sequence-mode) or each file in its own color (shown in +@fig:file-mode) and toggle between options after the data has been plotted, allowing for both inter- and intra-file comparisons.
 
 To inspect a region of the visualization more closely, a user may click and drag over it to zoom in.
 When zooming in, a more detailed visualization is shown by asynchronously retrieving data for the region, allowing for base-pair resolution analysis.
@@ -78,6 +78,18 @@ With a single click, the axis scaling may be reset to the default zoom level.
 
 The title and subtitle of the visualization are dynamically set but may be overridden at any time by the user.
 If the user wishes, their visualization may be downloaded in one of several formats suitable for publication such as SVG, PDF, JPG, and PNG.
+
+<div id="fig:color-coding">
+
+
+![Sequence mode](figures/sequence_mode.png){#fig:sequence-mode width=100%}
+
+![File mode](figures/file_mode.png){#fig:file-mode width=100%}
+
+DNAvisualization.org supports color coding each sequence or file individually.
+
+</div>
+
 
 ## Implementation
 
@@ -123,7 +135,7 @@ Then, when a user zooms in on a region, a request is sent to AWS Lambda, which s
 The matching data is then returned to the Lambda function, which downsamples the data if necessary (to prevent wasting users' memory with more data points than can be show) and returns it to the browser, which in turn updates the visualization.
 This process happens entirely in parallel for each sequence the user has submitted, regardless of how much demand there is on the website, showcasing the usefulness of serverless computing. The S3 buckets (_i.e._ folders) containing the cached DNA transformations are configured such that twenty-four hours after a user has submitted a sequence for visualization, its transformation is automatically deleted, thereby further reducing the cost of the website's operation.
 
-![A sequence diagram demonstrating the interactions between the client's browser, AWS Lambda, and AWS S3. There are two sets of interactions: initial sequence transformation and sequence querying. Each of these interactions happens in parallel for each sequence.](architecture.png){#fig:architecture width=4.25in}
+![A sequence diagram demonstrating the interactions between the client's browser, AWS Lambda, and AWS S3. There are two sets of interactions: initial sequence transformation and sequence querying. Each of these interactions happens in parallel for each sequence.](figures/architecture.png){#fig:architecture width=4.25in}
 
 An overview of the architecture is presented in +@fig:architecture.
 
