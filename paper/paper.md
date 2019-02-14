@@ -97,7 +97,7 @@ The web tool is built using a novel entirely serverless architecture, with compu
 To understand how this system differs from a traditional architecture, consider a traditional approach to building the DNAvisualization.org tool.
 A server, usually running Linux or Microsoft Windows, is established to handle HTTP requests to the website.
 This server is either maintained by a university or, increasingly often, a cloud services provider.
-If there are no requests (as can be expected to be a significant fraction of the time for most websites), the server sits idle.
+If there are no requests (as can be expected to be a nontrivial fraction of the time for low traffic web tools), the server sits idle.
 When requests are submitted, the server responds to each one.
 If the server is at capacity, requests may wait unanswered or, with additional complexity, more servers may be automatically requested from cloud services provider to meet the greater demand.
 Data storage is usually provided by a relational database management system (RDBMS), which must also be running on a server.
