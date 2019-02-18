@@ -115,6 +115,7 @@
                 <!-- The final version of a paper -->
                 <text variable="volume" font-weight="bold"/>
                 <text variable="page"/>
+                <text variable="DOI"/>
               </if>
               <else>
                 <!-- The initial version of a paper -->
