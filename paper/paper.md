@@ -14,7 +14,7 @@ author:
         - HMS
         - SBGrid
   - Pablo Ruiz:
-      email: test@test.com
+      email: pabloruizruiz10@gmail.com
       institute: SEAS
 institute:
   - Lab41:
@@ -175,10 +175,6 @@ The software repository is hosted at https://github.com/Benjamin-Lee/DNAvisualiz
 
 This work was supported by the non-profit firm In-Q-Tel, Inc. Funding
 for open access charge: In-Q-Tel, Inc.
-
-# Conflicts of Interest
-
-None declared.
 
 # References
 

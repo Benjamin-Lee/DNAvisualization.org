@@ -1,0 +1,550 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={DNAvisualization.org: an entirely serverless web tool for DNA sequence visualization},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatletter
+\@ifpackageloaded{subfig}{}{\usepackage{subfig}}
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\captionsetup[subfloat]{margin=0.5em}
+\AtBeginDocument{%
+\renewcommand*\figurename{Figure}
+\renewcommand*\tablename{Table}
+}
+\AtBeginDocument{%
+\renewcommand*\listfigurename{List of Figures}
+\renewcommand*\listtablename{List of Tables}
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+
+\title{DNAvisualization.org: an entirely serverless web tool for DNA sequence
+visualization}
+\usepackage{authblk}
+\author[%
+  1%
+  ,%
+  2%
+  ,%
+  3%
+  ]{%
+  Benjamin D. Lee%
+  %
+  \textsuperscript{*\,}%
+  %%
+  %
+}
+\author[%
+  2%
+  ,%
+  4%
+  ]{%
+  Michael A. Timony%
+  %
+  %
+}
+\author[%
+  3%
+  ]{%
+  Pablo Ruiz%
+  %
+  %
+}
+\affil[1]{In-Q-Tel Lab41}
+\affil[2]{Harvard Medical School}
+\affil[3]{School of Engineering and Applied Sciences, Harvard University}
+\affil[4]{SBGrid}
+\date{}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage \null \vskip 2em
+  \begin {center}%
+    \let \footnote \thanks
+         {\LARGE \@title \par}%
+         \vskip 1.5em%
+                {\large \lineskip .5em%
+                  \begin {tabular}[t]{c}%
+                    \@author
+                  \end {tabular}\par}%
+                                                \vskip 0.2em{\textsuperscript{*}\,Correspondence:
+                                    Benjamin D. Lee <benjamindlee@me.com>\\
+                  }%
+                %                \vskip 1em{\large \@date}%
+  \end {center}%
+  \par
+  \vskip 1.5em}
+\makeatother
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Raw DNA sequences contain an immense amount of meaningful biological
+information. However, these sequences are hard for humans to intuitively
+interpret. To solve this problem, a number of methods have been proposed
+to transform DNA sequences into two-dimensional visualizations.
+\href{https://DNAvisualization.org}{DNAvisualization.org} implements
+several of these methods in a cost effective and performant manner via a
+novel, entirely serverless architecture. By taking advantage of recent
+developments in serverless parallel computing and selective data
+retrieval, the website is able to offer users the ability to visualize
+up to thirty 4.5 Mbp DNA sequences simultaneously using one of five
+supported methods and to export these visualizations in a variety
+publication-ready formats.
+\end{abstract}
+
+% pandoc-xnos: cleveref fakery
+\newcommand{\plusnamesingular}{}
+\newcommand{\starnamesingular}{}
+\newcommand{\xrefname}[1]{\protect\renewcommand{\plusnamesingular}{#1}}
+\newcommand{\Xrefname}[1]{\protect\renewcommand{\starnamesingular}{#1}}
+\providecommand{\cref}{\plusnamesingular~\ref}
+\providecommand{\Cref}{\starnamesingular~\ref}
+\providecommand{\crefformat}[2]{}
+\providecommand{\Crefformat}[2]{}
+
+% pandoc-xnos: cleveref formatting
+\crefformat{figure}{fig.~#2#1#3}
+\Crefformat{figure}{Figure~#2#1#3}
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+As DNA sequencing technology becomes more commonplace, tools for the
+analysis of its data are among the most cited papers in science (1). The
+reason is simple: DNA sequences are, by themselves, almost completely
+unintelligible to humans. Seeing meaningful patterns in DNA sequences
+(which are often too large to be shown in their entirety on a screen) is
+a significant challenge for researchers. One approach to addressing this
+problem is to convert DNA sequences into two-dimensional visualizations
+that capture some part of the biological information contained within
+them. This approach has the benefit of taking advantage of the highly
+developed human visual system, which is capable of tremendous feats of
+pattern recognition and memory (2).
+
+A variety of methods have been proposed to convert DNA sequences into
+two dimensional visualizations (3--12). These methods are highly
+heterogenous, but, for the sake of this paper, we will only discuss
+methods with no degeneracy, \emph{i.e.} methods that produce
+visualizations which may be unambiguously transformed back into the DNA
+sequences from which they were generated. All of these methods operate
+on a single underlying principle: they map each nucleotide in a DNA
+sequence to one or more points in the Cartesian plane and treat each
+sequence as a walk between these points.
+
+One effect of mapping each base to at least one point is that the number
+of points grows linearly with the length of the DNA sequence. This poses
+a technological challenge, as the ability to sequence DNA has vastly
+outpaced tools to visualize it. Indeed, there is currently a dearth of
+DNA visualization tools capable of implementing the variety of methods
+that have been introduced in the literature (11, 13, 14). Taking
+inspiration from DNAsonification.org (15), which allows for the auditory
+inspection of DNA sequences, we propose DNAvisualization.org to fill
+this gap in the web-based visualization toolset.
+
+\hypertarget{methods-and-results}{%
+\section{Methods and Results}\label{methods-and-results}}
+
+\hypertarget{interface}{%
+\subsection{Interface}\label{interface}}
+
+The user interface for the tool is deliberately simple. A user first
+selects a visualization method from one of the five currently supported
+methods (6, 7, 11, 16) and then provides FASTA-formatted sequence data
+to visualize, either by using the operating system's file-input prompt,
+dragging-and-dropping files onto the browser window, or pasting the raw
+data into a text prompt. Upon receipt of sequence data, a loading
+spinner indicates that the system is processing the data. After the data
+processing is complete, the loading spinner is replaced with the
+two-dimensional visualization.
+
+The initial view is such that the entirety of each sequence's
+visualization is visible: every part of every sequence can be seen. This
+poses an immediate challenge, as comparing sequences of vastly different
+lengths will result in the smaller sequence being so small as to be
+essentially invisible. To solve this problem, the tool allows users to
+toggle the visibility of sequences by clicking on the corresponding
+legend entry, which will automatically rescale the visualization's axes
+to fit the displayed sequences. The legend coloring is dynamic as well.
+The user may decide to color code the legend either with each sequence
+(shown in \xrefname{fig.}\cref{fig:sequence-mode}) or each file in its
+own color (shown in \xrefname{fig.}\cref{fig:file-mode}) and toggle
+between options after the data has been plotted, allowing for both
+inter- and intra-file comparisons.
+
+To inspect a region of the visualization more closely, a user may click
+and drag over it to zoom in. When zooming in, a more detailed
+visualization is shown by asynchronously retrieving data for the region,
+allowing for base-pair resolution analysis. With a single click, the
+axis scaling may be reset to the default zoom level.
+
+The title and subtitle of the visualization are dynamically set but may
+be overridden at any time by the user. If the user wishes, their
+visualization may be downloaded in one of several formats suitable for
+publication such as SVG, PDF, JPG, and PNG.
+
+\begin{figure}
+\centering
+
+\subfloat[Sequence
+mode\label{fig:sequence-mode}]{\includegraphics[width=1\textwidth,height=\textheight]{figures/sequence_mode.png}}
+
+\subfloat[File
+mode\label{fig:file-mode}]{\includegraphics[width=1\textwidth,height=\textheight]{figures/file_mode.png}}
+
+\caption{DNAvisualization.org supports color coding each sequence or
+file individually.}
+
+\label{fig:color-coding}
+
+\end{figure}
+
+\hypertarget{implementation}{%
+\subsection{Implementation}\label{implementation}}
+
+The web tool is built using a novel, entirely serverless architecture,
+with computing, as well as data storage and selective retrieval, done in
+a serverless manner. To understand how this system differs from a
+traditional architecture, consider a traditional approach to building
+the DNAvisualization.org tool. A server, usually running Linux or
+Microsoft Windows, is established to handle HTTP requests to the
+website. This server is either maintained by a university or,
+increasingly often, a cloud service provider. If there are no requests
+(as can be expected to be a nontrivial fraction of the time for
+low-traffic web tools), the server sits idle. When requests are
+submitted, the server responds to each one. If the server is at
+capacity, requests may go unanswered or, with additional complexity,
+more servers may be requested from cloud services provider to meet the
+greater demand. Data storage is usually provided by a relational
+database management system (RDBMS), which must also be running on a
+server.
+
+This paradigm has several disadvantages: disruptions to the server
+result in disruptions to the website, greater expertise is required for
+the development and maintenance of the website, the server wastes
+resources while sitting idle, and the server's computational and storage
+capacity is directly limited by its hardware.
+
+To solve these problems, a new model has been introduced called
+serverless computing or Function-as-a-Service (FaaS). The basic idea is
+that a software developer specifies code to be executed (\emph{i.e.} a
+function) and then invokes it on varying inputs. The cloud service
+provider is thereby delegated the responsibility for the execution of
+the code. In this model, the pricing is by function invocation. When not
+being used, there is no cost to the user. On the other hand, if there
+are numerous simultaneous function invocations, each invocation is
+handled separately, in parallel.
+
+By making the serverless function a virtual ``server'' and invoking the
+function upon each individual request, one is able to take full
+advantage of serverless computing. For each request to the website, a
+virtual server is created for just long enough to respond to the request
+and then immediately extinguished. This results in the website being
+able to instantly scale to use precisely the resources needed to meet
+demand.
+
+DNAvisualization.org is built atop Amazon Web Services (AWS) due to
+their generous free tier that, at the time of this writing, allows for
+one-million free function invocations per month using their Lambda
+serverless compute platform, which is anticipated to easily meet the
+demand for the site. In the event that the free tier is exceeded, AWS
+Lambda's pricing is very affordable.
+
+For DNAvisualization.org, we use AWS Lambda to serverlessly transform
+submitted DNA sequences into their visualizations in parallel, in
+addition to serving the static assets (\emph{i.e.} HTML, Javascript, and
+CSS files) to the user. The site uses Python's Flask web framework and
+has its deployment to AWS Lambda seamlessly automated by the Zappa tool.
+
+It must be noted that using a serverless architecture to host a website
+is not novel by itself. Rather, the novelty of the architecture lies in
+its combination of serverless computing for request handling with
+query-in-place data retrieval on compressed data. As mentioned
+previously, a normal web architecture would use a server running a RDBMS
+to handle data storage. In the case of DNA visualization, the database
+would be used to persist the transformed DNA sequences as x- and
+y-coordinates that may be queried when zooming in on a region. However,
+using a database server creates many of the same issues as using a
+server for web hosting, such as scalability, cost, and parallelism.
+Instead of using an RDBMS, we used the S3 cloud storage platform
+combined with the S3 Select query-in-place functionality offered by AWS.
+In essence, this service allows one to upload a compressed tabular file
+to S3 and then submit a SQL query to be executed against the tabular
+data. In this paradigm, pricing is based on the amount and duration of
+data storage, the amount of scanned during querying, and the amount of
+data returned by query.
+
+For DNAvisualization.org, each submitted sequence's transformation is
+stored on AWS S3 in the open-source Apache Parquet tabular data format
+using Snappy columnar compression. Then, when a user zooms in on a
+region, a request is sent to AWS Lambda, which submits a SQL query to S3
+Select, which in turn scans the file for data in the region. The
+matching data is then returned to the Lambda function, which downsamples
+the data if necessary (to prevent wasting users' memory with more data
+points than can be shown) and returns it to the browser, which then
+updates the visualization. This process happens entirely in parallel for
+each sequence that the user has submitted, regardless of how much demand
+there is on the website, showcasing the usefulness of serverless
+computing. The S3 buckets (\emph{i.e.} folders) containing the cached
+DNA sequence transformations are configured such that twenty-four hours
+after a user has submitted a sequence for visualization, its
+transformation is automatically deleted, thereby further reducing the
+cost of the website's operation.
+
+\begin{figure}
+\centering
+\includegraphics[width=4.25in,height=\textheight]{figures/architecture.png}
+\caption{A sequence diagram demonstrating the interactions between the
+client's browser, AWS Lambda, and AWS S3. There are two sets of
+interactions: initial sequence transformation and sequence querying.
+Each of these interactions happens in parallel for each
+sequence.\label{fig:architecture}}
+\end{figure}
+
+An overview of the architecture is presented in
+\xrefname{fig.}\cref{fig:architecture}.
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+Because DNA sequence transformation is an inherently parallelizable
+task, the use of serverless computing is a natural fit for this
+application. However, not all web applications for biology are amenable
+to serverless computing.
+
+The primary limitation of this architecture is necessity for a short
+duration of computation (currently on the scale of seconds) or, failing
+that, the ability to parallelize the computation and the data. In
+addition, memory constraints on the scale of megabytes to several
+gigabytes must also be respected. Applications which violate these
+requirements will need significant modifications to this architecture in
+order to function. As the capabilities of serverless computing increase,
+the burden of these limitations will decrease. For more information
+about the limitations of serverless computing, see (17).
+
+These limitations were bypassed by this tool in several ways, which may
+be of interest to readers attempting to implement similar architectures
+in the future. When implementing parallelization, we were faced with a
+choice between higher, file-level parallelization (parsing and
+transforming each file's sequences in a separate Lambda function
+invocation) and lower, sequence-level parallelization (parsing the files
+in the browser and invoking a Lambda function to transform each sequence
+individually). We initially chose the former but quickly ran into memory
+issues, even when opting to use the most generous memory allocation
+available (3,008 MB at the time of writing\footnote{This total includes
+  all of the function's code as well as the data on which it is invoked.}).
+To reduce memory demands, we switched to sequence-level parallelism and
+eliminated as many dependencies as possible.
+
+Currently, the website is limited to visualizing up to thirty sequences
+of up to 4.5 Mbp each for a grand total of 135 Mbp of sequence data at a
+time. The total sequence count limitation ensures that our chart
+renderer can handle rendering all of the points (downsampled to a static
+1,000 points per sequence) and the sequence length limitation ensures
+that the transforming Lambda function's memory is not overwhelmed. In
+the future, we aim to increase this limit by taking advantage of further
+optimizations in memory management during transformation and increases
+in the total amount of memory available to function invocations.
+
+\hypertarget{conclusion}{%
+\section{Conclusion}\label{conclusion}}
+
+This web tool serves as a demonstration of the applicability of
+serverless computing to computational molecular biology as well as a
+useful tool to quickly gain an intuitive visual overview of DNA
+sequences. While not all applications are amenable to serverless
+computing, those that are may achieve greater performance with decreased
+cost and development complexity, a significant advantage over
+traditional web architectures. By making sequence visualization fast and
+simple as well as by providing an open-source example of serverless
+computing and data retrieval, this tool aims to make both of these
+valuable techniques more widely used within the biological research
+community.
+
+\hypertarget{data-availability}{%
+\section{Data Availability}\label{data-availability}}
+
+The website is freely accessible at
+\href{https://dnavisualization.org}{https://DNAvisualization.org}. The
+software repository is hosted at
+https://github.com/Benjamin-Lee/DNAvisualization.org.
+
+\hypertarget{funding}{%
+\section{Funding}\label{funding}}
+
+This work was supported by the non-profit firm In-Q-Tel, Inc.~Funding
+for open access charge: In-Q-Tel, Inc.
+
+\hypertarget{references}{%
+\section*{References}\label{references}}
+\addcontentsline{toc}{section}{References}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-wrenBioinformaticsProgramsAre2016}{}%
+1. Wren,J.D. (2016) Bioinformatics programs are 31-fold over-represented
+among the highest impact scientific papers of the past two decades.
+\emph{Bioinformatics}, \textbf{32}, 2686--2691,
+\href{https://doi.org/10.1093/bioinformatics/btw284}{DOI: \texttt{10.1093/bioinformatics/btw284}}.
+
+\leavevmode\hypertarget{ref-bradyVisualLongtermMemory2008}{}%
+2. Brady,T.F., Konkle,T., Alvarez,G.A. and Oliva,A. (2008) Visual
+long-term memory has a massive storage capacity for object details.
+\emph{Proceedings of the National Academy of Sciences}, \textbf{105},
+14325--14329,
+\href{https://doi.org/10.1073/pnas.0803390105}{DOI: \texttt{10.1073/pnas.0803390105}}. \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2533687/}{PMCID: \texttt{PMC2533687}}.
+
+\leavevmode\hypertarget{ref-randicCompact2DGraphical2003}{}%
+3. Randić,M., Vračko,M., Zupan,J. and Novič,M. (2003) Compact 2-D
+graphical representation of DNA. \emph{Chemical Physics Letters},
+\textbf{373}, 558--562,
+\href{https://doi.org/10.1016/S0009-2614(03)00639-0}{DOI: \texttt{10.1016/S0009-2614(03)00639-0}}.
+
+\leavevmode\hypertarget{ref-qiUsingHuffmanCoding2011}{}%
+4. Qi,Z.-H., Li,L. and Qi,X.-Q. (2011) Using Huffman coding method to
+visualize and analyze DNA sequences. \emph{Journal of Computational
+Chemistry}, \textbf{32}, 3233--3240,
+\href{https://doi.org/10.1002/jcc.21906}{DOI: \texttt{10.1002/jcc.21906}}.
+
+\leavevmode\hypertarget{ref-guoNumericalCharacterizationDNA2003}{}%
+5. Guo,X. and Nandy,A. (2003) Numerical characterization of DNA
+sequences in a 2-D graphical representation scheme of low degeneracy.
+\emph{Chemical Physics Letters}, \textbf{369}, 361--366,
+\href{https://doi.org/10.1016/S0009-2614(02)02029-8}{DOI: \texttt{10.1016/S0009-2614(02)02029-8}}.
+
+\leavevmode\hypertarget{ref-yauDNASequenceRepresentation2003}{}%
+6. Yau,S.S.T. (2003) DNA sequence representation without degeneracy.
+\emph{Nucleic Acids Research}, \textbf{31}, 3078--3080,
+\href{https://doi.org/10.1093/nar/gkg432}{DOI: \texttt{10.1093/nar/gkg432}}.
+
+\leavevmode\hypertarget{ref-gatesSimpleWayLook1986}{}%
+7. Gates,M.A. (1986) A simple way to look at DNA. \emph{Journal of
+Theoretical Biology}, \textbf{119}, 319--328,
+\href{https://doi.org/10.1016/S0022-5193(86)80144-8}{DOI: \texttt{10.1016/S0022-5193(86)80144-8}}.
+
+\leavevmode\hypertarget{ref-zou2DGraphicalRepresentation2014}{}%
+8. Zou,S., Wang,L. and Wang,J. (2014) A 2D graphical representation of
+the sequences of DNA based on triplets and its application.
+\emph{EURASIP Journal on Bioinformatics and Systems Biology},
+\href{https://doi.org/10.1186/1687-4153-2014-1}{DOI: \texttt{10.1186/1687-4153-2014-1}}. \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3896961/}{PMCID: \texttt{PMC3896961}}.
+
+\leavevmode\hypertarget{ref-jeffreyChaosGameRepresentation1990}{}%
+9. Jeffrey,H.J. (1990) Chaos game representation of gene structure.
+\emph{Nucleic Acids Research}, \textbf{18}, 2163--2170.
+
+\leavevmode\hypertarget{ref-pengLongrangeCorrelationsNucleotide1992}{}%
+10. Peng,C.-K., Buldyrev,S.V., Goldberger,A.L., Havlin,S., Sciortino,F.,
+Simons,M. and Stanley,H.E. (1992) Long-range correlations in nucleotide
+sequences. \emph{Nature}, \textbf{356}, 168--170,
+\href{https://doi.org/10.1038/356168a0}{DOI: \texttt{10.1038/356168a0}}.
+
+\leavevmode\hypertarget{ref-leeSquiggleUserfriendlyTwodimensional2018}{}%
+11. Lee,B.D. (2018) Squiggle: A user-friendly two-dimensional DNA
+sequence visualization tool. \emph{Bioinformatics},
+\href{https://doi.org/10.1093/bioinformatics/bty807}{DOI: \texttt{10.1093/bioinformatics/bty807}}.
+
+\leavevmode\hypertarget{ref-bariEffectiveEncodingDNA2013}{}%
+12. Bari,A.G., Reaz,R., Islam,A.T., Choi,H.-J. and Jeong,B.-S. (2013)
+Effective Encoding for DNA Sequence Visualization Based on Nucleotide's
+Ring Structure. \emph{Evolutionary Bioinformatics}, \textbf{9},
+EBO.S12160,
+\href{https://doi.org/10.4137/EBO.S12160}{DOI: \texttt{10.4137/EBO.S12160}}. \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3712558/}{PMCID: \texttt{PMC3712558}}.
+
+\leavevmode\hypertarget{ref-thomasGraphDNAJavaProgram2007}{}%
+13. Thomas,J.M., Horspool,D., Brown,G., Tcherepanov,V. and Upton,C.
+(2007) GraphDNA: A Java program for graphical display of DNA composition
+analyses. \emph{BMC Bioinformatics},
+\href{https://doi.org/10.1186/1471-2105-8-21}{DOI: \texttt{10.1186/1471-2105-8-21}}. \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1783863/}{PMCID: \texttt{PMC1783863}}.
+
+\leavevmode\hypertarget{ref-arakawaGenomeProjectorZoomable2009}{}%
+14. Arakawa,K., Tamaki,S., Kono,N., Kido,N., Ikegami,K., Ogawa,R. and
+Tomita,M. (2009) Genome Projector: Zoomable genome map with multiple
+views. \emph{BMC Bioinformatics}, \textbf{10}, 31,
+\href{https://doi.org/10.1186/1471-2105-10-31}{DOI: \texttt{10.1186/1471-2105-10-31}}. \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2636772/}{PMCID: \texttt{PMC2636772}}.
+
+\leavevmode\hypertarget{ref-templeAuditoryDisplayTool2017}{}%
+15. Temple,M.D. (2017) An auditory display tool for DNA sequence
+analysis. \emph{BMC Bioinformatics}, \textbf{18},
+\href{https://doi.org/10.1186/s12859-017-1632-x}{DOI: \texttt{10.1186/s12859-017-1632-x}}. \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5404335/}{PMCID: \texttt{PMC5404335}}.
+
+\leavevmode\hypertarget{ref-qiNovel2DGraphical2007}{}%
+16. Qi,Z. and Qi,X. (2007) Novel 2D graphical representation of DNA
+sequence based on dual nucleotides. \emph{Chemical Physics Letters},
+\textbf{440}, 139--144,
+\href{https://doi.org/10.1016/j.cplett.2007.03.107}{DOI: \texttt{10.1016/j.cplett.2007.03.107}}.
+
+\leavevmode\hypertarget{ref-hellersteinServerlessComputingOne2019}{}%
+17. Hellerstein,J.M., Faleiro,J., Gonzalez,J.E., Schleier-Smith,J.,
+Sreekanti,V., Tumanov,A. and Wu,C. (2019) Serverless Computing: One Step
+Forward, Two Steps Back. In \emph{Conference on Innovative Data Systems
+Research}. Asilomar, CA.
+
+\section{Figures and Tables Captions}
+
+Figure 1. DNAvisualization.org supports color coding each sequence or
+file individually.
+
+Figure 2. A sequence diagram demonstrating the interactions between the
+client's browser, AWS Lambda, and AWS S3. There are two sets of
+interactions: initial sequence transformation and sequence querying.
+Each of these interactions happens in parallel for each
+sequence.
+
+\end{document}
