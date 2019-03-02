@@ -63,5 +63,4 @@ def query_x_range(Key, x_min=None, x_max=None):
             return df
 
     if not end_event_received:
-        # fp.close()
         raise Exception("End event not received, request incomplete.")
