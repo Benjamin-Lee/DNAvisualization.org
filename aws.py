@@ -41,8 +41,10 @@ def query_x_range(Key, x_min=None, x_max=None):
                                         OutputSerialization={'CSV': {'RecordDelimiter': '\n'}})
     event_stream = response['Payload']
     end_event_received = False
+
+    # store the CSV output in memory
     data_bytes = io.BytesIO()
-    # fp = tempfile.TemporaryFile()
+
     for event in event_stream:
         if 'Records' in event:
             data = event['Records']['Payload']
