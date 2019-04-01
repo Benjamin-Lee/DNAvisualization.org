@@ -1,5 +1,5 @@
 ---
-title: "DNAvisualization.org: an entirely serverless web tool for DNA sequence visualization"
+title: "DNAvisualization.org: a serverless web tool for DNA sequence visualization"
 author:
   - Benjamin D. Lee:
       institute:
@@ -37,7 +37,7 @@ Raw DNA sequences contain an immense amount of meaningful biological information
 However, these sequences are hard for humans to intuitively interpret.
 To solve this problem, a number of methods have been proposed to transform DNA sequences into two-dimensional visualizations.
 [DNAvisualization.org](https://DNAvisualization.org) implements several of these methods in a cost effective and performant manner via a novel, entirely serverless architecture.
-By taking advantage of recent developments in serverless parallel computing and selective data retrieval, the website is able to offer users the ability to visualize up to thirty 4.5 Mbp DNA sequences simultaneously using one of five supported methods and to export these visualizations in a variety publication-ready formats.
+By taking advantage of recent developments in serverless parallel computing and selective data retrieval, the website is able to offer users the ability to visualize up to thirty 4.5 Mbp DNA sequences simultaneously using one of five supported methods and to export these visualizations in a variety of publication-ready formats.
 
 
 # Introduction
@@ -128,7 +128,7 @@ In the case of DNA visualization, the database would be used to persist the tran
 However, using a database server creates many of the same issues as using a server for web hosting, such as scalability, cost, and parallelism.
 Instead of using an RDBMS, we used the S3 cloud storage platform combined with the S3 Select query-in-place functionality offered by AWS.
 In essence, this service allows one to upload a compressed tabular file to S3 and then submit a SQL query to be executed against the tabular data.
-In this paradigm, pricing is based on the amount and duration of data storage, the amount of scanned during querying, and the amount of data returned by query.
+In this paradigm, pricing is based on the amount and duration of data storage, the amount of data scanned during querying, and the amount of data returned by query.
 
 For DNAvisualization.org, each submitted sequence's transformation is stored on AWS S3 in the open-source Apache Parquet tabular data format using Snappy columnar compression.
 Then, when a user zooms in on a region, a request is sent to AWS Lambda, which submits a SQL query to S3 Select, which in turn scans the file for data in the region.
