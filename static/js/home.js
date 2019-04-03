@@ -525,6 +525,21 @@ window.onload = function () {
     }
   }
 
+  // check that the File API is present. If not, display an alert to the user with a suggestion.
+  if (!Modernizr.filereader) {
+    bootbox.alert({
+      title: "Unsupported browser",
+      message: `This browser is not supported due to the lack of support for the <a href=https://developer.mozilla.org/en-US/docs/Web/API/File"
+          ">File API</a>. Please use IE 10+, Firefox 10+, Chrome 13+, Opera 12+, or Safari 12+ to use this site.`,
+      backdrop: true,
+      buttons: {
+        ok: {
+          className: 'btn-secondary',
+        }
+      }
+    })
+  }
+
   // support for drag-and-drop, copy-pasting, and a file upload button
   FileReaderJS.setupClipboard(document.body, options);
   FileReaderJS.setupInput(document.getElementById('file-input'), options);
