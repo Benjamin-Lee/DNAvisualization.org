@@ -41,6 +41,7 @@ The sentence now reads "The web tool is built using a novel architecture, with c
 > Also I am unsure of how to “respect” a memory constraint. I would rephrase this statement.
 
 > With the Randic (Qi) dinucleotide approach. Would it be better to implement a codon (trinucleotide) approach with degeneracy (20 options rather than the 16 dinucleotides). From a users point of view this may be more biologically relevant.
+Simply put, yes, it would be better to implement a codon approach with degeneracy that the Qi method. This is an insightful method that would likely capture more biological meaning. However, as per the NAR web server instructions ("new methods that have not been previously validated in a separate publication" are discouraged), no new novel visualization methods were introduced. With respect to the addition of novel methods, the website has a section ("Have an idea for another way to turn a DNA sequence into a two-dimensional visualization? Let us know over on the [Squiggle repository](https://github.com/Lab41/squiggle/issues/new) and we'll be happy to work with you on implementing it") that refers users with novel ideas to propose it to the underlying transformation library atop which the web service is built for inclusion.
 > Also in the Qi graph, it might be a good idea to label the consensus line explicitly rather than refer to it as one of the input sequence identifiers. E.g. with the test data the consensus (overlapping) orange line is labeled Chimpanzee.
 
 ## Referee: 2
@@ -95,6 +96,6 @@ vanishes only for the first time.
 
 > 4. In Safari, it does not work. While click on “Load an example file”, the site freezes. Just shows the  loading spinner
 
-The website was, in fact, developed exclusively using MacOS Mojave v10.14.2 (presently using v10.14.3) and Safari v12.0.2 (presently using v12.0.3) and has had the "load an example file" functionality verified. Further information, such as the version of MacOS and Safari in use as well as any errors printed to the Javascript console, would be helpful. If you are comfortable using GitHub (through an anonymous account), filing an issue would allow for this bug to be resolved, as it is presently not reproducible.
+The website was, in fact, developed exclusively using MacOS Mojave v10.14.2 (presently using v10.14.3) and Safari v12.0.2 (presently using v12.0.3) and has had the "load an example file" functionality verified. Further information, such as the version of MacOS and Safari in use as well as any errors printed to the Javascript console, would be helpful to fix this issue. If you are comfortable using GitHub (through an anonymous account), filing an issue would allow for more discussion, as the bug is presently not reproducible.
 
 > 5. Integrating two default sample files -  one for small (already available), the other for large FASTA sequences - may be a good idea.
