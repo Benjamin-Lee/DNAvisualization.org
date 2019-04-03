@@ -20,6 +20,8 @@
 ### Page 3 Implementation
 > First sentence refers twice to serverless - it this redundant (minor edit)
 
+The sentence now reads "The web tool is built using a novel architecture, with computing, as well as data storage and selective retrieval, done in an entirely serverless manner."
+
 > The section on 'FaaS method reads a little like an advertisement for Amazon services. I think a less biased discussion of other providers of such methods should be included.
 > “generous free tier” is too opinionated.
 > ‘Lambda’s pricing is very affordable” ??? Need to be more objective and less biased in this regard.
@@ -82,6 +84,8 @@ The implementation now reads "the amount of data scanned during querying".
 Most of the functionalities work except the followings;
 
 > 1. drop anywhere on page does not work
+
+Without knowing the specific details of the browser version, this bug is not able to be reproduced. Drag-and-drop is powered by [FileReader.js](https://bgrins.github.io/filereader.js/), which has full support for IE, Chrome, Firefox, and Opera as well as support for Safari 10+ (as per https://developer.mozilla.org/en-US/docs/Web/API/File). That drag-and-drop does not work but the website as a whole does work suggests that the issue is not specifically with the File API, but more information would be needed to fully isolate and fix this issue. As a stopgap measure, feature detection for the File API has been implemented, which alerts the user if their browser is incompatible with the site and provides a list of browsers and versions which are compatible.
 
 > 2. plot option does not vanishes automatically, if I want to change
 title and subtitle of the same figure twice or thrice and so on. It
