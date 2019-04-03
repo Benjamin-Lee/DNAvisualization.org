@@ -93,7 +93,7 @@ DNAvisualization.org supports color coding each sequence or file individually.
 
 ## Implementation
 
-The web tool is built using a novel, entirely serverless architecture, with computing, as well as data storage and selective retrieval, done in a serverless manner.
+The web tool is built using a novel architecture, with computing, as well as data storage and selective retrieval, done in an entirely serverless manner.
 To understand how this system differs from a traditional architecture, consider a traditional approach to building the DNAvisualization.org tool.
 A server, usually running Linux or Microsoft Windows, is established to handle HTTP requests to the website.
 This server is either maintained by a university or, increasingly often, a cloud service provider.
