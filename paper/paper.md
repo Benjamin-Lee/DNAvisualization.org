@@ -145,8 +145,8 @@ An overview of the architecture is presented in +@fig:architecture.
 Because DNA sequence transformation is an inherently parallelizable task, the use of serverless computing is a natural fit for this application.
 However, not all web applications for biology are amenable to serverless computing.
 
-The primary limitation of this architecture is necessity for a short duration of computation (currently on the scale of seconds) or, failing that, the ability to parallelize the computation and the data.
-In addition, memory constraints on the scale of megabytes to several gigabytes must also be respected.
+The primary limitation of this architecture is the necessity for a short duration of computation (currently on the scale of seconds) or, failing that, the ability to parallelize the computation and the data.
+In addition, a function's memory use may not exceed a predefined limit, which can range from the scale of megabytes to several gigabyte and be specified by the user.
 Applications which violate these requirements will need significant modifications to this architecture in order to function.
 As the capabilities of serverless computing increase, the burden of these limitations will decrease.
 For more information about the limitations of serverless computing, see @hellersteinServerlessComputingOne2019.
