@@ -34,6 +34,7 @@ The sentence now reads "The web tool is built using a novel architecture, with c
 > Some text is in [] brackets - what does this imply.
 > The “initial sequence transformations” and “sequence querying” mentioned in legend are not clearly labeled in figure - which is which? I assume it’s the boxes marked as loop.
 
+This figure has been completely remade for greater clarity. Instead of using a sequence diagram, this figure now features a graphical representation of the architecture with a much more robust legend, while capturing the same information as before. The “initial sequence transformations” and “sequence querying” mentioned in legend are now clearly labeled, along with each of the steps. Color-coded parallel lines are now used to demonstrate parallelism, rather than  the previous loop boxes.
 ### Page 7 Discussion
 > When discussing the limitation of the architecture it would be good to discuss a clear-cut bioinformatic process or approach that would be problematic - if is this what you are implying?
 > Again  in the Conclusion reference is made to “not all applications are amenable” - this is too vague and an example discussed (in Discussion?) would help clear this up.
@@ -81,6 +82,8 @@ The implementation now reads "the amount of data scanned during querying".
 > 2.  the descriptions in "Implementation" section need to be modified, please refer AWS or FaaS framework. At a first glance, the description seems a new variant of FaaS framework is proposed and implemented for the purpose of this work.
 
 > 3. The boxes for client, AWS Lambda and AWS S3 at the below of  Figure 2 can be removed as they are already on top.
+
+In response to the points raised by the first reviewer, Figure 2 has now be completely remade. As such, there are no more boxes on to bottom (or the top) of the figure.
 
 >The followings are related to 'usability test' for the site;
 Most of the functionalities work except the followings;
