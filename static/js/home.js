@@ -411,6 +411,7 @@ function showTitleModal() {
       }, {
         text: $("#subtitle").val()
       });
+      titleModal.modal("hide");
     })
   }, 200);
 }
