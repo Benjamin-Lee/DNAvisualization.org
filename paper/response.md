@@ -43,6 +43,7 @@ This figure has been completely remade for greater clarity. Instead of using a s
 
 This sentence has been reworded to read: "In addition, a function's memory use may not exceed a predefined limit, which can range from the scale of megabytes to several gigabyte and be specified by the user."
 > With the Randic (Qi) dinucleotide approach. Would it be better to implement a codon (trinucleotide) approach with degeneracy (20 options rather than the 16 dinucleotides). From a users point of view this may be more biologically relevant.
+
 Simply put, yes, it would be better to implement a codon approach with degeneracy that the Qi method. This is an insightful method that would likely capture more biological meaning. However, as per the NAR web server instructions ("new methods that have not been previously validated in a separate publication" are discouraged), no new novel visualization methods were introduced. With respect to the addition of novel methods, the website has a section ("Have an idea for another way to turn a DNA sequence into a two-dimensional visualization? Let us know over on the [Squiggle repository](https://github.com/Lab41/squiggle/issues/new) and we'll be happy to work with you on implementing it") that refers users with novel ideas to propose it to the underlying transformation library atop which the web service is built for inclusion.
 > Also in the Qi graph, it might be a good idea to label the consensus line explicitly rather than refer to it as one of the input sequence identifiers. E.g. with the test data the consensus (overlapping) orange line is labeled Chimpanzee.
 
@@ -61,8 +62,12 @@ Simply put, yes, it would be better to implement a codon approach with degenerac
 
 The word "entirely" has been removed from the title.
 
-> The manuscript is well written.  It puts this work in context of other 2D graphical representations of DNA sequences; it would be better still if it compared 2D graphical representations to other more concrete representations such as sequence alignments, 2D similarity dotplots, and genome browsers which can display GC content, alignments, repetitive sequence annotations and many other types of features and data along the DNA sequence.  I spotted a couple typos:
+> The manuscript is well written.  It puts this work in context of other 2D graphical representations of DNA sequences; it would be better still if it compared 2D graphical representations to other more concrete representations such as sequence alignments, 2D similarity dotplots, and genome browsers which can display GC content, alignments, repetitive sequence annotations and many other types of features and data along the DNA sequence.  
 
+
+
+> I spotted a couple typos:
+>
 > Abstract: "a variety publication-ready" -- probably missing an "of"
 
 The abstract now reads "a variety of publication-ready".
