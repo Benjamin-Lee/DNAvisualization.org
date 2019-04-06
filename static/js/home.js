@@ -145,9 +145,6 @@ let titleModal = bootbox.dialog({
     },
   }
 });
-// so that the reset button knows what zoom to reset to
-let originalExtremesX = {};
-let originalExtremesY = {};
 let pastedFASTACount = 0; // so that we can individually remove pasted FASTA seqs
 let mode = "auto" // default to auto legend labeling mode
 
@@ -279,29 +276,14 @@ function plotSequence(fastaString, filename) {
 
         // store the downsampled shape
         seqs[resultName]["overviewData"][method] = result.data[1];
-
-
-        // add the series to chart (with animation!)
-        chart.addSeries({
-          name: resultName,
-          id: result.data[0],
-          data: result.data[1],
-          marker: {
-            enabled: false
-          }
-        }, false);
       };
-      chart.redraw();
-      // save the original dimensions
-      originalExtremesX = chart.xAxis[0].getExtremes();
-      originalExtremesY = chart.yAxis[0].getExtremes();
 
       $(".show-when-plotting").show()
       $(".hide-when-plotting").hide();
       setTimeout(function () {
         dialog.modal("hide");
       }, 750);
-      changeMode();
+      changeMode(); // this is what actually does the plotting
     })
 
   // decide on a name for the plot based on how many files there are
@@ -413,7 +395,7 @@ function afterSetExtremes(e) {
       (e.min > seqs[key].overviewData[method][0][0])) {
       seqQuery(seqs[key]["hash"], e.min, e.max)
         .then(function (results) {
-          chart.get(results.data[0]).setData(results.data[1]);
+          chart.get(results.data[0]).setData(results.data[1].slice());
           chart.hideLoading();
         })
     } else {
@@ -460,7 +442,7 @@ function activateFileMode() {
     state.push({
       name: k,
       id: v.hash,
-      data: v.overviewData[method],
+      data: v.overviewData[method].slice(),
       marker: {
         enabled: false
       },
@@ -489,7 +471,7 @@ function activateSequenceMode() {
         return {
           name: k,
           id: v.hash,
-          data: v.overviewData[method],
+          data: v.overviewData[method].slice(),
           marker: {
             enabled: false
           },
