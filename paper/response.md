@@ -95,11 +95,13 @@ Most of the functionalities work except the followings;
 
 > 1. drop anywhere on page does not work
 
-Without knowing the specific details of the browser version, this bug is not able to be reproduced. Drag-and-drop is powered by [FileReader.js](https://bgrins.github.io/filereader.js/), which has full support for IE, Chrome, Firefox, and Opera as well as support for Safari 10+ (as per https://developer.mozilla.org/en-US/docs/Web/API/File). That drag-and-drop does not work but the website as a whole does work suggests that the issue is not specifically with the File API, but more information would be needed to fully isolate and fix this issue. As a stopgap measure, feature detection for the File API has been implemented, which alerts the user if their browser is incompatible with the site and provides a list of browsers and versions which are compatible.
+Without knowing the specific details of the browser version, this bug is not able to be reproduced. Drag-and-drop is powered by [FileReader.js](https://bgrins.github.io/filereader.js/), which has full support for IE, Chrome, Firefox, and Opera as well as support for Safari 10+ (as per https://developer.mozilla.org/en-US/docs/Web/API/File). That drag-and-drop does not work but the website as a whole does work suggests that the issue is not specifically with the File API, but more information would be needed to fully isolate and fix this issue. As a stopgap measure, feature detection for the File API has been implemented in [`8e4f5d7`](https://github.com/Benjamin-Lee/DNAvisualization.org/commit/8e4f5d7274192b3d6d21d832c631b0b6e4e8c0b9), which alerts the user if their browser is incompatible with the site and provides a list of browsers and versions which are compatible.
 
 > 2. plot option does not vanishes automatically, if I want to change
 title and subtitle of the same figure twice or thrice and so on. It
 vanishes only for the first time.
+
+This bug has been fixed in [`efb174e`](https://github.com/Benjamin-Lee/DNAvisualization.org/commit/efb174e40d836e47faebd14fddd19e45802cc4ec).
 
 > 3. Sequence can’t be tracked and modified while I want to see the visualization of modified PASTA sequence using "Paste FASTA function"
 
