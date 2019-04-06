@@ -73,6 +73,7 @@ let axis_labels = {
 };
 let method = "squiggle"; // default method is squiggle
 let method_name = "Squiggle"
+let selectedMethods = ["squiggle"] // to hold the list of selected viz methods
 let dialog = bootbox.dialog({
   message: `
     <div class="container">
@@ -184,7 +185,8 @@ function plotSequence(fastaString, filename) {
       seqs[seq["name"]] = {
         filename: filename,
         hash: XXH.h64(seq["seq"], 0).toString(10),
-        length: seq["seq"].length
+        length: seq["seq"].length,
+        overviewData: {},
       };
       addedCount++;
     } else {
@@ -266,7 +268,7 @@ function plotSequence(fastaString, filename) {
   }
   // then, transform the seqs, get the downsampled data, and render the viz
   $("#loading-modal-message").text("Visualizing your data...");
-  axios.all(parsed.map(x => transform(x.name, x.seq)))
+  axios.all(parsed.map(x => transform(x.name, x.seq, method)))
     .then(function (results) {
       for (result of results) {
 
@@ -276,7 +278,8 @@ function plotSequence(fastaString, filename) {
         })[result.data[0]][0];
 
         // store the downsampled shape
-        seqs[resultName]["overviewData"] = result.data[1];
+        seqs[resultName]["overviewData"][method] = result.data[1];
+
 
         // add the series to chart (with animation!)
         chart.addSeries({
@@ -289,7 +292,7 @@ function plotSequence(fastaString, filename) {
         }, false);
       };
       chart.redraw();
-      // save the iriginal dimensions
+      // save the original dimensions
       originalExtremesX = chart.xAxis[0].getExtremes();
       originalExtremesY = chart.yAxis[0].getExtremes();
 
@@ -320,6 +323,27 @@ function plotSequence(fastaString, filename) {
 
   // render all tooltips
   $('[data-toggle="tooltip"]').tooltip()
+
+  // after visualizing and plotting the main method, transform secondary methods
+  if (selectedMethods.length > 1) {
+    for (let selectedMethod of selectedMethods.slice(1)) {
+      axios.all(parsed.map(x => transform(x.name, x.seq, selectedMethod)))
+        .then(function (results) {
+          for (result of results) {
+
+            // determine the name associated with the hash
+            resultName = _.invertBy(seqs, (x) => {
+              return [x.hash]
+            })[result.data[0]][0];
+
+            // store the downsampled shape
+            seqs[resultName]["overviewData"][selectedMethod] = result.data[1];
+          }
+        })
+    }
+
+  }
+
 }
 
 // reset the chart back to its original zoom
@@ -327,15 +351,17 @@ function resetChart() {
   for (let i = 0; i < chart.series.length; i++) {
     let name = chart.series[i].userOptions.name;
     try {
-      chart.series[i].setData(seqs[name].overviewData)
+      chart.series[i].setData(seqs[name].overviewData[method])
 
 
     } catch (e) {
 
     }
   }
-  chart.xAxis[0].setExtremes(originalExtremesX.min, originalExtremesX.max);
-  chart.yAxis[0].setExtremes(originalExtremesY.min, originalExtremesY.max);
+
+  // let highcharts recalculate the axis ranges
+  chart.zoom();
+
 }
 
 // for manually controlling the zoom
@@ -357,11 +383,11 @@ function seqQuery(seq_hash, x_min = null, x_max = null) {
   });
 };
 
-function transform(seq_name, seq) {
+function transform(seq_name, seq, viz_method) {
   let bodyFormData = new FormData();
   bodyFormData.set('seq_name', seq_name);
   bodyFormData.set('seq', seq);
-  bodyFormData.set('method', method);
+  bodyFormData.set('method', viz_method);
   return axios({
     method: 'post',
     url: route + '/transform',
@@ -380,11 +406,11 @@ function afterSetExtremes(e) {
 
   for (key of Object.keys(seqs)) {
 
-    if (seqs[key].overviewData == null) {
+    if (seqs[key].overviewData[method] == null) {
       continue;
     }
-    if ((e.max < seqs[key].overviewData[seqs[key].overviewData.length - 1][0]) &&
-      (e.min > seqs[key].overviewData[0][0])) {
+    if ((e.max < seqs[key].overviewData[method][seqs[key].overviewData[method].length - 1][0]) &&
+      (e.min > seqs[key].overviewData[method][0][0])) {
       seqQuery(seqs[key]["hash"], e.min, e.max)
         .then(function (results) {
           chart.get(results.data[0]).setData(results.data[1]);
@@ -434,7 +460,7 @@ function activateFileMode() {
     state.push({
       name: k,
       id: v.hash,
-      data: v.overviewData,
+      data: v.overviewData[method],
       marker: {
         enabled: false
       },
@@ -463,7 +489,7 @@ function activateSequenceMode() {
         return {
           name: k,
           id: v.hash,
-          data: v.overviewData,
+          data: v.overviewData[method],
           marker: {
             enabled: false
           },
@@ -505,6 +531,18 @@ function resizeMethodBtnGroup() {
     $('#method').addClass('btn-group-sm');
   };
 };
+
+// returns an array of checked visualization methods
+function getCheckedMethods() {
+  let checkedMethods = [];
+  $('input[name=method]').each(function () {
+    var $this = $(this);
+    if ($this.is(":checked")) {
+      checkedMethods.push($this.attr("id"));
+    }
+  });
+  return checkedMethods;
+}
 
 $(window).resize(function () {
   resizeMethodBtnGroup();
@@ -548,8 +586,10 @@ window.onload = function () {
   FileReaderJS.setupDrop(document.body, options);
 
 
-  // bind the viz method button to the method iable
+
+  // bind the viz method button to the method lable
   $('input[name=method]').change(function () {
+    selectedMethods = getCheckedMethods();
     let methods = {
       squiggle: "Squiggle",
       gates: "Gates",
@@ -558,7 +598,7 @@ window.onload = function () {
       randic: "Randic",
       qi: "Qi"
     }
-    method = $(this).attr('id');
+    method = selectedMethods[0];
     method_name = methods[method];
   });
 
