@@ -34,7 +34,10 @@ The sentence now reads "The web tool is built using a novel architecture, with c
 > Some text is in [] brackets - what does this imply.
 > The “initial sequence transformations” and “sequence querying” mentioned in legend are not clearly labeled in figure - which is which? I assume it’s the boxes marked as loop.
 
-This figure has been completely remade for greater clarity. Instead of using a sequence diagram, this figure now features a graphical representation of the architecture with a much more robust legend, while capturing the same information as before. The “initial sequence transformations” and “sequence querying” mentioned in legend are now clearly labeled, along with each of the steps. Color-coded parallel lines are now used to demonstrate parallelism, rather than  the previous loop boxes.
+This figure has been completely remade for greater clarity.
+Instead of using a sequence diagram, this figure now features a graphical representation of the architecture with a much more robust legend, while capturing the same information as before.
+The “initial sequence transformations” and “sequence querying” mentioned in legend are now clearly labeled, along with each of the steps.
+Color-coded parallel lines are now used to demonstrate parallelism, rather than  the previous loop boxes.
 ### Page 7 Discussion
 > When discussing the limitation of the architecture it would be good to discuss a clear-cut bioinformatic process or approach that would be problematic - if is this what you are implying?
 > Again  in the Conclusion reference is made to “not all applications are amenable” - this is too vague and an example discussed (in Discussion?) would help clear this up.
@@ -44,7 +47,10 @@ This figure has been completely remade for greater clarity. Instead of using a s
 This sentence has been reworded to read: "In addition, a function's memory use may not exceed a predefined limit, which can range from the scale of megabytes to several gigabyte and be specified by the user."
 > With the Randic (Qi) dinucleotide approach. Would it be better to implement a codon (trinucleotide) approach with degeneracy (20 options rather than the 16 dinucleotides). From a users point of view this may be more biologically relevant.
 
-Simply put, yes, it would be better to implement a codon approach with degeneracy that the Qi method. This is an insightful method that would likely capture more biological meaning. However, as per the NAR web server instructions ("new methods that have not been previously validated in a separate publication" are discouraged), no new novel visualization methods were introduced. With respect to the addition of novel methods, the website has a section ("Have an idea for another way to turn a DNA sequence into a two-dimensional visualization? Let us know over on the [Squiggle repository](https://github.com/Lab41/squiggle/issues/new) and we'll be happy to work with you on implementing it") that refers users with novel ideas to propose it to the underlying transformation library atop which the web service is built for inclusion.
+Simply put, yes, it would be better to implement a codon approach with degeneracy that the Qi method.
+This is an insightful method that would likely capture more biological meaning.
+However, as per the NAR web server instructions ("new methods that have not been previously validated in a separate publication" are discouraged), no new novel visualization methods were introduced.
+With respect to the addition of novel methods, the website has a section ("Have an idea for another way to turn a DNA sequence into a two-dimensional visualization? Let us know over on the [Squiggle repository](https://github.com/Lab41/squiggle/issues/new) and we'll be happy to work with you on implementing it") that refers users with novel ideas to propose it to the underlying transformation library atop which the web service is built for inclusion.
 > Also in the Qi graph, it might be a good idea to label the consensus line explicitly rather than refer to it as one of the input sequence identifiers. E.g. with the test data the consensus (overlapping) orange line is labeled Chimpanzee.
 
 ## Referee: 2
@@ -56,9 +62,13 @@ Simply put, yes, it would be better to implement a codon approach with degenerac
 
 > The website works as described.  An example DNA sequence file containing the HBB gene sequence from several species is provided as an example input, which makes it very easy to try out the website without first having to find suitable input.  The algorithm is selected before the FASTA sequences are uploaded; after the initial rendering, it is possible to zoom to a smaller region of the sequence, reset to the original range, or alter the image title and caption.  It would be nice to also be able to change the algorithm after the initial rendering; as far as I can tell, the website must be reloaded or revisited in order to select a different algorithm.
 
-Changing the algorithm after initial rendering poses a trilemma: store the uploaded raw FASTA sequence and transform on demand (slow due to the need to pull from S3 and wastes storage space if the user doesn't end up using the feature), performing the transformations preemptively without specification by the user (uses up to 5x more computing resources, which is wasted if not used by the user), or store the transformed sequence and transform on demand (most space efficient option but also insures the I/O penalty of pulling from S3 as well as the computational cost of inverting the transformation). 
+For the initial submission, changing the visualization algorithm required removing all the sequences from the chart by using the trashcan icon and then reuploading the FASTA files or pasting the sequences.
+This approach is obviously less than ideal.
+Changing the algorithm after initial rendering poses a trilemma: store the uploaded raw FASTA sequence and transform on demand (slow due to the need to pull from S3 and wastes storage space if the user doesn't end up using the feature), performing the transformations preemptively without specification by the user (uses up to 5x more computing resources, which is wasted if not used by the user), or store the transformed sequence and transform on demand (most space efficient option but also insures the I/O penalty of pulling from S3 as well as the computational cost of inverting the transformation).
 
-Thus, to change the algorithm after initial rendering, an alternate solution was found. Instead of the user selecting a single visualization method before uploading a FASTA file, the user is now able to select multiple visualization methods they are interested in. After uploading DNA sequence(s), the user may then click on a button to rerender the graph with an alternative visualization method. 
+Thus, to change the algorithm after initial rendering, an alternate solution was found.
+Instead of the user selecting a single visualization method before uploading a FASTA file, the user is now able to select multiple visualization methods they are interested in.
+After uploading DNA sequence(s), the user may then click on a button to rerender the graph with an alternative visualization method.
 
 > The github repository is well organized and the code is very readable.
 
@@ -99,7 +109,9 @@ Most of the functionalities work except the followings;
 
 > 1. drop anywhere on page does not work
 
-Without knowing the specific details of the browser version, this bug is not able to be reproduced. Drag-and-drop is powered by [FileReader.js](https://bgrins.github.io/filereader.js/), which has full support for IE, Chrome, Firefox, and Opera as well as support for Safari 10+ (as per https://developer.mozilla.org/en-US/docs/Web/API/File). That drag-and-drop does not work but the website as a whole does work suggests that the issue is not specifically with the File API, but more information would be needed to fully isolate and fix this issue. As a stopgap measure, feature detection for the File API has been implemented in [`8e4f5d7`](https://github.com/Benjamin-Lee/DNAvisualization.org/commit/8e4f5d7274192b3d6d21d832c631b0b6e4e8c0b9), which alerts the user if their browser is incompatible with the site and provides a list of browsers and versions which are compatible.
+Without knowing the specific details of the browser version, this bug is not able to be reproduced. Drag-and-drop is powered by [FileReader.js](https://bgrins.github.io/filereader.js/), which has full support for IE, Chrome, Firefox, and Opera as well as support for Safari 10+ (as per https://developer.mozilla.org/en-US/docs/Web/API/File).
+That drag-and-drop does not work but the website as a whole does work suggests that the issue is not specifically with the File API, but more information would be needed to fully isolate and fix this issue.
+As a stopgap measure, feature detection for the File API has been implemented in [`8e4f5d7`](https://github.com/Benjamin-Lee/DNAvisualization.org/commit/8e4f5d7274192b3d6d21d832c631b0b6e4e8c0b9), which alerts the user if their browser is incompatible with the site and provides a list of browsers and versions which are compatible.
 
 > 2. plot option does not vanishes automatically, if I want to change
 title and subtitle of the same figure twice or thrice and so on. It
@@ -111,6 +123,8 @@ This bug has been fixed in [`efb174e`](https://github.com/Benjamin-Lee/DNAvisual
 
 > 4. In Safari, it does not work. While click on “Load an example file”, the site freezes. Just shows the  loading spinner
 
-The website was, in fact, developed exclusively using MacOS Mojave v10.14.2 (presently using v10.14.3) and Safari v12.0.2 (presently using v12.0.3) and has had the "load an example file" functionality verified. Further information, such as the version of MacOS and Safari in use as well as any errors printed to the Javascript console, would be helpful to fix this issue. If you are comfortable using GitHub (through an anonymous account), filing an issue would allow for more discussion, as the bug is presently not reproducible.
+The website was, in fact, developed exclusively using MacOS Mojave v10.14.2 (presently using v10.14.3) and Safari v12.0.2 (presently using v12.0.3) and has had the "load an example file" functionality verified.
+Further information, such as the version of MacOS and Safari in use as well as any errors printed to the Javascript console, would be helpful to fix this issue.
+If you are comfortable using GitHub (through an anonymous account), filing an issue would allow for more discussion, as the bug is presently not reproducible.
 
 > 5. Integrating two default sample files -  one for small (already available), the other for large FASTA sequences - may be a good idea.
