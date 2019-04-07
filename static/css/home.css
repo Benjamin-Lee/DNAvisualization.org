@@ -10,7 +10,7 @@ a {
   color: #be202e
 }
 
-.dropdown-toggle::after {
+.no-carat::after {
     display:none;
 }
 

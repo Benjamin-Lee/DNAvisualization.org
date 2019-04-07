@@ -209,7 +209,7 @@
                           <button type="button" class="btn btn-outline-secondary" id="remove" data-toggle="tooltip" data-placement="top" title="Remove files"><i class="fas fa-trash"></i></button>
                           <button type="button" class="btn btn-outline-secondary" id="changeTitle" onclick="showTitleModal()" data-toggle="tooltip" data-placement="top" title="Change title and subtitle"><i class="fas fa-bars"></i></button>
                           <div class="btn-group " role="group">
-                            <button id="export" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button id="export" type="button" class="btn btn-outline-secondary dropdown-toggle no-carat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <i class="fas fa-file-export"></i>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="export">
@@ -275,10 +275,30 @@
               </div>
               <div class="row hide-when-plotting mt-2">
                 <div class="col-lg-7 offset-lg-1 mb-2">
-                  <button type="button" class="btn btn-outline-secondary btn-block hide-when-plotting" id="load-example"><i class="fas fa-dna"></i> Load an example file</button>
+                  <div class="btn-group btn-block hide-when-plotting">
+                    <button type="button" class="btn btn-outline-secondary btn-block" id="load-example"><i class="fas fa-dna"></i> Load an example file</button>
+                    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#" onclick="plotSequence (hbb, 'hbb.fasta')">Hemoglobin subunit beta, multiple species (1,871 bp)</a>
+                      <a class="dropdown-item" href="#" onclick="plotSequence (titin, 'titin.fasta')">Human titin transcript variant N2BA, mRNA (105,223 bp)</a>
+                      <a class="dropdown-item" href="#" onclick="plotSequence (bsub, 'GCA_000293765.1_ASM29376v1_genomic.fna')"><em>Bacillus subtilis</em> QB928 complete genome (4,195,853 bp)</a>
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-3 mb-2">
-                  <a href="{{url_for('static',  filename='files/hbb.fna')}}" class="btn btn-outline-secondary btn-block hide-when-plotting" id="download-example"><i class="fas fa-file-download"></i> Download example file</a>
+                  <div class="btn-group btn-block hide-when-plotting">
+                    <a href="{{url_for('static',  filename='files/hbb.fna')}}" class="btn btn-outline-secondary btn-block hide-when-plotting" id="download-example"><i class="fas fa-file-download"></i> Download example file</a>
+                    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="{{url_for('static',  filename='files/hbb.fna')}}">Hemoglobin subunit beta, multiple species (1,871 bp)</a>
+                      <a class="dropdown-item" href="{{url_for('static',  filename='files/titin.fna')}}">Human titin transcript variant N2BA, mRNA (105,223 bp)</a>
+                      <a class="dropdown-item" href="{{url_for('static',  filename='files/GCA_000293765.1_ASM29376v1_genomic.fna')}}"><em>Bacillus subtilis</em> QB928 complete genome (4,195,853 bp)</a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -503,9 +523,8 @@
 
 
   <!-- last, load the JS for the page -->
-  <script type="text/javascript" src="{{ url_for('static', filename='js/hbb.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
-
+  <script type="text/javascript" src="{{ url_for('static', filename='js/example_seqs.js') }}"></script>
 
 </body>
 
