@@ -56,6 +56,10 @@ Simply put, yes, it would be better to implement a codon approach with degenerac
 
 > The website works as described.  An example DNA sequence file containing the HBB gene sequence from several species is provided as an example input, which makes it very easy to try out the website without first having to find suitable input.  The algorithm is selected before the FASTA sequences are uploaded; after the initial rendering, it is possible to zoom to a smaller region of the sequence, reset to the original range, or alter the image title and caption.  It would be nice to also be able to change the algorithm after the initial rendering; as far as I can tell, the website must be reloaded or revisited in order to select a different algorithm.
 
+Changing the algorithm after initial rendering poses a trilemma: store the uploaded raw FASTA sequence and transform on demand (slow due to the need to pull from S3 and wastes storage space if the user doesn't end up using the feature), performing the transformations preemptively without specification by the user (uses up to 5x more computing resources, which is wasted if not used by the user), or store the transformed sequence and transform on demand (most space efficient option but also insures the I/O penalty of pulling from S3 as well as the computational cost of inverting the transformation). 
+
+Thus, to change the algorithm after initial rendering, an alternate solution was found. Instead of the user selecting a single visualization method before uploading a FASTA file, the user is now able to select multiple visualization methods they are interested in. After uploading DNA sequence(s), the user may then click on a button to rerender the graph with an alternative visualization method. 
+
 > The github repository is well organized and the code is very readable.
 
 > In my opinion, the title does not need to include the word "entirely".
