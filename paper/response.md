@@ -2,7 +2,7 @@
 
 ### Comments for the Author
 > Overall the web site works as described and I see no problems with it (using Chrome and Firefox on Mac OSX). The graphics are nice, the tools to inspect the graphs are functional. The tools are not original but this is not the point, these are nicely implemented and appropriately referenced to prior work, though the discussion of these could be expanded upon.
-
+>
 > A comparison to other methods should be expanded upon.
 > Of the 17 references cited there is little discussion of their content. For instance Page 1 “a variety of methods have been proposed” (references 3-12) !! This really does little justice to the prior work or description thereof. Generally speaking if a reference is included then something substantial from that paper should be mentioned - if only a sentence for each.
 
@@ -62,9 +62,9 @@ With respect to the addition of novel methods, the website has a section ("Have 
 
 ### Comments for the Author
 > In "DNAvisualization.org: an entirely serverless web tool for DNA sequence visualization", the authors present an open-source website that displays uploaded DNA sequences using the previously published Squiggle program.  The website is free to use and does not require registration.
-
+>
 > Uploaded DNA sequences are plotted in a 2-D space, with DNA sequence position along the X axis; the Y position for each DNA base is calculated according to the user's selection of algorithm.  The main algorithm is Squiggle, which uses glyphs of different shapes for the DNA bases A, C, G and T.  The glyphs are connected at their endpoints, with the result that the line representing a DNA sequence will tend to move upward in GC-rich sequence and downward in AT-rich sequence.  Similar DNA sequences have similar patterns of upward and downward movement.  Four older algorithms are also offered: Yau (unit vector glyphs), Yau-BP (vector glyphs normalized to constant x width), Randic (tablature-like), and Qi (tablature-like but for dinucleotide pairs).
-
+>
 > The website works as described.  An example DNA sequence file containing the HBB gene sequence from several species is provided as an example input, which makes it very easy to try out the website without first having to find suitable input.  The algorithm is selected before the FASTA sequences are uploaded; after the initial rendering, it is possible to zoom to a smaller region of the sequence, reset to the original range, or alter the image title and caption.  It would be nice to also be able to change the algorithm after the initial rendering; as far as I can tell, the website must be reloaded or revisited in order to select a different algorithm.
 
 For the initial submission, changing the visualization algorithm required removing all the sequences from the chart by using the trashcan icon and then reuploading the FASTA files or pasting the sequences.
@@ -76,7 +76,7 @@ Instead of the user selecting a single visualization method before uploading a F
 After uploading DNA sequence(s), the user may then click on a button to rerender the graph with an alternative visualization method.
 
 > The github repository is well organized and the code is very readable.
-
+>
 > In my opinion, the title does not need to include the word "entirely".
 
 The word "entirely" has been removed from the title.
@@ -111,7 +111,7 @@ In response to the points raised by the first reviewer, Figure 2 has now be comp
 
 >The followings are related to 'usability test' for the site;
 Most of the functionalities work except the followings;
-
+>
 > 1. drop anywhere on page does not work
 
 Without knowing the specific details of the browser version, this bug is not able to be reproduced. Drag-and-drop is powered by [FileReader.js](https://bgrins.github.io/filereader.js/), which has full support for IE, Chrome, Firefox, and Opera as well as support for Safari 10+ (as per https://developer.mozilla.org/en-US/docs/Web/API/File).
