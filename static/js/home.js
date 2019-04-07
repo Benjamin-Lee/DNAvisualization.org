@@ -258,21 +258,9 @@ function plotSequence(fastaString, filename) {
     }
   }
 
-  // set the axis labels to reflect the viz method
-  chart.xAxis[0].setTitle({
-    text: axis_labels[method]["x"]
-  })
-  chart.yAxis[0].setTitle({
-    text: axis_labels[method]["y"]
-  })
+  // make sure the axes match the viz method
+  updateAxes();
 
-  if (method == "randic") {
-    chart.yAxis[0].categories = ["A", "T", "G", "C"];
-    chart.yAxis[0].options.tickInterval = 1;
-  } else if (method == "qi") {
-    chart.yAxis[0].categories = ['AG', 'GA', 'CT', 'TC', 'AC', 'CA', 'GT', 'TG', 'AT', 'TA', 'CG', 'GC', 'AA', 'CC', 'GG', 'TT'];
-    chart.yAxis[0].options.tickInterval = 1;
-  }
   // then, transform the seqs, get the downsampled data, and render the viz
   $("#loading-modal-message").text("Visualizing your data...");
   axios.all(parsed.map(x => transform(x.name, x.seq, method)))
@@ -342,6 +330,31 @@ function resetChart() {
 
   // sets the chart name when changing viz methods
   updateChartName()
+
+  // re call this method since the axes may have changed
+  updateAxes()
+}
+
+function updateAxes() {
+  // set the axis labels to reflect the viz method
+  chart.xAxis[0].setTitle({
+    text: axis_labels[method]["x"]
+  })
+  chart.yAxis[0].setTitle({
+    text: axis_labels[method]["y"]
+  })
+
+  if (method == "randic") {
+    chart.yAxis[0].setCategories(["A", "T", "G", "C"]);
+    chart.yAxis[0].options.tickInterval = 1;
+  } else if (method == "qi") {
+    chart.yAxis[0].setCategories(['AG', 'GA', 'CT', 'TC', 'AC', 'CA', 'GT', 'TG', 'AT', 'TA', 'CG', 'GC', 'AA', 'CC', 'GG', 'TT']);
+    chart.yAxis[0].options.tickInterval = 1;
+  } else {
+    chart.yAxis[0].setCategories()
+  }
+
+  chart.redraw()
 }
 
 // updates the chart title and subtitle if user has not manually set
