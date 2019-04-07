@@ -71,9 +71,19 @@ let axis_labels = {
     "y": "dinucleotide"
   }
 };
+let methods = {
+  squiggle: "Squiggle",
+  gates: "Gates",
+  yau: "Yau",
+  "yau-bp": "Yau-BP",
+  randic: "Randic",
+  qi: "Qi"
+}
 let method = "squiggle"; // default method is squiggle
 let method_name = "Squiggle"
 let selectedMethods = ["squiggle"] // to hold the list of selected viz methods
+let user_title = "";
+let user_subtitle = "";
 let dialog = bootbox.dialog({
   message: `
     <div class="container">
@@ -286,22 +296,8 @@ function plotSequence(fastaString, filename) {
       changeMode(); // this is what actually does the plotting
     })
 
-  // decide on a name for the plot based on how many files there are
-  let filenames = _.uniq(Object.values(seqs).map(x => x.filename));
-  if (filenames.length != 1) {
-    var title = `${method_name} DNA Visualization`;
-    var subtitle = null;
-  } else if (filenames.length == 1) {
-    var title = filenames[0] != "Pasted Sequence #1" ? `Visualization of ${filenames[0]}` : "DNA Sequence Visualization";
-    var subtitle = `Via the ${method_name} method`;
-  }
-
-  // make the subtitle reflect the plotting method
-  chart.setTitle({
-    text: title
-  }, {
-    text: subtitle
-  });
+  // set the intital chart name
+  updateChartName();
 
   // render all tooltips
   $('[data-toggle="tooltip"]').tooltip()
@@ -333,7 +329,7 @@ function resetChart() {
   for (let i = 0; i < chart.series.length; i++) {
     let name = chart.series[i].userOptions.name;
     try {
-      chart.series[i].setData(seqs[name].overviewData[method])
+      chart.series[i].setData(seqs[name].overviewData[method].slice())
 
 
     } catch (e) {
@@ -344,6 +340,31 @@ function resetChart() {
   // let highcharts recalculate the axis ranges
   chart.zoom();
 
+  // sets the chart name when changing viz methods
+  updateChartName()
+}
+
+// updates the chart title and subtitle if user has not manually set
+function updateChartName() {
+  // decide on a name for the plot based on how many files there are
+  if (user_title || user_subtitle) {
+    return
+  }
+  let filenames = _.uniq(Object.values(seqs).map(x => x.filename));
+  if (filenames.length != 1) {
+    var title = `${methods[method]} DNA Visualization`;
+    var subtitle = null;
+  } else if (filenames.length == 1) {
+    var title = filenames[0] != "Pasted Sequence #1" ? `Visualization of ${filenames[0]}` : "DNA Sequence Visualization";
+    var subtitle = `Via the ${methods[method]} method`;
+  }
+
+  // make the subtitle reflect the plotting method
+  chart.setTitle({
+    text: title
+  }, {
+    text: subtitle
+  });
 }
 
 // for manually controlling the zoom
@@ -406,8 +427,6 @@ function afterSetExtremes(e) {
 }
 
 function showTitleModal() {
-  $("#title").val(chart.title.textStr);
-  $("#subtitle").val(chart.subtitle.textStr);
   titleModal.modal("show");
   setTimeout(function () {
     $(".bootbox-cancel").click(function () {
@@ -420,6 +439,10 @@ function showTitleModal() {
         text: $("#subtitle").val()
       });
       titleModal.modal("hide");
+
+      // ensure that updateChartName doesn't override the user title
+      user_title = $("#title").val();
+      user_subtitle = $("#subtitle").val();
     })
   }, 200);
 }
@@ -572,17 +595,48 @@ window.onload = function () {
   // bind the viz method button to the method lable
   $('input[name=method]').change(function () {
     selectedMethods = getCheckedMethods();
-    let methods = {
-      squiggle: "Squiggle",
-      gates: "Gates",
-      yau: "Yau",
-      "yau-bp": "Yau-BP",
-      randic: "Randic",
-      qi: "Qi"
-    }
+
     method = selectedMethods[0];
     method_name = methods[method];
+
+    // only show the viz control panel if it will do something
+    if (selectedMethods.length == 1) {
+      $("#plotting_method_col").hide()
+      return
+    } else {
+      $("#plotting_method_col").show()
+    }
+
+    // hide all currently rendered viz control buttons
+    for (let key of Object.keys(methods)) {
+      $(`#${key}_plotting_control_label`).hide()
+    }
+
+    // remove any edges on the viz method control panel
+    for (let selectedMethod of selectedMethods) {
+      $(`#${selectedMethod}_plotting_control_label`).removeClass("rounded-left rounded-right")
+    }
+
+    // render the viz method control panel
+    $(`#${selectedMethods[0]}_plotting_control_label`).addClass("rounded-left");
+    $(`#${selectedMethods[selectedMethods.length - 1]}_plotting_control_label`).addClass("rounded-right");
+    for (let selectedMethod of selectedMethods) {
+      $(`#${selectedMethod}_plotting_control_label`).show()
+    }
+
+    // set the viz control button to match the current active method
+    $(`#${method}_plotting_control_label`).addClass("active");
+
   });
+
+  // bind the viz control panel to the chart
+  $('input[name=plotting_method]').change(function () {
+    for (let selectedMethod of selectedMethods) {
+      $(`#${selectedMethod}_plotting_control_label`).removeClass("active")
+    }
+    method = $("input[name=plotting_method]:checked").val();
+    resetChart();
+  })
 
   // once the user has clicked a control, hide the tooltip
   $('#controls').click(function () {
