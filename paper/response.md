@@ -27,6 +27,11 @@ The sentence now reads "The web tool is built using a novel architecture, with c
 > ‘Lambda’s pricing is very affordable” ??? Need to be more objective and less biased in this regard.
 > Are there other providers on which such an architecture could be run?
 
+With respect to being more objective about the Lambda's free tier and pricing (as well as competitors), this paragraph has been rewritten to read: "At the time of this writing, there are a variety of serverless computing platforms including (but certainly not limited to) Amazon Web Services (AWS) Lambda, Google Cloud Functions, and Microsoft Azure Functions, each of which differ in terms of factors such as supported programming languages, startup latency, and pricing structure. DNAvisualization.org is built atop AWS Lambda due to its permanent free tier that, at the time of this writing, allows for one-million free function invocations totaling up to 3.2 million seconds of compute time per month, which is anticipated to easily meet the demand for the site.
+In the event that the free tier is exceeded, AWS Lambda's pricing is \$0.20 per million function invocations and $1.667×10^{-5}$ dollars per GB-second of computation at the time of this writing." Additionally, the following sentence has been added about S3 pricing: "At the time of this writing, the price of storage in S3 is $0.023 per GB per month (for the first 50 TB of data), with S3 Select priced at \$0.002 per GB of data scanned and \$0.0007 per GB of data returned."
+
+In regard to other providers on which this architecture would work, the following has been added to the discussion: "While this website was implemented using AWS, this architecture is not exclusive to AWS. Google Cloud Platform (GCP) offers both serverless computing and serverless data querying via their BigQuery platform. Although both GCP and AWS have similar offerings, it is nontrivial to change cloud service providers due to each service provider's use of a proprietary application programming interface (API). The issue of vendor lock-in via proprietary APIs is one of the open problems in serverless computing, although open-source tools such as show promise for ameliorating this issue."
+
 ### Figure 2
 > I would suggest it is “A diagram demonstrating…” rather than  “A sequence diagram demonstrating…”
 > The legend is not really sufficient to describe the Figure. For instance why do some arrows have  x and others not? Some yellow boxes are aligned with vertical lines some are free standing - is this meaningful?
@@ -44,7 +49,7 @@ Color-coded parallel lines are now used to demonstrate parallelism, rather than 
 
 > Also I am unsure of how to “respect” a memory constraint. I would rephrase this statement.
 
-This sentence has been reworded to read: "In addition, a function's memory use may not exceed a predefined limit, which can range from the scale of megabytes to several gigabyte and be specified by the user."
+This sentence has been reworded to read: "In addition, a function's memory use may not exceed a predefined limit, which can range from the scale of megabytes to several gigabytes and be specified by the user."
 > With the Randic (Qi) dinucleotide approach. Would it be better to implement a codon (trinucleotide) approach with degeneracy (20 options rather than the 16 dinucleotides). From a users point of view this may be more biologically relevant.
 
 Simply put, yes, it would be better to implement a codon approach with degeneracy that the Qi method.
