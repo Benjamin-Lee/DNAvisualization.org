@@ -133,3 +133,5 @@ Further information, such as the version of MacOS and Safari in use as well as a
 If you are comfortable using GitHub (through an anonymous account), filing an issue would allow for more discussion, as the bug is presently not reproducible.
 
 > 5. Integrating two default sample files -  one for small (already available), the other for large FASTA sequences - may be a good idea.
+
+Three sample files of varying sizes are now available for testing and download: HBB (already available), human titin (as an example of a very large gene), and *Bacillus subtilis* (as example of a model bacterial genome). 
