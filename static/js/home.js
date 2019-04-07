@@ -166,6 +166,22 @@ seq_hash = the xx64 hash with seed(0) in base10
 
 function plotSequence (fastaString, filename) {
   dialog.modal('show')
+
+  if (!selectedMethods.length) {
+    bootbox.alert({
+      message: 'At least one method must be selected.',
+      backdrop: true,
+      buttons: {
+        ok: {
+          className: 'btn-secondary'
+        }
+      } })
+    setTimeout(function () {
+      dialog.modal('hide')
+    }, 500)
+    return false
+  }
+
   if (!validateFasta(fastaString)) {
     bootbox.alert({
       title: filename ? 'Error: Bad FASTA file' : 'Error: Invalid submission.',
