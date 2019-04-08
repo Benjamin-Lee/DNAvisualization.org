@@ -80,9 +80,9 @@ If the user wishes, their visualization may be downloaded in one of several form
 <div id="fig:color-coding">
 
 
-![Sequence mode](figures/sequence_mode.png){#fig:sequence-mode width=100%}
+![Sequence mode](figures/sequence_mode_2.png){#fig:sequence-mode width=100%}
 
-![File mode](figures/file_mode.png){#fig:file-mode width=100%}
+![File mode](figures/file_mode_2.png){#fig:file-mode width=100%}
 
 DNAvisualization.org supports color coding each sequence or file individually.
 
