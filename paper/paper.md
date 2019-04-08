@@ -43,13 +43,11 @@ By taking advantage of recent developments in serverless parallel computing and 
 # Introduction
 
 As DNA sequencing technology becomes more commonplace, tools for the analysis of its data are among the most cited papers in science [@wrenBioinformaticsProgramsAre2016].
-The reason is simple: DNA sequences are, by themselves, almost completely unintelligible to humans.
-Seeing meaningful patterns in DNA sequences (which are often too large to be shown in their entirety on a screen) is a significant challenge for researchers.
-One approach to addressing this problem is to convert DNA sequences into two-dimensional visualizations that capture some part of the biological information contained within them.
+The reason is simple: DNA sequences are, by themselves, almost completely unintelligible to humans. Seeing meaningful patterns in DNA sequences (which are often too large to be shown in their entirety on a screen) is a significant challenge for researchers. Numerous tools, ranging from genome browsers [@genomeBrowsers] to multiple sequence alignment viewers [@MSAViewer] and dot plot visualizers [@yassEnhancing] have been developed to enable interactive browser-based visualization of DNA sequences, alignments, and annotations.
+A different approach to addressing this problem is to convert DNA sequences directly into two-dimensional visualizations that capture some aspect of the biological information contained within, without relying on external information such as annotations.
 This approach has the benefit of taking advantage of the highly developed human visual system, which is capable of tremendous feats of pattern recognition and memory [@bradyVisualLongtermMemory2008].
 
-A variety of methods have been proposed to convert DNA sequences into two dimensional visualizations [@randicCompact2DGraphical2003; @qiUsingHuffmanCoding2011; @guoNumericalCharacterizationDNA2003; @yauDNASequenceRepresentation2003; @gatesSimpleWayLook1986; @zou2DGraphicalRepresentation2014; @jeffreyChaosGameRepresentation1990; @pengLongrangeCorrelationsNucleotide1992; @leeSquiggleUserfriendlyTwodimensional2018; @bariEffectiveEncodingDNA2013].
-These methods are highly heterogenous, but, for the sake of this paper, we will only discuss methods with no degeneracy, _i.e._ methods that produce visualizations which may be unambiguously transformed back into the DNA sequences from which they were generated.
+A variety of methods have been proposed to convert DNA sequences into two dimensional visualizations. One common technique is to map each nucleotide to a vector and connect those vectors tip-to-tail to represent a DNA sequence. For example, the Gates method [@gatesSimpleWayLook1986] uses up, down, left, and right vectors of length one to represent Ts, As, Cs, and Gs, respectively, while the Yau method [@yauDNASequenceRepresentation2003] uses vectors along a unit circle to represent the bases. Others, such as Qi [@qiUsingHuffmanCoding2011] and its derivative Squiggle [@leeSquiggleUserfriendlyTwodimensional2018] algorithm are based on mapping a binary representation of the sequence to upward- and downward-oriented vectors for 1s and 0s, respectively. In contrast, other algorithms such as @qiNovel2DGraphical2007 and @randicCompact2DGraphical2003 are based on tablature, with the x coordinate corresponding to base number and the y coordinate to a specific nucleotide or dinucleotide, respectively. These methods are highly heterogenous, but, for the sake of this paper, we will only discuss methods with no degeneracy, _i.e._ methods that produce visualizations which may be unambiguously transformed back into the DNA sequences from which they were generated.
 All of these methods operate on a single underlying principle: they map each nucleotide in a DNA sequence to one or more points in the Cartesian plane and treat each sequence as a walk between these points.
 
 One effect of mapping each base to at least one point is that the number of points grows linearly with the length of the DNA sequence.
@@ -62,7 +60,7 @@ Taking inspiration from DNAsonification.org [@templeAuditoryDisplayTool2017], wh
 ## Interface
 
 The user interface for the tool is deliberately simple.
-A user first selects a visualization method from one of the five currently supported methods [@yauDNASequenceRepresentation2003;@gatesSimpleWayLook1986;@leeSquiggleUserfriendlyTwodimensional2018;@qiNovel2DGraphical2007] and then provides FASTA-formatted sequence data to visualize, either by using the operating system's file-input prompt, dragging-and-dropping files onto the browser window, or pasting the raw data into a text prompt.
+A user first selects one or more visualization methods from the five currently implemented by the `Squiggle` package [@yauDNASequenceRepresentation2003;@gatesSimpleWayLook1986;@leeSquiggleUserfriendlyTwodimensional2018;@qiNovel2DGraphical2007]. The user then provides FASTA-formatted sequence data to visualize, either by using the operating system's file-input prompt, dragging-and-dropping files onto the browser window, or pasting the raw data into a text prompt.
 Upon receipt of sequence data, a loading spinner indicates that the system is processing the data.
 After the data processing is complete, the loading spinner is replaced with the two-dimensional visualization.
 
@@ -115,11 +113,11 @@ By making the serverless function a virtual "server" and invoking the function u
 For each request to the website, a virtual server is created for just long enough to respond to the request and then immediately extinguished.
 This results in the website being able to instantly scale to use precisely the resources needed to meet demand.
 
-At the time of this writing, there are a variety of serverless computing platforms including (but certainly not limited to) Amazon Web Services (AWS) Lambda, Google Cloud Functions, and Microsoft Azure Functions, each of which differ in terms of factors such as supported programming languages, startup latency, and pricing structure [@peekingBehind]. DNAvisualization.org is built atop AWS Lambda due to its permanent free tier that, at the time of this writing, allows for one-million free function invocations totaling up to 3.2 million seconds of compute time per month[^3], which is anticipated to easily meet the demand for the site.
-In the event that the free tier is exceeded, AWS Lambda's pricing is \$0.20 per million function invocations and $1.667×10^{-5}$ dollars per GB-second[^4] of computation at the time of this writing. 
+At the time of this writing, there are a variety of serverless computing platforms including (but certainly not limited to) Amazon Web Services (AWS) Lambda (https://aws.amazon.com/lambda/), Google Cloud Functions (http://cloud.google.com/functions/), and Microsoft Azure Functions (https://azure.microsoft.com/en-us/services/functions/), each of which differ in terms of factors such as supported programming languages, startup latency, and pricing structure [@peekingBehind]. DNAvisualization.org is built atop AWS Lambda due to its permanent free tier that, at the time of this writing, allows for one-million free function invocations totaling up to 3.2 million seconds of compute time per month[^3], which is anticipated to easily meet the demand for the site.
+In the event that the free tier is exceeded, AWS Lambda's pricing is \$0.20 per million function invocations and \$0.00001667 dollars per GB-second[^4] of computation at the time of this writing. 
 
 For DNAvisualization.org, we use AWS Lambda to serverlessly transform submitted DNA sequences into their visualizations in parallel, in addition to serving the static assets (_i.e._ HTML, Javascript, and CSS files) to the user.
-The site uses Python's Flask web framework and has its deployment to AWS Lambda seamlessly automated by the Zappa tool.
+The site uses Python's Flask web microframework (http://flask.pocoo.org) and has its deployment to AWS Lambda seamlessly automated by the Zappa tool (https://github.com/Miserlou/Zappa).
 
 It must be noted that using a serverless architecture to host a website is not novel by itself.
 Rather, the novelty of the architecture lies in its combination of serverless computing for request handling with query-in-place data retrieval on compressed data.
@@ -143,12 +141,12 @@ An overview of the architecture is presented in +@fig:architecture.
 # Discussion
 
 Because DNA sequence transformation is an inherently parallelizable task, the use of serverless computing is a natural fit for this application.
-However, not all web applications for biology are amenable to serverless computing.
+However, not all web applications for biology are currently amenable to serverless computing due to the constraints imposed by cloud services providers.
 
-The primary limitation of this architecture is the necessity for a short duration of computation (currently on the scale of seconds) or, failing that, the ability to parallelize the computation and the data.
+The primary limitation of serverless computing for web tools is the necessity for a short duration of computation (currently on the scale of seconds to minutes, depending on the platform) or, failing that, the ability to parallelize the computation and the data.
 In addition, a function's memory use may not exceed a predefined limit, which can range from the scale of megabytes to several gigabytes and be specified by the user.
 Applications which violate these requirements will need significant modifications to this architecture in order to function.
-As the capabilities of serverless computing increase, the burden of these limitations will decrease.
+An example of a web server that cannot trivially be ported to use an entirely serverless architecture is MISTIC2 [@MISTIC2], a tool for protein coevolution analysis, whose job durations can be as long as five hours (supplementary figure 1). This job length is significantly longer than any current serverless offering allows a single function invocation to run. However, as the capabilities of serverless computing increase, the burden of these limitations will decrease.
 For more information about the limitations of serverless computing, see @berkeleyView and @hellersteinServerlessComputingOne2019.
 
 These limitations were bypassed by this tool in several ways, which may be of interest to readers attempting to implement similar architectures in the future.
@@ -160,7 +158,7 @@ Currently, the website is limited to visualizing up to thirty sequences of up to
 The total sequence count limitation ensures that our chart renderer can handle rendering all of the points (downsampled to a static 1,000 points per sequence) and the sequence length limitation ensures that the transforming Lambda function's memory is not overwhelmed.
 In the future, we aim to increase this limit by taking advantage of further optimizations in memory management during transformation and increases in the total amount of memory available to function invocations.
 
-While this website was implemented using AWS, this architecture is not exclusive to AWS. Google Cloud Platform (GCP) offers both serverless computing and serverless data querying via their BigQuery platform. Although both GCP and AWS have similar offerings, it is nontrivial to change cloud service providers due to each service provider's use of a proprietary application programming interface (API). The issue of vendor lock-in via proprietary APIs is one of the open problems in serverless computing [@berkeleyView], although open-source tools such as  [@serverlessFramework] show promise for ameliorating this issue.
+While this website was implemented using AWS, this architecture is not exclusive to AWS. Google Cloud Platform (GCP) offers both serverless computing and serverless data querying via their BigQuery platform. Although both GCP and AWS have similar offerings, it is nontrivial to change cloud service providers due to each service provider's use of a proprietary application programming interface (API). The issue of vendor lock-in via proprietary APIs is one of the open problems in serverless computing [@berkeleyView], although open-source tools such as the Serverless Framework (https://www.github.com/serverless/serverless) and Apache OpenWhisk (https://openwhisk.apache.org) show promise for ameliorating this issue.
 
 # Conclusion
 

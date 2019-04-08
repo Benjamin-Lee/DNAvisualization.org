@@ -6,16 +6,24 @@
 > A comparison to other methods should be expanded upon.
 > Of the 17 references cited there is little discussion of their content. For instance Page 1 “a variety of methods have been proposed” (references 3-12) !! This really does little justice to the prior work or description thereof. Generally speaking if a reference is included then something substantial from that paper should be mentioned - if only a sentence for each.
 
+All visualization methods referred to in the paper have now been described and compared to each other. This section now reads: "One common technique is to map each nucleotide to a vector and connect those vectors tip-to-tail to represent a DNA sequence. For example, the Gates method uses up, down, left, and right vectors of length one to represent Ts, As, Cs, and Gs, respectively, while the Yau method uses vectors along a unit circle to represent the bases. Others, such as Qi and its derivative Squiggle algorithm are based on mapping a binary representation of the sequence to upward- and downward-oriented vectors for 1s and 0s, respectively. In contrast, other algorithms such as @qiNovel2DGraphical2007 and @randicCompact2DGraphical2003 are based on tablature, with the x coordinate corresponding to base number and the y coordinate to a specific nucleotide or dinucleotide, respectively."
+
 ### Intro Page 2
 > It is stated that methods used are those for which
 > “Visualizations which may be unambiguously transformed back into the DNA sequence”
 > Following on from this when downloading a zoomed section of the graph (something of interest to the user) I would suggest also including the DNA sequence within the x-axis range with the bases colour coded to match the graph. (you could also think about aligning these DNA sequence but that might be too much to ask?).
 
+This feature is not able to be implemented due to the lack of existing software capable of inverting DNA sequence transformations and the fact that raw DNA sequences are not stored, thereby necessitating transformation inversion. However, this is a valuable suggestion that will most certainly be implemented in a future version of this website.
+
 ### Interface Page 2.
 > Include a short description for each of the 5 visualization methods used /referenced rather than bunching all refs to a single sentence.
 > Why were these chosen over some of the other methods referenced.
 
+The reason for the inclusion of these specific methods has been clarified as being those implemented in the previously published `Squiggle` package: 
+
 > Just a thought - when looking at a zoomed region, it would be nice to jump to another visualization method of the same x-axis region. The zoom out function is nice.
+
+This feature has been implemented.
 
 ### Page 3 Implementation
 > First sentence refers twice to serverless - it this redundant (minor edit)
@@ -42,10 +50,12 @@ In regard to other providers on which this architecture would work, the followin
 This figure has been completely remade for greater clarity.
 Instead of using a sequence diagram, this figure now features a graphical representation of the architecture with a much more robust legend, while capturing the same information as before.
 The “initial sequence transformations” and “sequence querying” mentioned in legend are now clearly labeled, along with each of the steps.
-Color-coded parallel lines are now used to demonstrate parallelism, rather than  the previous loop boxes.
+Color-coded parallel lines are now used to demonstrate parallelism, rather than the previous loop boxes.
 ### Page 7 Discussion
 > When discussing the limitation of the architecture it would be good to discuss a clear-cut bioinformatic process or approach that would be problematic - if is this what you are implying?
 > Again  in the Conclusion reference is made to “not all applications are amenable” - this is too vague and an example discussed (in Discussion?) would help clear this up.
+
+The following sentences have been added to the discussion to address this point: "An example of a web server that cannot trivially be ported to use an entirely serverless architecture is MISTIC2 [@MISTIC2], a tool for protein coevolution analysis, whose job durations can be as long as five hours (supplementary figure 1). This job length is significantly longer than any current serverless offering allows a single function invocation to run."
 
 > Also I am unsure of how to “respect” a memory constraint. I would rephrase this statement.
 
@@ -57,6 +67,8 @@ This is an insightful method that would likely capture more biological meaning.
 However, as per the NAR web server instructions ("new methods that have not been previously validated in a separate publication" are discouraged), no new novel visualization methods were introduced.
 With respect to the addition of novel methods, the website has a section ("Have an idea for another way to turn a DNA sequence into a two-dimensional visualization? Let us know over on the [Squiggle repository](https://github.com/Lab41/squiggle/issues/new) and we'll be happy to work with you on implementing it") that refers users with novel ideas to propose it to the underlying transformation library atop which the web service is built for inclusion.
 > Also in the Qi graph, it might be a good idea to label the consensus line explicitly rather than refer to it as one of the input sequence identifiers. E.g. with the test data the consensus (overlapping) orange line is labeled Chimpanzee.
+
+With the Qi graph, there is no consensus line. That the topmost line is the only one visible is a pernicious example of overfitting. Hovering over a legend item results in that sequences being the overlapping (topmost) line. A clarification regarding this issue has been added to the instructions.
 
 ## Referee: 2
 
@@ -83,7 +95,8 @@ The word "entirely" has been removed from the title.
 
 > The manuscript is well written.  It puts this work in context of other 2D graphical representations of DNA sequences; it would be better still if it compared 2D graphical representations to other more concrete representations such as sequence alignments, 2D similarity dotplots, and genome browsers which can display GC content, alignments, repetitive sequence annotations and many other types of features and data along the DNA sequence.  
 
-
+To better place this work in the context of browser-based DNA sequence exploration tools, the following section has been added to the introduction: "Numerous tools, ranging from genome browsers [@genomeBrowsers] to multiple sequence alignment viewers [@MSAViewer] and dot plot visualizers [@yassEnhancing] have been developed to enable interactive browser-based visualization of DNA sequences, alignments, and annotations.
+A different approach to addressing this problem is to convert DNA sequences directly into two-dimensional visualizations that capture some aspect of the biological information contained within, without relying on external information such as annotations."
 
 > I spotted a couple typos:
 >
@@ -105,6 +118,8 @@ The implementation now reads "the amount of data scanned during querying".
 
 > 2.  the descriptions in "Implementation" section need to be modified, please refer AWS or FaaS framework. At a first glance, the description seems a new variant of FaaS framework is proposed and implemented for the purpose of this work.
 
+Links to AWS Lambda, Google Cloud Functions and Microsoft Azure functions have been added to refer to the various platforms for serverless computing. In addition, links to the Serverless Framework and Apache OpenWhisk have been added to refer to open-source serverless frameworks.
+
 > 3. The boxes for client, AWS Lambda and AWS S3 at the below of  Figure 2 can be removed as they are already on top.
 
 In response to the points raised by the first reviewer, Figure 2 has now be completely remade. As such, there are no more boxes on to bottom (or the top) of the figure.
@@ -116,15 +131,17 @@ Most of the functionalities work except the followings;
 
 Without knowing the specific details of the browser version, this bug is not able to be reproduced. Drag-and-drop is powered by [FileReader.js](https://bgrins.github.io/filereader.js/), which has full support for IE, Chrome, Firefox, and Opera as well as support for Safari 10+ (as per https://developer.mozilla.org/en-US/docs/Web/API/File).
 That drag-and-drop does not work but the website as a whole does work suggests that the issue is not specifically with the File API, but more information would be needed to fully isolate and fix this issue.
-As a stopgap measure, feature detection for the File API has been implemented in [`8e4f5d7`](https://github.com/Benjamin-Lee/DNAvisualization.org/commit/8e4f5d7274192b3d6d21d832c631b0b6e4e8c0b9), which alerts the user if their browser is incompatible with the site and provides a list of browsers and versions which are compatible.
+As a stopgap measure, feature detection for the File API has been implemented, which alerts the user if their browser is incompatible with the site and provides a list of browsers and versions which are compatible.
 
 > 2. plot option does not vanishes automatically, if I want to change
 title and subtitle of the same figure twice or thrice and so on. It
 vanishes only for the first time.
 
-This bug has been fixed in [`efb174e`](https://github.com/Benjamin-Lee/DNAvisualization.org/commit/efb174e40d836e47faebd14fddd19e45802cc4ec).
+This bug has been fixed.
 
 > 3. Sequence can’t be tracked and modified while I want to see the visualization of modified PASTA sequence using "Paste FASTA function"
+
+The ability to modify pasted FASTA sequences and descriptions has been implemented.
 
 > 4. In Safari, it does not work. While click on “Load an example file”, the site freezes. Just shows the  loading spinner
 
