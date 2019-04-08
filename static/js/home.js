@@ -84,6 +84,7 @@ let method_name = 'Squiggle'
 let selectedMethods = ['squiggle'] // to hold the list of selected viz methods
 let user_title = ''
 let user_subtitle = ''
+let default_zoom = true
 let dialog = bootbox.dialog({
   message: `
     <div class="container">
@@ -325,18 +326,24 @@ function plotSequence (fastaString, filename) {
 }
 
 // reset the chart back to its original zoom
-function resetChart () {
+function resetChart (preserveX = false) {
   for (let i = 0; i < chart.series.length; i++) {
     let name = chart.series[i].userOptions.name
     try {
-      chart.series[i].setData(seqs[name].overviewData[method].slice())
+      if (preserveX) {
+        console.log('preserving x range')
+        if (!afterSetExtremes({min: chart.xAxis[0].min, max: chart.xAxis[0].max})) {
+          chart.series[i].setData(seqs[name].overviewData[method].slice())
+        }
+        chart.yAxis[0].setExtremes(null, null)
+      } else {
+        chart.series[i].setData(seqs[name].overviewData[method].slice())
+        // let highcharts recalculate the axis ranges
+        chart.zoom()
+      }
     } catch (e) {
-
     }
   }
-
-  // let highcharts recalculate the axis ranges
-  chart.zoom()
 
   // sets the chart name when changing viz methods
   updateChartName()
@@ -396,6 +403,7 @@ function zoom (factor) {
   yRange = chart.yAxis[0].getExtremes().max - chart.yAxis[0].getExtremes().min
   chart.xAxis[0].setExtremes(chart.xAxis[0].getExtremes().min - (xRange * factor), chart.xAxis[0].getExtremes().max + (xRange * factor))
   chart.yAxis[0].setExtremes(chart.yAxis[0].getExtremes().min - (yRange * factor), chart.yAxis[0].getExtremes().max + (yRange * factor))
+  default_zoom = false
 }
 
 function seqQuery (seq_hash, x_min = null, x_max = null) {
@@ -428,6 +436,7 @@ function transform (seq_name, seq, viz_method) {
 
 function afterSetExtremes (e) {
   // upon setting the x range of the graph, get the data for that region
+  // returns true if successful in changing the data
   chart.showLoading('Loading data...')
 
   for (key of Object.keys(seqs)) {
@@ -436,15 +445,19 @@ function afterSetExtremes (e) {
     }
     if ((e.max < seqs[key].overviewData[method][seqs[key].overviewData[method].length - 1][0]) &&
       (e.min > seqs[key].overviewData[method][0][0])) {
+      console.log('executing seq query for ' + key)
       seqQuery(seqs[key]['hash'], e.min, e.max)
         .then(function (results) {
           chart.get(results.data[0]).setData(results.data[1].slice())
+          default_zoom = false
           chart.hideLoading()
         })
     } else {
       chart.hideLoading()
+      return false
     }
   }
+  return true
 }
 
 function showTitleModal () {
@@ -652,7 +665,7 @@ window.onload = function () {
       $(`#${selectedMethod}_plotting_control_label`).removeClass('active')
     }
     method = $('input[name=plotting_method]:checked').val()
-    resetChart()
+    resetChart(!default_zoom)
   })
 
   // once the user has clicked a control, hide the tooltip
