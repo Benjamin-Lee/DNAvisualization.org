@@ -130,7 +130,7 @@ In this paradigm, pricing is based on the amount and duration of data storage, t
 
 For DNAvisualization.org, each submitted sequence's transformation is stored on AWS S3 in the open-source Apache Parquet tabular data format using Snappy columnar compression.
 Then, when a user zooms in on a region, a request is sent to AWS Lambda, which submits a SQL query to S3 Select, which in turn scans the file for data in the region.
-The matching data is then returned to the Lambda function, which downsamples the data if necessary (to prevent wasting users' memory with more data points than can be shown) and returns it to the browser, which then updates the visualization.
+The matching data are then returned to the Lambda function, which downsamples the data if necessary (to prevent wasting users' memory with more data points than can be shown) and returns it to the browser, which then updates the visualization.
 This process happens entirely in parallel for each sequence that the user has submitted, regardless of how much demand there is on the website, showcasing the usefulness of serverless computing.
 The S3 buckets (_i.e._ folders) containing the cached DNA sequence transformations are configured such that twenty-four hours after a user has submitted a sequence for visualization, its transformation is automatically deleted, thereby further reducing the cost of the website's operation.
 
