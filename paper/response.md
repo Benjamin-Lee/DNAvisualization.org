@@ -1,3 +1,16 @@
+Dear Prof. Benson,
+
+Thank you for the opportunity to revise my manuscript “DNAvisualization.org: a serverless web tool for DNA sequence visualization”. I appreciate the reviewers’ insightful comments and timely responses.
+
+I have carefully reviewed the concerns raised and have revised my manuscript accordingly. Following this letter are point-by-point responses to each of the reviewers’ comments.
+
+I hope that this revised manuscript is now suitable for publication and look forward to hearing from you in due time.
+
+
+Warm regards,
+Benjamin Lee, on behalf of all authors
+
+
 ## Referee: 1
 
 ### Comments for the Author
@@ -19,7 +32,7 @@ This feature is not able to be implemented due to the lack of existing software 
 > Include a short description for each of the 5 visualization methods used /referenced rather than bunching all refs to a single sentence.
 > Why were these chosen over some of the other methods referenced.
 
-The reason for the inclusion of these specific methods has been clarified as being those implemented in the previously published `Squiggle` package: 
+The reason for the inclusion of these specific methods has been clarified as being those implemented in the previously published `Squiggle` package:
 
 > Just a thought - when looking at a zoomed region, it would be nice to jump to another visualization method of the same x-axis region. The zoom out function is nice.
 
@@ -118,6 +131,8 @@ The implementation now reads "the amount of data scanned during querying".
 
 > 1. Is there any time/space complexity analysis for sequence and file level parallelization? As the former parses each sequences, so there should be trade-off of Memory/time complexities between file and sequence level parsing. As parse level sequencing seems the main contribution for limited amount of memory, any analytical insights need to be added here. comparing the technical benefits/ complexity analysis with other state of the art e.g., DNASonification.org would be great.
 
+With respect to the time and space complexity of the different types of parallelism, the following has been added to the discussion: "While this tradeoff results in increased memory use by the client, which must load and parse the FASTA files in memory, and greater cost because pricing is by both the function invocation and the total amount of computation (which remains the same, as the total number of bases that must be transformed does not change), it enables greater throughput by more effectively leveraging parallelism."
+
 > 2.  the descriptions in "Implementation" section need to be modified, please refer AWS or FaaS framework. At a first glance, the description seems a new variant of FaaS framework is proposed and implemented for the purpose of this work.
 
 Links to AWS Lambda, Google Cloud Functions and Microsoft Azure functions have been added to refer to the various platforms for serverless computing. In addition, links to the Serverless Framework and Apache OpenWhisk have been added to refer to open-source serverless frameworks.
@@ -153,4 +168,4 @@ If you are comfortable using GitHub (through an anonymous account), filing an is
 
 > 5. Integrating two default sample files -  one for small (already available), the other for large FASTA sequences - may be a good idea.
 
-Three sample files of varying sizes are now available for testing and download: HBB (already available), human titin (as an example of a very large gene), and *Bacillus subtilis* (as example of a model bacterial genome). 
+Three sample files of varying sizes are now available for testing and download: HBB (already available), human titin (as an example of a very large gene), and *Bacillus subtilis* (as example of a model bacterial genome).
