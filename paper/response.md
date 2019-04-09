@@ -8,6 +8,7 @@ I hope that this revised manuscript is now suitable for publication and look for
 
 
 Warm regards,
+
 Benjamin Lee, on behalf of all authors
 
 
@@ -32,7 +33,7 @@ This feature is not able to be implemented due to the lack of existing software 
 > Include a short description for each of the 5 visualization methods used /referenced rather than bunching all refs to a single sentence.
 > Why were these chosen over some of the other methods referenced.
 
-The reason for the inclusion of these specific methods has been clarified as being those implemented in the previously published `Squiggle` package:
+The reason for the inclusion of these specific methods has been clarified as being those implemented in the previously published `Squiggle` package: "A user first selects one or more visualization methods from the five currently implemented by the `Squiggle` package".
 
 > Just a thought - when looking at a zoomed region, it would be nice to jump to another visualization method of the same x-axis region. The zoom out function is nice.
 
