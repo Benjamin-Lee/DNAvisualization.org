@@ -320,21 +320,25 @@
           <h2 id="about">About</h2>
 
           <p>Raw DNA sequences, which consist of long strings of letters, are
-            hard for humans to make sense of at a glance. However, there is
-            significant biological meaning contained within them. To reveal this
-            meaning, <a href="http://squiggle.readthedocs.io/en/latest/methods.html">a number
-              of methods</a> have been proposed to convert raw DNA sequences into
-            two-dimensional visualizations. This website allows you to try several
-            of these methods out on your data with a high-performance
-            parallel-computing backend enabling genome-scale visualization.</p>
+          hard for humans to make sense of at a glance. However, there is
+          significant biological meaning contained within them. To reveal this
+          meaning, <a
+          href="http://squiggle.readthedocs.io/en/latest/methods.html">a number
+          of methods</a> have been proposed to convert raw DNA sequences into
+          two-dimensional visualizations. This website allows you to try several
+          of these methods out on your data with a high-performance
+          parallel-computing backend enabling genome-scale visualization.</p>
 
           <h2 id="instructions">Instructions</h2>
 
           <p>Using this website is easy:</p>
 
           <ol>
-            <li>Choose a visualization method. For full information about the
-              visualization methods, take a look <a href="http://squiggle.readthedocs.io/en/latest/methods.html">here</a>.</li>
+
+            <li>Choose one or more visualization methods. For full information
+            about the visualization methods, take a look <a
+            href="http://squiggle.readthedocs.io/en/latest/methods.html">here</a>.</li>
+
             <li>Upload a sequence by: <ul>
                 <li>Clicking the "browse" button</li>
                 <li>Dragging a file anywhere on the page</li>
@@ -343,6 +347,7 @@
                 <li>Pasting the contents of a FASTA file into a textbox</li>
               </ul>
             </li>
+
           </ol>
 
           <p class="font-weight-bold">That's it.</p>
@@ -350,10 +355,26 @@
           <p>Optionally, after plotting a sequence, you can:</p>
 
           <ul>
-            <li>Remove files from the visualization by clicking the <i class="fas fa-trash"></i> icon and selecting files</li>
-            <li>Modify the graph's title and subtitle by clicking the <i class="fas fa-bars"></i> icon</li>
-            <li>Export the content of the graph in .png, .jpeg, .svg, or .pdf format by clicking on the <i class="fas fa-file-export"></i> icon</li>
-            <li>Zoom in on a region of interest by clicking and dragging over it, zoom out via the <i class="fas fa-search-minus"></i> icon, or reset the zoom.</li>
+
+            <li>Remove files from the visualization by clicking the <i
+            class="fas fa-trash"></i> icon and selecting files</li>
+
+            <li>Modify the graph's title and subtitle by clicking the <i
+            class="fas fa-bars"></i> icon</li>
+
+            <li>Export the content of the graph in .png, .jpeg, .svg, or .pdf
+            format by clicking on the <i class="fas fa-file-export"></i>
+            icon</li>
+
+            <li>Zoom in on a region of interest by clicking and dragging over
+            it, zoom out via the <i class="fas fa-search-minus"></i> icon, or
+            reset the zoom</li>
+
+            <li>Change the visualization method if you have chosen more than
+            one visualization method</li>
+
+            <li>Edit a pasted sequence by clicking on the <i class="dropdown-toggle"></i> symbol next to the "<i class="fas fa-paste"></i> Paste FASTA" button</li>
+
           </ul>
 
           <p>When you plot your data using this website, there are a few things
@@ -371,13 +392,15 @@
             supported. We are actively investigating adding more methods.</p>
 
           <p>As you look at an output graph with several overlaid sequences, you
-            will see that when the sequences completely mirror one another, that
-            the sequences are essentially identical. When you see the plot lines
-            begin to diverge, you will instantly be able to see where the
-            sequences have begun to differ. You can zoom in for a closer view,
-            then reset the zoom to enable a return the original (unzoomed) view.
-            When the sequences are parallel on the plot, that tells you that the
-            sequences are once again identical after a period of divergence.</p>
+          will see that when the sequences completely mirror one another, that
+          the sequences are essentially identical. When you see the plot lines
+          begin to diverge, you will instantly be able to see where the
+          sequences have begun to differ. You can zoom in for a closer view,
+          then reset the zoom to enable a return the original (unzoomed) view.
+          To change the topmost sequence on the visualization, hover over the
+          legend entry corresponding to the sequence you want to see. When the
+          sequences are parallel on the plot, that tells you that the sequences
+          are once again identical after a period of divergence.</p>
 
           <p>Try visualizing your data with each of the visualization
             techniques; each method shows your data from a slightly different
@@ -393,19 +416,24 @@
           <h2 id="architecture">Architecture</h2>
 
           <p>DNAvisualization.org is built on an entirelesly serverless
-            architecture. Due to the inherently parallelizable nature of DNA
-            sequence transformation (the transformation of one sequence has no
-            effect on the transformation of another), this design yields a
-            significant performance increase at a lower cost compared to a
-            traditional architecture.</p>
+          architecture. Due to the inherently parallelizable nature of DNA
+          sequence transformation (the transformation of one sequence has no
+          effect on the transformation of another), this design yields a
+          significant performance increase at a lower cost compared to a
+          traditional architecture.</p>
 
           <p>This website uses <a href="http://flask.pocoo.org">Flask</a> as a
-            lightweight Python web framework and <a href="https://www.zappa.io">Zappa</a> to automate deployment to Amazon
-            Web Service's (AWS) <a href="https://aws.amazon.com/lambda">Lambda</a>
-            serverless computing platform. Additionally, it takes advantace of <a href="https://aws.amazon.com/s3/"> AWS S3</a> for serverless data
-            storage and querying. All stored data are automatically deleted after 24 hours.</p>
+          lightweight Python web framework and <a
+          href="https://www.zappa.io">Zappa</a> to automate deployment to Amazon
+          Web Service's (AWS) <a href="https://aws.amazon.com/lambda">Lambda</a>
+          serverless computing platform. Additionally, it takes advantace of <a
+          href="https://aws.amazon.com/s3/"> AWS S3</a> for serverless data
+          storage and querying. All stored data are automatically deleted after
+          24 hours.</p>
 
-          <p>For a full overview of the architecture, take a look at the <a href="https://en.wikipedia.org/wiki/Sequence_diagram">sequence diagram</a> below:</p>
+          <p>For a full overview of the architecture, take a look at the <a
+          href="https://en.wikipedia.org/wiki/Sequence_diagram">sequence
+          diagram</a> below:</p>
 
           <div class="mermaid text-center">
             {% include "test.mmd" without context %}
@@ -473,18 +501,25 @@
           </details>
           <h2 id="contact">Contact Us</h2>
 
-          <p>Having issues? We're happy to help get them resolved. If you think you've found a bug, the best way to get in touch is to <a href="https://github.com/Benjamin-Lee/DNAvisualization.org/issues/new?assignees=&labels=bug&template=bug_report.md&title="
-              target="_blank"> make an bug report</a>
-            on the project's <a href="https://github.com/Benjamin-Lee/DNAvisualization.org">GitHub repository</a>.</p>
+          <p>Having issues? We're happy to help get them resolved. If you think
+          you've found a bug, the best way to get in touch is to <a
+          href="https://github.com/Benjamin-Lee/DNAvisualization.org/issues/new?assignees=&labels=bug&template=bug_report.md&title="
+          target="_blank"> make an bug report</a> on the project's <a
+          href="https://github.com/Benjamin-Lee/DNAvisualization.org">GitHub
+          repository</a>.</p>
 
           <p>Have an idea for another way to turn a DNA sequence into a
-            two-dimensional visualization? Let us know over on the <a href="https://github.com/Lab41/squiggle/issues/new"> Squiggle repository</a> and we'll be happy to work with you on implementing it.
-            (DNAvisualization.org uses a stripped-down version of the Squiggle
-            library to transform sequences.)
-          </p>
+          two-dimensional visualization? Let us know over on the <a
+          href="https://github.com/Lab41/squiggle/issues/new"> Squiggle
+          repository</a> and we'll be happy to work with you on implementing it.
+          (DNAvisualization.org uses a stripped-down version of the Squiggle
+          library to transform sequences.) </p>
 
-          <p>To make a feature request for the DNAvisualization.org website, please click <a href="https://github.com/Benjamin-Lee/DNAvisualization.org/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=" target="_blank">here</a>.
-          </p>
+          <p>To make a feature request for the DNAvisualization.org website,
+          please click <a
+          href="https://github.com/Benjamin-Lee/DNAvisualization.org/issues/new?assignees=&labels=enhancement&template=feature_request.md&title="
+          target="_blank">here</a>. </p>
+
         </div>
       </div>
     </div><!--  /container -->
