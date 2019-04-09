@@ -165,7 +165,7 @@ seq = the sequence
 seq_hash = the xx64 hash with seed(0) in base10
 */
 
-function plotSequence (fastaString, filename) {
+function plotSequence (fastaString, filename, pasted = false) {
   dialog.modal('show')
 
   if (!selectedMethods.length) {
@@ -211,6 +211,13 @@ function plotSequence (fastaString, filename) {
         hash: XXH.h64(seq['seq'], 0).toString(10),
         length: seq['seq'].length,
         overviewData: {}
+      }
+      if (pasted) {
+        seqs[seq['name']]['seq'] = seq.seq // store the raw sequence so it can be edited
+        $('#pasted_sequence_toggle').attr('hidden', false) // show the toggle for editing the pasted sequence
+        $('#paste-sequence').removeClass('rounded')
+        let id = String(Math.floor(Math.random() * 100000)) // assign a unique id, so that the right element can be removed
+        $('#pasted_sequence_dropdown').append(`<a class="dropdown-item pasted-sequence-dropdown-element" href="#" id="${id}" onclick="editPastedSequence('${seq['name']}', '${id}')">${seq['name']}`)
       }
       addedCount++
     } else {
@@ -331,7 +338,6 @@ function resetChart (preserveX = false) {
     let name = chart.series[i].userOptions.name
     try {
       if (preserveX) {
-        console.log('preserving x range')
         if (!afterSetExtremes({min: chart.xAxis[0].min, max: chart.xAxis[0].max})) {
           chart.series[i].setData(seqs[name].overviewData[method].slice())
         }
@@ -445,7 +451,6 @@ function afterSetExtremes (e) {
     }
     if ((e.max < seqs[key].overviewData[method][seqs[key].overviewData[method].length - 1][0]) &&
       (e.min > seqs[key].overviewData[method][0][0])) {
-      console.log('executing seq query for ' + key)
       seqQuery(seqs[key]['hash'], e.min, e.max)
         .then(function (results) {
           chart.get(results.data[0]).setData(results.data[1].slice())
@@ -587,6 +592,35 @@ $(window).resize(function () {
   resizeMethodBtnGroup()
 })
 
+function editPastedSequence (seqName, id) {
+  let value = '>' + seqName + '\n' + seqs[seqName].seq
+  bootbox.prompt({
+    title: `Editing pasted sequence "${seqName}"`,
+    inputType: 'textarea',
+    value: value,
+    backdrop: true,
+    callback: function (result) {
+      // ignore no changes
+      if (result == null || result == value) {
+        return
+      }
+      let filename = seqs[seqName].filename
+      delete seqs[seqName]
+      $(`#${id}`).remove()
+      plotSequence(result, filename, pasted = true)
+    },
+    size: 'large',
+    buttons: {
+      cancel: {
+        className: 'btn-outline-secondary'
+      },
+      confirm: {
+        className: 'btn-secondary'
+      }
+    }
+  })
+}
+
 window.onload = function () {
   let options = {
     // CSS Class to add to the drop element when a drag is active
@@ -683,7 +717,7 @@ window.onload = function () {
         if (!result) {
           return
         }
-        plotSequence(result, `Pasted Sequence #${pastedFASTACount}`)
+        plotSequence(result, `Pasted Sequence #${pastedFASTACount}`, pasted = true)
       },
       size: 'large',
       buttons: {
@@ -764,9 +798,16 @@ window.onload = function () {
         let seqNamesToRemove = Object.entries(seqs).filter(x => result.includes(x[1].filename)).map(x => x[0])
         for (seqName of seqNamesToRemove) {
           delete seqs[seqName]
+          $(`.pasted-sequence-dropdown-element:contains('${seqName}')`).remove()
         }
 
-        // reset the vie
+        // if all pasted sequences have been deleted, remove the toggle
+        if (!$(`.pasted-sequence-dropdown-element`).length) {
+          $('#paste-sequence').addClass('rounded')
+          $('#pasted_sequence_toggle').attr('hidden', true)
+        }
+
+        // reset the view
         if (!Object.entries(seqs).length) {
           $('.hide-when-plotting').show()
           $('.show-when-plotting').hide()

@@ -142,7 +142,8 @@
           <!-- viz controls during plotting -->
           <div class="show-when-plotting pb-2" id="mode">
             <div class="row">
-              <div class="col"> <!-- Legend mode -->
+              <div class="col">
+                <!-- Legend mode -->
                 <div class="row" id="mode">
                   <div class="col text-center">
                     <label for="mode">Legend Mode</label>
@@ -164,7 +165,8 @@
                   </div>
                 </div>
               </div>
-              <div class="col" id="plotting_method_col" style="display:none"> <!-- viz method -->
+              <div class="col" id="plotting_method_col" style="display:none">
+                <!-- viz method -->
                 <div class="row" id="method_label">
                   <div class="col text-center">
                     <label for="plotting_method">Method</label>
@@ -195,7 +197,8 @@
                   </div>
                 </div>
               </div>
-              <div class="col"> <!-- Options -->
+              <div class="col">
+                <!-- Options -->
                 <div class="row" id="mode">
                   <div class="col text-center">
                     <div class="row">
@@ -227,7 +230,8 @@
                   </div>
                 </div>
               </div>
-              <div class="col"> <!-- Zoom controls -->
+              <div class="col">
+                <!-- Zoom controls -->
                 <div class="row">
                   <div class="col text-center">
                     <label for="method">Zoom <i class="far fa-question-circle" data-toggle="tooltip" data-placement="top" data-html="true" title="Drag on a region to zoom in and click below to zoom out. Loading the data may take a few moments."></i></label>
@@ -264,7 +268,14 @@
                   </div>
                 </div>
                 <div class="col-md-3">
-                  <button type="button" class="btn btn-outline-secondary btn-block" id="paste-sequence"><i class="fas fa-paste"></i> Paste FASTA</button>
+                  <div class="btn-group btn-block">
+                    <button type="button" class="btn btn-outline-secondary btn-block rounded" id="paste-sequence"><i class="fas fa-paste"></i> Paste FASTA </button>
+                    <button type="button" hidden class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" id="pasted_sequence_toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu" id="pasted_sequence_dropdown">
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row hide-when-plotting mt-2">
