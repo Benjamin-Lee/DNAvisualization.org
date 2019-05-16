@@ -102,19 +102,21 @@ Data storage is usually provided by a relational database management system (RDB
 
 This paradigm has several disadvantages: disruptions to the server result in disruptions to the website, greater expertise is required for the development and maintenance of the website, the server wastes resources while sitting idle, and the server's computational and storage capacity is directly limited by its hardware.
 
-A new model has been introduced called serverless computing[^2]or Function-as-a-Service (FaaS) that is able to solve these problems.
+A new model has been introduced called serverless computing or Function-as-a-Service (FaaS) that is able to solve these problems.
 The basic idea is that a software developer specifies code to be executed (_i.e._ a function) and then invokes it on varying inputs.
-The cloud service provider is thereby delegated the responsibility for the execution of the code, thus enhancing developer productivity [@berkeleyView].
+In fact, the name "serverless computing" is a misnomer: the computation still occurs on a server, just not one the developer is responsible for managing.
+Instead, the cloud service provider is delegated the responsibility for the execution of the code, thus enhancing developer productivity [@berkeleyView].
 In this model, the pricing is calculated by function invocation, typically metered to the tenth of a second.
 When not being used, there is no cost to the user.
-On the other hand, if there are numerous simultaneous function invocations, each invocation is handled separately, in parallel. 
+On the other hand, if there are numerous simultaneous function invocations, each invocation is handled separately, in parallel.
 
 By making the serverless function a virtual "server" and invoking the function upon each individual request, one is able to take full advantage of serverless computing.
 For each request to the website, a virtual server is created for just long enough to respond to the request and then immediately extinguished.
 This results in the website being able to instantly scale to use precisely the resources needed to meet demand.
 
-At the time of this writing, there are a variety of serverless computing platforms including (but certainly not limited to) Amazon Web Services (AWS) Lambda (https://aws.amazon.com/lambda/), Google Cloud Functions (http://cloud.google.com/functions/), and Microsoft Azure Functions (https://azure.microsoft.com/en-us/services/functions/), each of which differ in terms of factors such as supported programming languages, startup latency, and pricing structure [@peekingBehind]. DNAvisualization.org is built atop AWS Lambda due to its permanent free tier that, at the time of this writing, allows for one-million free function invocations totaling up to 3.2 million seconds of compute time per month[^3], which is anticipated to easily meet the demand for the site.
-In the event that the free tier is exceeded, AWS Lambda's pricing is \$0.20 per million function invocations and \$0.00001667 dollars per GB-second[^4] of computation at the time of this writing. 
+At the time of this writing, there are a variety of serverless computing platforms including (but certainly not limited to) Amazon Web Services (AWS) Lambda (https://aws.amazon.com/lambda/), Google Cloud Functions (http://cloud.google.com/functions/), and Microsoft Azure Functions (https://azure.microsoft.com/en-us/services/functions/), each of which differ in terms of factors such as supported programming languages, startup latency, and pricing structure [@peekingBehind].
+DNAvisualization.org is built atop AWS Lambda due to its permanent free tier that, at the time of this writing, allows for one-million free function invocations totaling up to 3.2 million seconds of compute time per month, which is anticipated to easily meet the demand for the site. 
+In the event that the free tier is exceeded, AWS Lambda's pricing is \$0.20 per million function invocations and \$0.00001667 dollars per GB-second of computation (one GB-second corresponds to using a Lambda function with 1 GB of RAM for one second) at the time of this writing.
 
 For DNAvisualization.org, we use AWS Lambda to serverlessly transform submitted DNA sequences into their visualizations in parallel, in addition to serving the static assets (_i.e._ HTML, Javascript, and CSS files) to the user.
 The site uses Python's Flask web microframework (http://flask.pocoo.org) and has its deployment to AWS Lambda seamlessly automated by the Zappa tool (https://github.com/Miserlou/Zappa).
@@ -151,7 +153,7 @@ For more information about the limitations of serverless computing, see @berkele
 
 These limitations were bypassed by this tool in several ways, which may be of interest to readers attempting to implement similar architectures in the future.
 When implementing parallelization, we were faced with a choice between higher, file-level parallelization (parsing and transforming each file's sequences in a separate Lambda function invocation) and lower, sequence-level parallelization (parsing the files in the browser and invoking a Lambda function to transform each sequence individually).
-We initially chose the former but quickly ran into memory issues, even when opting to use the most generous memory allocation available (3,008 MB at the time of writing [^1]).
+We initially chose the former but quickly ran into memory issues, even when opting to use the most generous memory allocation available (3,008 MB at the time of writing, which includes all of the function's code as well as the data on which it is invoked).
 To reduce memory demands, we switched to sequence-level parallelism and eliminated as many dependencies as possible. While this tradeoff results in increased memory use by the client, which must load and parse the FASTA files in memory, and greater cost because pricing is by both the function invocation and the total amount of computation (which remains the same, as the total number of bases that must be transformed does not change), it enables greater throughput by more effectively leveraging parallelism.
 
 Currently, the website is limited to visualizing up to thirty sequences of up to 4.5 Mbp each for a grand total of 135 Mbp of sequence data at a time.
@@ -177,9 +179,3 @@ This work was supported by the non-profit firm In-Q-Tel, Inc. Funding
 for open access charge: In-Q-Tel, Inc.
 
 # References
-
-[^1]: This total includes all of the function's code as well as the data on which it is invoked.
-[^2]: The name "serverless computing" is a misnomer: the computation still occurs on a server, just not one the developer is responsible for managing.
-[^3]: Because a Lambda function's CPU allocation is proportional to its configured memory allocation, the total amount of actual compute time included in the free tier can range from 3.2 million to 136,170 seconds.
-[^4]: One GB-second corresponds to using a Lambda function with 1 GB of RAM for one second.
-
