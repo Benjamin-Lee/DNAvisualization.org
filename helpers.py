@@ -1,5 +1,6 @@
 import logging
 
+
 def downsample(zone, downsample_factor=1000):
     # downsample if > downsample_factor points
     if len(zone) > downsample_factor:
