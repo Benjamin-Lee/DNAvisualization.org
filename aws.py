@@ -32,7 +32,7 @@ def query_x_range(Key, x_min=None, x_max=None):
             x_min, x_max
         )
     else:
-        Expression = "select * from s3object s;"
+        Expression = "select * from s3object s;" # TODO:  fix this!!!
 
     response = s3.select_object_content(
         Bucket=f"dnavisualization-data-{stage}",
