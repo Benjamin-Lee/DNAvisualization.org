@@ -19,7 +19,7 @@
     "nuxt": "^2.13.2"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^2.0.0",
+    "@nuxtjs/eslint-config": "^3.0.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^7.3.1",
