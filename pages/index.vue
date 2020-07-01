@@ -3,7 +3,7 @@
     <div>
       <logo />
       <h1 class="title">
-        dnavisualization.org
+        dnavisualization.org v2
       </h1>
       <h2 class="subtitle">
         A web tool to turn DNA sequences into interactive visualizations
