@@ -6,17 +6,17 @@
       variant="info"
       class="navbar navbar-expand-lg navbar-light bg-light rounded sticky-top"
     >
-      <b-navbar-brand href="#">DNAvisualization.org</b-navbar-brand>
+      <b-navbar-brand href="">DNAvisualization.org</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="#">About</b-nav-item>
-          <b-nav-item href="#">Instructions</b-nav-item>
-          <b-nav-item href="#">Architecture</b-nav-item>
-          <b-nav-item href="#">Citation</b-nav-item>
-          <b-nav-item href="#">Contact</b-nav-item>
+          <b-nav-item to="/about">About</b-nav-item>
+          <b-nav-item to="/instructions">Instructions</b-nav-item>
+          <b-nav-item to="/architecture">Architecture</b-nav-item>
+          <b-nav-item to="#">Citation</b-nav-item>
+          <b-nav-item to="#">Contact</b-nav-item>
           <b-nav-item
             href="https://github.com/Benjamin-Lee/DNAvisualization.org/issues/new?assignees=&amp;labels=bug&amp;template=bug_report.md&amp;title="
             target="_blank"
