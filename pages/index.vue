@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <TheVisualization></TheVisualization>
     <div>
       <logo />
       <h1 class="title">
