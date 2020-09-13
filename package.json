@@ -16,6 +16,7 @@
     "@nuxtjs/axios": "^5.12.1",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.16.0",
+    "dnaviz": "^1.0.0-0",
     "nuxt": "^2.14.1"
   },
   "devDependencies": {
