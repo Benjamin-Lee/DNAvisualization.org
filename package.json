@@ -12,7 +12,7 @@
     "fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.12.1",
+    "@nuxtjs/axios": "^5.12.2",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.16.0",
     "dnaviz": "^1.0.0-0",
