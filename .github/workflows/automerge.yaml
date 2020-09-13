@@ -18,7 +18,7 @@ jobs:
       - name: "Merge pull request"
         uses: "actions/github-script@v2"
         with:
-          github-token: "$"
+          github-token: ${{github.token}}
           script: |
             const pullRequest = context.payload.pull_request
             const repository = context.repo
