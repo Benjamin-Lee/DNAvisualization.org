@@ -1,22 +1,16 @@
 <template>
-  <div>
-    <textarea v-model="sequence" placeholder="enter sequence"></textarea>
-    <br />Coordinates: {{ coordinates }}
-  </div>
+  <div>Sequences: {{ stringified }}</div>
 </template>
 <script>
 // const dna = require("dnaviz")
-import * as dna from "dnaviz"
+import { mapState } from "vuex"
+
 export default {
-  data() {
-    return {
-      sequence: "",
-    }
-  },
   computed: {
-    coordinates() {
-      return dna.squiggle(this.sequence)
+    stringified() {
+      return JSON.stringify(this.sequences)
     },
+    ...mapState(["sequences"]),
   },
 }
 </script>
