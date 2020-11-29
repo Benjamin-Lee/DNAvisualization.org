@@ -1,9 +1,7 @@
 <template>
   <div class="container">
     <div>
-      <h1 class="title">
-        Architecture
-      </h1>
+      <h1 class="title">Architecture</h1>
       <p>
         DNAvisualization.org is built on an entirelesly serverless architecture.
         Due to the inherently parallelizable nature of DNA sequence

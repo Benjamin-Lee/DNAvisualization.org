@@ -1,9 +1,7 @@
 <template>
   <div class="container">
     <div>
-      <h1 class="title">
-        About
-      </h1>
+      <h1 class="title">About</h1>
       <p>
         Raw DNA sequences, which consist of long strings of letters, are hard
         for humans to make sense of at a glance. However, there is significant
