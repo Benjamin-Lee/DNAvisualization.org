@@ -1,11 +1,14 @@
 <template>
   <div>
+    <!-- eslint-disable vue/attribute-hyphenation-->
     <Plotly
       v-if="data.length > 0"
       :data="data"
       :layout="layout"
       :display-mode-bar="false"
+      :showTips="false"
     ></Plotly>
+    <!-- eslint-enable vue/attribute-hyphenation-->
   </div>
 </template>
 <script>
