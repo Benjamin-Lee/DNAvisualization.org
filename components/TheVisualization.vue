@@ -17,7 +17,14 @@ export default {
       return JSON.stringify(this.sequences)
     },
     layout() {
-      return { title: "My graph" }
+      return {
+        title: "My graph",
+        // the default bootstrap stack font stack
+        font: {
+          family:
+            '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !default',
+        },
+      }
     },
     data() {
       const x = []
