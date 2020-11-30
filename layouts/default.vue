@@ -4,7 +4,7 @@
       toggleable="lg"
       type="light"
       variant="info"
-      class="navbar navbar-expand-lg navbar-light bg-light rounded sticky-top"
+      class="navbar navbar-expand-lg navbar-light bg-light rounded sticky-top border-bottom"
     >
       <b-navbar-brand href="">DNAvisualization.org</b-navbar-brand>
 
