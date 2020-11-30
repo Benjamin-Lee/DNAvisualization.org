@@ -32,6 +32,7 @@ export default {
         x.push({
           x: this.sequences[key].visualization.yau_bp[0],
           y: this.sequences[key].visualization.yau_bp[1],
+          name: key,
         })
       }
       return x
