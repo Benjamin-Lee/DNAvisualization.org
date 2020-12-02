@@ -17,7 +17,7 @@
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.20.0",
     "dnaviz": "^1.0.0-0",
-    "nuxt": "^2.14.7",
+    "nuxt": "^2.14.8",
     "vue-plotly": "^1.1.0"
   },
   "devDependencies": {
