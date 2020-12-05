@@ -17,7 +17,7 @@
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.20.1",
     "dnaviz": "^1.0.0-0",
-    "nuxt": "^2.14.8",
+    "nuxt": "^2.14.9",
     "vue-plotly": "^1.1.0"
   },
   "devDependencies": {
@@ -27,7 +27,7 @@
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-nuxt": ">=2.0.0",
-    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-prettier": "^3.2.0",
     "prettier": "^2.2.1"
   }
 }
