@@ -3,7 +3,7 @@
     <b-navbar
       toggleable="lg"
       type="light"
-      variant="white"
+      variant="light"
       class="rounded border-bottom"
     >
       <!-- <b-navbar-brand href="">DNAvisualization.org</b-navbar-brand> -->

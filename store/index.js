@@ -18,9 +18,14 @@ export const mutations = {
   setCurrentMethod(state, method) {
     state.currentMethod = method
   },
+  /** Overwrite the entire `sequences` object in `state` */
+  setSequences(state, sequences) {
+    Vue.set(state, "sequences", sequences)
+  },
 }
 
 export const actions = {
+  /** Transform a sequence using the current visualization method and save it */
   // TODO: add a check to prevent duplicate transformation
   transformSequence({ commit, state }, { description, sequence }) {
     commit("insertTransformedSequence", {
@@ -29,5 +34,9 @@ export const actions = {
       method: state.currentMethod,
       visualization: dnaviz[state.currentMethod](sequence),
     })
+  },
+  /** Resets the state of the application to default */
+  clearState({ commit }) {
+    commit("setSequences", {})
   },
 }
