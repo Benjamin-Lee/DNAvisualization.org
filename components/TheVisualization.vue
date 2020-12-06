@@ -16,12 +16,12 @@ import { mapState } from "vuex"
 
 export default {
   computed: {
-    stringified() {
-      return JSON.stringify(this.sequences)
-    },
     layout() {
       return {
-        title: "My graph",
+        title:
+          this.data.length === 1
+            ? `Visualization of ${this.data[0].name} via the ${this.currentMethod} method`
+            : `DNA Sequence Visualization via the ${this.currentMethod} method`,
         // the default bootstrap stack font stack
         font: {
           family:
@@ -33,14 +33,14 @@ export default {
       const x = []
       for (const key in this.sequences) {
         x.push({
-          x: this.sequences[key].visualization.yau_bp[0],
-          y: this.sequences[key].visualization.yau_bp[1],
+          x: this.sequences[key].visualization[this.currentMethod][0],
+          y: this.sequences[key].visualization[this.currentMethod][1],
           name: key,
         })
       }
       return x
     },
-    ...mapState(["sequences"]),
+    ...mapState(["sequences", "currentMethod"]),
   },
 }
 </script>

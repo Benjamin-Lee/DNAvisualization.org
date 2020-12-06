@@ -2,6 +2,7 @@ import Vue from "vue"
 import * as dnaviz from "dnaviz"
 export const state = () => ({
   sequences: {},
+  currentMethod: "squiggle",
 })
 
 export const mutations = {
@@ -14,16 +15,19 @@ export const mutations = {
       visualization: { [method]: visualization },
     })
   },
+  setCurrentMethod(state, method) {
+    state.currentMethod = method
+  },
 }
 
 export const actions = {
   // TODO: add a check to prevent duplicate transformation
-  transformSequence({ commit }, { description, sequence, method }) {
+  transformSequence({ commit, state }, { description, sequence }) {
     commit("insertTransformedSequence", {
       description,
       sequence,
-      method,
-      visualization: dnaviz[method](sequence),
+      method: state.currentMethod,
+      visualization: dnaviz[state.currentMethod](sequence),
     })
   },
 }
