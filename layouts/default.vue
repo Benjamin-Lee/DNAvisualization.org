@@ -32,6 +32,11 @@
           <b-nav-item to="/instructions">Instructions</b-nav-item>
           <b-nav-item to="#">Contact</b-nav-item>
           <b-nav-item
+            href="https://github.com/Benjamin-Lee/DNAvisualization.org"
+          >
+            GitHub
+          </b-nav-item>
+          <b-nav-item
             href="https://github.com/Benjamin-Lee/DNAvisualization.org/issues/new?assignees=&amp;labels=bug&amp;template=bug_report.md&amp;title="
             target="_blank"
             >Report a Bug</b-nav-item
