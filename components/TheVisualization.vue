@@ -2,6 +2,7 @@
   <div v-if="transformedData.length > 0">
     <!-- eslint-disable vue/attribute-hyphenation-->
     <Plotly
+      ref="plotly"
       :data="transformedData"
       :layout="layout"
       :display-mode-bar="false"
@@ -10,7 +11,10 @@
     <!-- eslint-enable vue/attribute-hyphenation-->
     <b-row class="bg-light border rounded">
       <b-col>
-        <b-btn variant="outline-secondary" @click="confirmClear">Clear</b-btn>
+        <b-button variant="outline-secondary" @click="confirmClear">
+          Clear
+        </b-button>
+        <b-button variant="outline-secondary" @click="saveImg">Save</b-button>
       </b-col>
       <b-col>
         <b-button-toolbar key-nav aria-label="Toolbar with button groups">
@@ -33,6 +37,7 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex"
+// import Plotly from "plotly.js/dist/plotly-basic"
 
 export default {
   data: () => {
@@ -84,6 +89,9 @@ export default {
             this.clearState()
           }
         })
+    },
+    saveImg() {
+      this.$refs.plotly.downloadImage({ format: "svg" })
     },
     ...mapActions(["clearState", "changeMethod"]),
   },
