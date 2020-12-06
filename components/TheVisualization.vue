@@ -1,19 +1,33 @@
 <template>
-  <div v-if="data.length > 0">
+  <div v-if="transformedData.length > 0">
     <!-- eslint-disable vue/attribute-hyphenation-->
     <Plotly
-      :data="data"
+      :data="transformedData"
       :layout="layout"
       :display-mode-bar="false"
       :showTips="false"
     ></Plotly>
     <!-- eslint-enable vue/attribute-hyphenation-->
     <b-row class="bg-light border rounded">
-      <b-col
-        ><b-btn variant="outline-secondary" @click="confirmClear"
-          >Clear</b-btn
-        ></b-col
-      >
+      <b-col>
+        <b-btn variant="outline-secondary" @click="confirmClear">Clear</b-btn>
+      </b-col>
+      <b-col>
+        <b-button-toolbar key-nav aria-label="Toolbar with button groups">
+          <b-button-group class="mx-1">
+            <b-button
+              v-for="method in methods"
+              :key="method"
+              :variant="
+                currentMethod == method ? 'secondary' : 'outline-secondary'
+              "
+              @click="changeMethod({ method: method })"
+            >
+              {{ method }}
+            </b-button>
+          </b-button-group>
+        </b-button-toolbar>
+      </b-col>
     </b-row>
   </div>
 </template>
@@ -21,12 +35,17 @@
 import { mapState, mapActions } from "vuex"
 
 export default {
+  data: () => {
+    return {
+      methods: ["squiggle", "yau", "yau_bp", "randic", "qi", "gates"],
+    }
+  },
   computed: {
     layout() {
       return {
         title:
-          this.data.length === 1
-            ? `Visualization of ${this.data[0].name} via the ${this.currentMethod} method`
+          this.transformedData.length === 1
+            ? `Visualization of ${this.transformedData[0].name} via the ${this.currentMethod} method`
             : `DNA Sequence Visualization via the ${this.currentMethod} method`,
         // the default bootstrap stack font stack
         font: {
@@ -35,7 +54,7 @@ export default {
         },
       }
     },
-    data() {
+    transformedData() {
       const x = []
       for (const key in this.sequences) {
         x.push({
@@ -66,7 +85,7 @@ export default {
           }
         })
     },
-    ...mapActions(["clearState"]),
+    ...mapActions(["clearState", "changeMethod"]),
   },
 }
 </script>
