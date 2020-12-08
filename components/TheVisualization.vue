@@ -1,13 +1,12 @@
 <template>
   <div v-if="transformedData.length > 0">
     <!-- eslint-disable vue/attribute-hyphenation-->
-    <Plotly
+    <VuePlotly
       ref="plotly"
       :data="transformedData"
       :layout="layout"
-      :display-mode-bar="false"
-      :showTips="false"
-    ></Plotly>
+      :options="{ displayModeBar: false, showTips: false }"
+    ></VuePlotly>
     <!-- eslint-enable vue/attribute-hyphenation-->
     <b-row class="bg-light border rounded">
       <b-col>
@@ -37,7 +36,6 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex"
-// import Plotly from "plotly.js/dist/plotly-basic"
 
 export default {
   data: () => {
@@ -57,6 +55,19 @@ export default {
           family:
             '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !default',
         },
+        // add a watermark in the bottom right
+        annotations: [
+          {
+            text: "BD Lee, et al. (2019). DNAvisualization.org.",
+            x: 1.0,
+            y: -0.15,
+            yref: "paper",
+            xref: "paper",
+            xanchor: "right",
+            showarrow: false,
+            font: { size: 10, color: "6c757d" },
+          },
+        ],
       }
     },
     transformedData() {
@@ -91,7 +102,10 @@ export default {
         })
     },
     saveImg() {
-      this.$refs.plotly.downloadImage({ format: "svg" })
+      this.$refs.plotly.downloadImage({
+        format: "svg",
+        filename: "dnavisualization-" + new Date().toISOString(),
+      })
     },
     ...mapActions(["clearState", "changeMethod"]),
   },

@@ -1,9 +1,9 @@
 import Vue from "vue"
-import { Plotly } from "vue-plotly"
+import vPlotly from "@statnett/vue-plotly"
 
 const VuePlotly = {
   install(Vue) {
-    Vue.component("Plotly", Plotly)
+    Vue.component("VuePlotly", vPlotly)
   },
 }
 Vue.use(VuePlotly)
