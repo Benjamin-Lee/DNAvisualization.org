@@ -25,7 +25,6 @@
     "@nuxtjs/eslint-config": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.1",
     "babel-eslint": "^10.0.1",
-    "bootstrap-vue-loader": "^1.0.5",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-nuxt": ">=2.0.0",

@@ -1,5 +1,3 @@
-import BootstrapVueLoader from "bootstrap-vue-loader"
-
 export default {
   target: "static",
   ssr: true,
@@ -27,10 +25,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: [
-    "bootstrap/dist/css/bootstrap.min.css",
-    "bootstrap-vue/dist/bootstrap-vue.css",
-  ],
+  css: [],
   /*
    ** Plugins to load before mounting the App
    */
@@ -46,14 +41,31 @@ export default {
    ** Nuxt.js modules
    */
   modules: [
+    // Doc: https://bootstrap-vue.js.org
+    "bootstrap-vue/nuxt",
     // Doc: https://axios.nuxtjs.org/usage
-    // "@nuxtjs/axios",
+    "@nuxtjs/axios",
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
+  /*
+   ** Bootstrap-Vue module configuration
+   ** See https://dev.bootstrap-vue.org/docs#nuxtjs-module
+   */
+  bootstrapVue: {
+    componentPlugins: [
+      "LayoutPlugin",
+      "ModalPlugin",
+      "ButtonPlugin",
+      "ButtonGroupPlugin",
+      "NavbarPlugin",
+      "JumbotronPlugin",
+      "FormTextareaPlugin",
+    ],
+  },
   /*
    ** Build configuration
    */
@@ -67,6 +79,5 @@ export default {
     babel: {
       compact: true,
     },
-    plugins: [new BootstrapVueLoader()],
   },
 }
