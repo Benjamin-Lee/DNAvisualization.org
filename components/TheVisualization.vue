@@ -5,7 +5,7 @@
       ref="plotly"
       :data="transformedData"
       :layout="layout"
-      :options="{ displayModeBar: false, showTips: false }"
+      :options="{ displayModeBar: false, showTips: false, responsive: true }"
     ></VuePlotly>
     <!-- eslint-enable vue/attribute-hyphenation-->
     <b-row class="bg-light border rounded">
