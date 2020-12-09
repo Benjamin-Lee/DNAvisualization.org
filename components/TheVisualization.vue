@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     layout() {
-      return {
+      const result = {
         title:
           this.transformedData.length === 1
             ? `Visualization of ${this.transformedData[0].name} via the ${this.currentMethod} method`
@@ -69,6 +69,37 @@ export default {
           },
         ],
       }
+      if (this.currentMethod === "randic") {
+        result.yaxis = {
+          tickmode: "array", // If "array", the placement of the ticks is set via `tickvals` and the tick text is `ticktext`.
+          tickvals: [0, 1, 2, 3],
+          ticktext: ["A", "T", "G", "C"],
+        }
+      } else if (this.currentMethod === "qi") {
+        result.yaxis = {
+          tickmode: "array", // If "array", the placement of the ticks is set via `tickvals` and the tick text is `ticktext`.
+          tickvals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+          ticktext: [
+            "AG",
+            "GA",
+            "CT",
+            "TC",
+            "AC",
+            "CA",
+            "GT",
+            "TG",
+            "AT",
+            "TA",
+            "CG",
+            "GC",
+            "AA",
+            "CC",
+            "GG",
+            "TT",
+          ],
+        }
+      } else result.yaxis = {}
+      return result
     },
     transformedData() {
       const x = []
