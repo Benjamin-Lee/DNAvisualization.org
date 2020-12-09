@@ -19,7 +19,7 @@
     "bootstrap-vue": "^2.20.1",
     "dnaviz": "^1.0.0-0",
     "nuxt": "^2.14.10",
-    "plotly.js": "^1.58.1"
+    "plotly.js": "^1.58.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",
