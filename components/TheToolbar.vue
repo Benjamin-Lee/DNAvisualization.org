@@ -36,12 +36,18 @@ export default {
   data: () => {
     return {
       methods: {
-        squiggle: "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
-        yau: "Bases plotted along a unit vector. Captures GC skew. <var>x</var>-coordinates do not map to base position. No support for non-ATGC bases.",
-        yau_bp: "Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as base positions). No support for non-ATGC bases.",
-        randic: "Like tablature, with As, Ts, Cs, and Gs assigned a <var>y</var>-coordinate. No support for non-ATGC bases. Not recommended.",
-        qi: "Same as Randic, except with dinucleotides instead of bases. Not recommended.",
-        gates: "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
+        squiggle:
+          "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
+        yau:
+          "Bases plotted along a unit vector. Captures GC skew. <var>x</var>-coordinates do not map to base position. No support for non-ATGC bases.",
+        yau_bp:
+          "Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as base positions). No support for non-ATGC bases.",
+        randic:
+          "Like tablature, with As, Ts, Cs, and Gs assigned a <var>y</var>-coordinate. No support for non-ATGC bases. Not recommended.",
+        qi:
+          "Same as Randic, except with dinucleotides instead of bases. Not recommended.",
+        gates:
+          "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
       },
     }
   },
