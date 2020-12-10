@@ -14,17 +14,18 @@
     </p>
 
     <b-row>
-      <b-dropdown
-        split
-        split-href="#foo/bar"
-        text="Load Example"
-        class="m-2"
-        @click="transformExampleSequences"
-      >
-        <b-dropdown-item href="#">Sars-Cov2</b-dropdown-item>
-        <b-dropdown-item href="#">HDV</b-dropdown-item>
-        <b-dropdown-item href="#">HCV</b-dropdown-item>
-      </b-dropdown>
+      <b-col cols="2.5 ">
+        <b-dropdown
+          split
+          split-href="#foo/bar"
+          text="Load Example"
+          @click="transformExampleSequences"
+        >
+          <b-dropdown-item href="#">Sars-Cov2</b-dropdown-item>
+          <b-dropdown-item href="#">HDV</b-dropdown-item>
+          <b-dropdown-item href="#">HCV</b-dropdown-item>
+        </b-dropdown>
+      </b-col>
       <b-col class="pl-0">
         <b-form-file
           v-model="uploadedFile"
