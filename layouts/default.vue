@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-flex flex-column sticky-footer-wrapper min-vh-100">
     <b-navbar
       toggleable="lg"
       type="light"
@@ -44,6 +44,17 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <nuxt></nuxt>
+    <nuxt class="flex-fill"></nuxt>
+    <footer class="bg-light py-3 border-top">
+      <b-container class="text-center">
+        <span class="text-muted"
+          >©{{ new Date().getFullYear() }} IQT Labs LLC, a wholly owned research
+          venture of In-Q-Tel, Inc. This content is released under the Apache
+          2.0 License, except for the DNA and chart icons, which are licensed
+          under CC BY-ND 3.0 by Icons8.</span
+        >
+      </b-container>
+    </footer>
   </div>
 </template>
+<style></style>
