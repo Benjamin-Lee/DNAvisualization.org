@@ -43,14 +43,13 @@
       <b-button-toolbar key-nav aria-label="Toolbar with button groups">
         <b-button-group class="mx-1">
           <div v-for="(description, method) in methods" :key="method">
-            <b-tooltip :target="method" triggers="hover">
-              {{ description }}
-            </b-tooltip>
             <b-button
               :id="method"
+              v-b-tooltip.hover
               :variant="
                 currentMethod == method ? 'secondary' : 'outline-secondary'
               "
+              :title="description"
               @click="changeMethod({ method: method })"
             >
               {{ method }}

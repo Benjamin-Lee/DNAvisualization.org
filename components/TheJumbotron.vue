@@ -19,6 +19,7 @@
           split
           split-href="#foo/bar"
           text="Load Example"
+          class="ml-3 mr-3"
           @click="transformExampleSequences"
         >
           <b-dropdown-item href="#">Sars-Cov2</b-dropdown-item>
