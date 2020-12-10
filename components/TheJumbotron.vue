@@ -38,7 +38,9 @@
     </b-row>
 
     <p class="mt-3">Or paste a FASTA-formatted sequence:</p>
+    <label for="paste-sequence" class="sr-only">Paste sequence:</label>
     <b-form-textarea
+      id="paste-sequence"
       v-model="pastedSequences"
       placeholder=">Description line goes here
 ATGCAGA...

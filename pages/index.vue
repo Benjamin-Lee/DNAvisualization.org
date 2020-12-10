@@ -7,7 +7,7 @@
     <b-container class="my-5 px-md-0 px-lg-5">
       <b-row align-h="between">
         <b-col md="7" xs="12">
-          <h4>Overview</h4>
+          <h1 class="h4">Overview</h1>
           <p style="text-align: justify; text-justify: inter-word" class="mb-0">
             Raw DNA sequences, which consist of long strings of letters, are
             hard for humans to make sense of at a glance. However, there is
@@ -22,7 +22,7 @@
         <b-col md="4" class="d-flex align-items-center flex-wrap">
           <!-- <p>A Project of</p> -->
           <div class="clearfix">
-            <h6 class="text-center pb-2">Brought to you by</h6>
+            <p class="h6 text-center pb-2">Brought to you by</p>
             <a href="https://iqt.org/labs" target="_blank">
               <b-img
                 src="images/iqt-Labs-full-color_high-res.png"
