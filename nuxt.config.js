@@ -68,6 +68,7 @@ export default {
       "FormFilePlugin",
       "ImagePlugin",
       "AlertPlugin",
+      "TooltipPlugin"
     ],
   },
   /*
