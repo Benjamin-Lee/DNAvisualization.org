@@ -13,8 +13,21 @@
       within the larger container.
     </p>
 
-    <b-button variant="outline-primary" href="#">Load Example</b-button>
-    <b-button variant="outline-success" href="#">Upload File</b-button>
+    <b-row>
+      <b-col cols="2">
+        <b-button variant="outline-primary" href="#">Load Example</b-button>
+      </b-col>
+      <b-col col="4" class="pl-0">
+        <b-form-file
+          v-model="uploadedFile"
+          class="w-50"
+          placeholder="Choose a file or drop it here..."
+          drop-placeholder="Drop file here..."
+          accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt"
+        ></b-form-file>
+      </b-col>
+    </b-row>
+
     <p class="mt-3">Or paste a FASTA-formatted sequence:</p>
     <b-form-textarea
       v-model="pastedSequences"
@@ -25,14 +38,6 @@
     <b-button variant="outline-secondary" @click="transformExampleSequences">
       submit
     </b-button>
-
-    <b-form-file
-      v-model="uploadedFile"
-      :state="Boolean(uploadedFile)"
-      placeholder="Choose a file or drop it here..."
-      drop-placeholder="Drop file here..."
-      accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt"
-    ></b-form-file>
   </b-jumbotron>
 </template>
 <script>
