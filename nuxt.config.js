@@ -69,6 +69,9 @@ export default {
       "ImagePlugin",
       "AlertPlugin",
       "TooltipPlugin",
+      "FormSelectPlugin",
+      "FormInputPlugin",
+      "FormGroupPlugin"
     ],
   },
   /*

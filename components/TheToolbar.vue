@@ -4,7 +4,51 @@
       <b-button variant="outline-secondary" @click="confirmClear">
         Clear
       </b-button>
-      <b-button variant="outline-secondary" @click="saveImg">Save</b-button>
+      <b-button v-b-modal.save-modal variant="outline-secondary">Save</b-button>
+      <b-modal
+        id="save-modal"
+        title="Save Options"
+        ref="modal"
+        @show="resetModal"
+        @hidden="resetModal"
+        @ok="handleOk"
+      >
+        <form ref="form" @submit.stop.prevent="handleSubmit">
+          <b-form-group
+            label="Choose Download Type"
+            label-for="download-type"
+            invalid-feedback="Download Type is Required"
+          >
+            <b-form-select
+              v-model="downloadType"
+              id="download-type"
+              :options="fileTypeOptions"
+              size="sm"
+              class="mt-3"
+              :state="Boolean(downloadType)"
+              required
+            ></b-form-select>
+          </b-form-group>
+          <label for="width-range">Choose Width</label>
+          <b-form-input
+            id="width-range"
+            v-model="width"
+            type="range"
+            min="0"
+            max="1000"
+          ></b-form-input>
+          <div class="mt-2">Width: {{ width }}</div>
+          <label for="height-range">Choose Height</label>
+          <b-form-input
+            id="height-range"
+            v-model="height"
+            type="range"
+            min="0"
+            max="1000"
+          ></b-form-input>
+          <div class="mt-2">Width: {{ height }}</div>
+        </form>
+      </b-modal>
     </b-col>
     <b-col>
       <b-button-toolbar key-nav aria-label="Toolbar with button groups">
@@ -35,6 +79,19 @@ import { mapState, mapActions } from "vuex"
 export default {
   data: () => {
     return {
+      downloadType: null,
+      width: 800,
+      height: 600,
+      fileTypeOptions: [
+        {
+          value: null,
+          text: "-- Select a download method --",
+          disabled: true,
+        },
+        { value: "png", text: "Download as PNG" },
+        { value: "jpg", text: "Download as JPEG" },
+        { value: "svg", text: "Download as SVG" },
+      ],
       methods: {
         squiggle:
           "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
@@ -70,11 +127,30 @@ export default {
           }
         })
     },
-    saveImg() {
+    saveImg(downloadType, width, height) {
       this.$root.$refs.TheVisualization.$refs.plotly.downloadImage({
-        format: "svg",
+        format: downloadType,
+        width: width,
+        height: height,
         filename: "dnavisualization-" + new Date().toISOString(),
       })
+    },
+    handleOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault()
+      // Trigger submit handler
+      if (this.downloadType == null) {
+        return
+      }
+      this.saveImg(this.downloadType, this.width, this.height)
+      this.$nextTick(() => {
+        this.$bvModal.hide("modal-prevent-closing")
+      })
+    },
+    resetModal() {
+      this.downloadType = null
+      this.width = 800
+      this.height = 600
     },
     ...mapActions(["clearState", "changeMethod"]),
   },
