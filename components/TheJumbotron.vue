@@ -40,7 +40,10 @@
     <p class="mt-3">Or paste a FASTA-formatted sequence:</p>
     <b-form-textarea
       v-model="pastedSequences"
-      placeholder="enter sequence"
+      placeholder=">Description line goes here
+ATGCAGA...
+>Optionally, another sequence can follow
+GACGTTT..."
       rows="4"
       class="my-3"
     ></b-form-textarea>
