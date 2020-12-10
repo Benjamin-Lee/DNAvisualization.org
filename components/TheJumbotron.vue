@@ -6,7 +6,6 @@
       This is a simple hero unit, a simple jumbotron-style component for calling
       extra attention to featured content or information.
     </template>
-
     <hr class="my-4" />
 
     <p>
@@ -23,9 +22,17 @@
       rows="4"
       class="my-3"
     ></b-form-textarea>
-    <b-button variant="outline-secondary" @click="transformSequences">
+    <b-button variant="outline-secondary" @click="transformExampleSequences">
       submit
     </b-button>
+
+    <b-form-file
+      v-model="uploadedFile"
+      :state="Boolean(uploadedFile)"
+      placeholder="Choose a file or drop it here..."
+      drop-placeholder="Drop file here..."
+      accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt"
+    ></b-form-file>
   </b-jumbotron>
 </template>
 <script>
@@ -35,6 +42,7 @@ import { mapState } from "vuex"
 export default {
   data() {
     return {
+      uploadedFile: null,
       pastedSequences:
         ">NC_001653.2 Hepatitis delta virus, complete genome\nATGAGCCAAGTTCCGAACAAGGATTCGCGGGGAGGATAGATCAGCGCCCGAGAGGGGTGAGTCGGTAAAG\nAGCATTGGAACGTCGGAGATACAACTCCCAAGAAGGAAAAAAGAGAAAGCAAGAAGCGGATGAATTTCCC\nCATAACGCCAGTGAAACTCTAGGAAGGGGAAAGAGGGAAGGTGGAAGAGAAGGAGGCGGGCCTCCCGATC\nCGAGGGGCCCGGCGGCCAAGTTTGGAGGACACTCCGGCCCGAAGGGTTGAGAGTACCCCAGAGGGAGGAA\nGCCACACGGAGTAGAACAGAGAAATCACCTCCAGAGGACCCCTTCAGCGAACAGAGAGCGCATCGCGAGA\nGGGAGTAGACCATAGCGATAGGAGGGGATGCTAGGAGTTGGGGGAGACCGAAGCGAGGAGGAAAGCAAAG\nAGAGCAGCGGGGCTAGCAGGTGGGTGTTCCGCCCCCCGAGAGGGGACGAGTGAGGCTTATCCCGGGGAAC\nTCGACTTATCGTCCCCACATAGCAGACTCCCGGACCCCCTTTCAAAGTGACCGAGGGGGGTGACTTTGAA\nCATTGGGGACCAGTGGAGCCATGGGATGCTCCTCCCGATTCCGCCCAAGCTCCTTCCCCCCAAGGGTCGC\nCCAGGAATGGCGGGACCCCACTCTGCAGGGTCCGCGTTCCATCCTTTCTTACCTGATGGCCGGCATGGTC\nCCAGCCTCCTCGCTGGCGCCGGCTGGGCAACATTCCGAGGGGACCGTCCCCTCGGTAATGGCGAATGGGA\nCCCACAAATCTCTCTAGCTTCCCAGAGAGAAGCGAGAGAAAAGTGGCTCTCCCTTAGCCATCCGAGTGGA\nCGTGCGTCCTCCTTCGGATGCCCAGGTCGGACCGCGAGGAGGTGGAGATGCCATGCCGACCCGAAGAGGA\nAAGAAGGACGCGAGACGCAAACCTGCGAGTGGAAACCCGCTTTATTCACTGGGGTCGACAACTCTGGGGA\nGAGGAGGGAGGGTCGGCTGGGAAGAGTATATCCTATGGGAATCCCTGGCTTCCCCTTATGTCCAGTCCCT\nCCCCGGTCCGAGTAAAGGGGGACTCCGGGACTCCTTGCATGCTGGGGACGAAGCCGCCCCCGGGCGCTCC\nCCTCGTTCCACCTTCGAGGGGGTTCACACCCCCAACCTGCGGGCCGGCTATTCTTCTTTCCCTTCTCTCG\nTCTTCCTCGGTCAACCTCCTAAGTTCCTCTTCCTCCTCCTTGCTGAGGTTCTTTCCCCCCGCCGATAGCT\nGCTTTCTCTTGTTCTCGAGGGCCTTCCTTCGTCGGTGATCCTGCCTCTCCTTGTCGGTGAATCCTCCCCT\nGGAAGGCCTCTTCCTAGGTCCGGAGTCTACTTCCATCTGGTCCGTTCGGGCCCTCTTCGCCGGGGGAGCC\nCCCTCTCCATCCTTATCTTTCTTTCCGAGAATTCCTTTGATGTTTCCCAGCCAGGGATGTTCATCCTCAA\nGTTTCTTGATTTTCTTCTTAACCTTCCGGAGGTCTCTCTCGAGTTCCTCTAACTTCTTTCTTCCGCTCAC\nCCACTGCTCGAGAACCTCTTCTCTCCCCCCGCGGTTTTTCCTTCCTTCGGGCCGGCTCATCTTCGACTAG\nAGGCGACGGTCCTCAGTACTCTTACTCTTTTCTGTAAAGAGGAGACTGCTGGCCCTGTCGCCCAAGTTCG\nAG",
     }
@@ -45,8 +53,27 @@ export default {
     },
     ...mapState(["sequences"]),
   },
+  watch: {
+    uploadedFile(val) {
+      console.log("watching file upload")
+      if (!val) {
+        console.log("returning due to empty value")
+        return
+      }
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        for (const sequence of fastaParse(e.target.result)) {
+          this.$store.dispatch("transformSequence", {
+            description: sequence.name,
+            sequence: sequence.seq,
+          })
+        }
+      }
+      reader.readAsText(val)
+    },
+  },
   methods: {
-    transformSequences() {
+    transformExampleSequences() {
       for (const sequence of fastaParse(this.pastedSequences)) {
         this.$store.dispatch("transformSequence", {
           description: sequence.name,
