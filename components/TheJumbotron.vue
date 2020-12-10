@@ -15,9 +15,9 @@
 
     <b-row>
       <b-col cols="2">
-        <b-button variant="outline-primary" href="#">Load Example</b-button>
+        <b-button variant="outline-secondary" href="#">Load Example</b-button>
       </b-col>
-      <b-col col="4" class="pl-0">
+      <b-col class="pl-0">
         <b-form-file
           v-model="uploadedFile"
           class="w-50"
@@ -60,13 +60,15 @@ export default {
   },
   watch: {
     uploadedFile(val) {
-      console.log("watching file upload")
       if (!val) {
-        console.log("returning due to empty value")
         return
       }
       const reader = new FileReader()
       reader.onload = (e) => {
+        if (e.target.result.length === 0) {
+          this.$bvModal.msgBoxOk("This file is empty. Please try again.")
+          this.uploadedFile = null
+        }
         for (const sequence of fastaParse(e.target.result)) {
           this.$store.dispatch("transformSequence", {
             description: sequence.name,
