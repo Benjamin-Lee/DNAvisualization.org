@@ -52,12 +52,32 @@ export default {
    */
   axios: {},
   /*
+   ** Bootstrap-Vue module configuration
+   ** See https://dev.bootstrap-vue.org/docs#nuxtjs-module
+   */
+  bootstrapVue: {
+    componentPlugins: [
+      "LayoutPlugin",
+      "ModalPlugin",
+      "ButtonPlugin",
+      "ButtonGroupPlugin",
+      "NavbarPlugin",
+      "JumbotronPlugin",
+      "FormTextareaPlugin",
+    ],
+  },
+  /*
    ** Build configuration
    */
   build: {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {},
+    extend(config, ctx) {
+      config.resolve.alias["plotly.js$"] = "~/plugins/custom-plotly.js"
+    },
+    babel: {
+      compact: true,
+    },
   },
 }

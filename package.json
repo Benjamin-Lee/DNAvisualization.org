@@ -13,19 +13,20 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.3",
+    "@statnett/vue-plotly": "^0.3.2",
     "biojs-io-fasta": "^0.1.17",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.20.1",
     "dnaviz": "^1.0.0-0",
-    "nuxt": "^2.14.9",
-    "vue-plotly": "^1.1.0"
+    "nuxt": "^2.14.10",
+    "plotly.js": "^1.58.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.1",
     "babel-eslint": "^10.0.1",
     "eslint": "^7.15.0",
-    "eslint-config-prettier": "^6.15.0",
+    "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-nuxt": ">=2.0.0",
     "eslint-plugin-prettier": "^3.2.0",
     "prettier": "^2.2.1"
