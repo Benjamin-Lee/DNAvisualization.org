@@ -27,14 +27,10 @@
           <b-nav-item to="#">Contact</b-nav-item>
           <b-nav-item
             href="https://github.com/Benjamin-Lee/DNAvisualization.org"
+            target="_blank"
           >
             GitHub
           </b-nav-item>
-          <b-nav-item
-            href="https://github.com/Benjamin-Lee/DNAvisualization.org/issues/new?assignees=&amp;labels=bug&amp;template=bug_report.md&amp;title="
-            target="_blank"
-            >Report a Bug</b-nav-item
-          >
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
