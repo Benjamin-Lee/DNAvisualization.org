@@ -1,12 +1,6 @@
 <template>
   <div class="d-flex flex-column sticky-footer-wrapper min-vh-100">
-    <b-navbar
-      toggleable="lg"
-      type="light"
-      variant="light"
-      class="rounded border-bottom"
-    >
-      <!-- <b-navbar-brand href="">DNAvisualization.org</b-navbar-brand> -->
+    <b-navbar toggleable="lg" variant="light" class="rounded border-bottom">
       <b-navbar-brand to="/">
         <img
           src="/images/logo.svg"
@@ -47,7 +41,7 @@
     <nuxt class="flex-fill"></nuxt>
     <footer class="bg-light py-3 border-top">
       <b-container class="text-center">
-        <span class="text-muted"
+        <span
           >©{{ new Date().getFullYear() }} IQT Labs LLC, a wholly owned research
           venture of In-Q-Tel, Inc. This content is released under the Apache
           2.0 License, except for the DNA and chart icons, which are licensed
@@ -57,4 +51,8 @@
     </footer>
   </div>
 </template>
-<style></style>
+<style>
+.navbar-light .navbar-nav .nav-link {
+  color: #495057;
+}
+</style>
