@@ -6,15 +6,21 @@
       :data="transformedData"
       :layout="layout"
       :options="{ displayModeBar: false, showTips: false, responsive: true }"
+      @relayout="zoom"
+      @doubleclick="resetZoom"
     ></VuePlotly>
     <TheToolbar></TheToolbar>
     <!-- eslint-enable vue/attribute-hyphenation-->
   </div>
 </template>
 <script>
-import { mapState } from "vuex"
+import { mapState, mapActions } from "vuex"
+import debounce from "lodash/debounce"
 
 export default {
+  data: () => {
+    return { zoomed: false, xMin: undefined, xMax: undefined }
+  },
   computed: {
     layout() {
       const result = {
@@ -40,6 +46,7 @@ export default {
             font: { size: 10, color: "6c757d" },
           },
         ],
+        yaxis: { fixedrange: true },
       }
       if (this.currentMethod === "randic") {
         result.yaxis = {
@@ -69,16 +76,17 @@ export default {
             "GG",
             "TT",
           ],
+          ...result.yaxis,
         }
-      } else result.yaxis = {}
+      } else result.yaxis = { ...result.yaxis }
       return result
     },
     transformedData() {
       const x = []
       for (const key in this.sequences) {
         x.push({
-          x: this.sequences[key].visualization[this.currentMethod][0],
-          y: this.sequences[key].visualization[this.currentMethod][1],
+          x: this.sequences[key].overview[this.currentMethod][0],
+          y: this.sequences[key].overview[this.currentMethod][1],
           name: key,
         })
       }
@@ -89,6 +97,46 @@ export default {
   created() {
     // Allow TheToolbar to talk directly to Plotly
     this.$root.$refs.TheVisualization = this
+    this.debouncedZoom = debounce((e) => {
+      if (
+        e["xaxis.range[0]"] !== undefined &&
+        e["xaxis.range[1]"] !== undefined
+      ) {
+        if (
+          e["xaxis.range[0]"] === this.xMin &&
+          e["xaxis.range[1]"] === this.xMax
+        ) {
+          return
+        }
+        this.zoomed = true
+
+        for (const description in this.sequences) {
+          this.computeOverview({
+            description,
+            xMin: e["xaxis.range[0]"],
+            xMax: e["xaxis.range[1]"],
+          })
+        }
+        this.xMin = e["xaxis.range[0]"]
+        this.xMax = e["xaxis.range[1]"]
+      }
+    }, 50)
+  },
+  methods: {
+    zoom(e) {
+      this.debouncedZoom(e)
+    },
+    resetZoom() {
+      this.zoomed = false
+      this.xMin = undefined
+      this.xMax = undefined
+      for (const description in this.sequences) {
+        this.computeOverview({
+          description,
+        })
+      }
+    },
+    ...mapActions(["computeOverview"]),
   },
 }
 </script>

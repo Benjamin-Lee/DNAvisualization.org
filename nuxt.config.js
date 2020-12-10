@@ -61,6 +61,7 @@ export default {
       "ModalPlugin",
       "ButtonPlugin",
       "ButtonGroupPlugin",
+      "ButtonToolbarPlugin",
       "NavbarPlugin",
       "JumbotronPlugin",
       "FormTextareaPlugin",
