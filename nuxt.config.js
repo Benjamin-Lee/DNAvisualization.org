@@ -64,6 +64,7 @@ export default {
       "NavbarPlugin",
       "JumbotronPlugin",
       "FormTextareaPlugin",
+      "FormFilePlugin",
     ],
   },
   /*
