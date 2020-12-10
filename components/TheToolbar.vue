@@ -54,7 +54,7 @@ export default {
         })
     },
     saveImg() {
-      this.$refs.plotly.downloadImage({
+      this.$root.$refs.TheVisualization.$refs.plotly.downloadImage({
         format: "svg",
         filename: "dnavisualization-" + new Date().toISOString(),
       })

@@ -86,5 +86,9 @@ export default {
     },
     ...mapState(["sequences", "currentMethod"]),
   },
+  created() {
+    // Allow TheToolbar to talk directly to Plotly
+    this.$root.$refs.TheVisualization = this
+  },
 }
 </script>
