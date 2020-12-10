@@ -66,6 +66,7 @@ export default {
       "JumbotronPlugin",
       "FormTextareaPlugin",
       "FormFilePlugin",
+      "ImagePlugin",
       "AlertPlugin",
     ],
   },

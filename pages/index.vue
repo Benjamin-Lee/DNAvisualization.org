@@ -4,5 +4,51 @@
     <b-container class="mt-3">
       <TheVisualization></TheVisualization>
     </b-container>
+    <b-container class="my-5 px-md-0 px-lg-5">
+      <b-row align-h="between">
+        <b-col md="7" xs="12">
+          <h4>Overview</h4>
+          <p style="text-align: justify; text-justify: inter-word" class="mb-0">
+            Raw DNA sequences, which consist of long strings of letters, are
+            hard for humans to make sense of at a glance. However, there is
+            significant biological meaning contained within them. To reveal this
+            meaning, a number of methods have been proposed to convert raw DNA
+            sequences into two-dimensional visualizations. This website allows
+            you to try several of these methods out on your data with a
+            high-performance parallel-computing backend enabling genome-scale
+            visualization.
+          </p>
+        </b-col>
+        <b-col md="4" class="d-flex align-items-center flex-wrap">
+          <!-- <p>A Project of</p> -->
+          <div class="clearfix">
+            <h6 class="text-center pb-2">Brought to you by</h6>
+            <a href="https://iqt.org/labs" target="_blank">
+              <b-img
+                src="images/iqt-Labs-full-color_high-res.png"
+                alt="IQT Labs"
+                fluid
+              ></b-img>
+            </a>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <p class="my-4">
+            If you use this tool in your research, please cite it as:
+          </p>
+          <p class="bg-light rounded p-3 border">
+            Benjamin D. Lee, Michael A. Timony, Pablo Ruiz,
+            DNAvisualization.org: a serverless web tool for DNA sequence
+            visualization, Nucleic Acids Research, Volume 47, Issue W1, 02 July
+            2019, Pages W20–W25,
+            <a href="https://doi.org/10.1093/nar/gkz404">
+              https://doi.org/10.1093/nar/gkz404
+            </a>
+          </p>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
