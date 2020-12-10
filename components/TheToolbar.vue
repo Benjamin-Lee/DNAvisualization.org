@@ -7,25 +7,20 @@
       <b-button v-b-modal.save-modal variant="outline-secondary">Save</b-button>
       <b-modal
         id="save-modal"
-        title="Save Options"
         ref="modal"
+        title="Save Options"
         @show="resetModal"
         @hidden="resetModal"
         @ok="handleOk"
       >
         <form ref="form" @submit.stop.prevent="handleSubmit">
-          <b-form-group
-            label="Choose Download Type"
-            label-for="download-type"
-            invalid-feedback="Download Type is Required"
-          >
+          <b-form-group label="Choose Download Type" label-for="download-type">
             <b-form-select
-              v-model="downloadType"
               id="download-type"
+              v-model="downloadType"
               :options="fileTypeOptions"
               size="sm"
               class="mt-3"
-              :state="Boolean(downloadType)"
               required
             ></b-form-select>
           </b-form-group>
@@ -33,20 +28,14 @@
           <b-form-input
             id="width-range"
             v-model="width"
-            type="range"
-            min="0"
-            max="1000"
+            type="number"
           ></b-form-input>
-          <div class="mt-2">Width: {{ width }}</div>
           <label for="height-range">Choose Height</label>
           <b-form-input
             id="height-range"
             v-model="height"
-            type="range"
-            min="0"
-            max="1000"
+            type="number"
           ></b-form-input>
-          <div class="mt-2">Width: {{ height }}</div>
         </form>
       </b-modal>
     </b-col>
@@ -54,14 +43,13 @@
       <b-button-toolbar key-nav aria-label="Toolbar with button groups">
         <b-button-group class="mx-1">
           <div v-for="(description, method) in methods" :key="method">
-            <b-tooltip :target="method" triggers="hover">
-              {{ description }}
-            </b-tooltip>
             <b-button
               :id="method"
+              v-b-tooltip.hover
               :variant="
                 currentMethod == method ? 'secondary' : 'outline-secondary'
               "
+              :title="description"
               @click="changeMethod({ method: method })"
             >
               {{ method }}
@@ -80,8 +68,8 @@ export default {
   data: () => {
     return {
       downloadType: null,
-      width: 800,
-      height: 600,
+      width: null,
+      height: null,
       fileTypeOptions: [
         {
           value: null,
@@ -89,7 +77,7 @@ export default {
           disabled: true,
         },
         { value: "png", text: "Download as PNG" },
-        { value: "jpg", text: "Download as JPEG" },
+        { value: "jpeg", text: "Download as JPEG" },
         { value: "svg", text: "Download as SVG" },
       ],
       methods: {
@@ -130,8 +118,8 @@ export default {
     saveImg(downloadType, width, height) {
       this.$root.$refs.TheVisualization.$refs.plotly.downloadImage({
         format: downloadType,
-        width: width,
-        height: height,
+        width,
+        height,
         filename: "dnavisualization-" + new Date().toISOString(),
       })
     },
@@ -139,7 +127,11 @@ export default {
       // Prevent modal from closing
       bvModalEvt.preventDefault()
       // Trigger submit handler
-      if (this.downloadType == null) {
+      if (
+        this.downloadType == null ||
+        this.height == null ||
+        this.width == null
+      ) {
         return
       }
       this.saveImg(this.downloadType, this.width, this.height)
@@ -149,8 +141,8 @@ export default {
     },
     resetModal() {
       this.downloadType = null
-      this.width = 800
-      this.height = 600
+      this.width = 1000
+      this.height = 400
     },
     ...mapActions(["clearState", "changeMethod"]),
   },

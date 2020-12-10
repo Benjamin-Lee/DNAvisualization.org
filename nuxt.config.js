@@ -71,7 +71,7 @@ export default {
       "TooltipPlugin",
       "FormSelectPlugin",
       "FormInputPlugin",
-      "FormGroupPlugin"
+      "FormGroupPlugin",
     ],
   },
   /*
