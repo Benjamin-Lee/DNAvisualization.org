@@ -72,6 +72,7 @@ export default {
       "FormSelectPlugin",
       "FormInputPlugin",
       "FormGroupPlugin",
+      "FormCheckboxPlugin",
     ],
   },
   /*

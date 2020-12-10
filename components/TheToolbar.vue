@@ -4,6 +4,23 @@
       <b-button variant="outline-secondary" @click="confirmClear">
         Clear
       </b-button>
+      <b-button v-b-modal.del-modal variant="outline-secondary"
+        >Remove Files</b-button
+      >
+      <b-modal id="del-modal" title="Remove Files" variant="outline-secondary">
+        <b-form-checkbox-group
+          id="deletion-checkbox-group"
+          v-model="deleteFiles"
+        >
+          <b-form-checkbox
+            v-for="(sequence, index) in sequences"
+            :key="Object.getOwnPropertyNames(sequence)[index]"
+            :value="Object.getOwnPropertyNames(sequence)[index]"
+          >
+            {{ Object.getOwnPropertyNames(sequence)[index] }}
+          </b-form-checkbox>
+        </b-form-checkbox-group>
+      </b-modal>
       <b-button v-b-modal.save-modal variant="outline-secondary">Save</b-button>
       <b-modal
         id="save-modal"
@@ -42,19 +59,19 @@
     <b-col>
       <b-button-toolbar key-nav aria-label="Toolbar with button groups">
         <b-button-group class="mx-1">
-          <div v-for="(description, method) in methods" :key="method">
-            <b-button
-              :id="method"
-              v-b-tooltip.hover
-              :variant="
-                currentMethod == method ? 'secondary' : 'outline-secondary'
-              "
-              :title="description"
-              @click="changeMethod({ method: method })"
-            >
-              {{ method }}
-            </b-button>
-          </div>
+          <b-button
+            v-for="(description, method) in methods"
+            :id="method"
+            :key="method"
+            v-b-tooltip.hover
+            :variant="
+              currentMethod == method ? 'secondary' : 'outline-secondary'
+            "
+            :title="description"
+            @click="changeMethod({ method: method })"
+          >
+            {{ method }}
+          </b-button>
         </b-button-group>
       </b-button-toolbar>
     </b-col>
@@ -70,6 +87,7 @@ export default {
       downloadType: null,
       width: null,
       height: null,
+      deleteFiles: [],
       fileTypeOptions: [
         {
           value: null,
@@ -84,11 +102,11 @@ export default {
         squiggle:
           "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
         yau:
-          "Bases plotted along a unit vector. Captures GC skew. <var>x</var>-coordinates do not map to base position. No support for non-ATGC bases.",
+          "Bases plotted along a unit vector. Captures GC skew. x-coordinates do not map to base position. No support for non-ATGC bases.",
         yau_bp:
-          "Same as Yau but projected such that all vectors have lengths in the <var>x</var>-axis of 1 (so that <var>x</var>-coordinates are the same as base positions). No support for non-ATGC bases.",
+          "Same as Yau but projected such that all vectors have lengths in the x-axis of 1 (so that x-coordinates are the same as base positions). No support for non-ATGC bases.",
         randic:
-          "Like tablature, with As, Ts, Cs, and Gs assigned a <var>y</var>-coordinate. No support for non-ATGC bases. Not recommended.",
+          "Like tablature, with As, Ts, Cs, and Gs assigned a y-coordinate. No support for non-ATGC bases. Not recommended.",
         qi:
           "Same as Randic, except with dinucleotides instead of bases. Not recommended.",
         gates:
@@ -96,7 +114,7 @@ export default {
       },
     }
   },
-  computed: { ...mapState(["currentMethod"]) },
+  computed: { ...mapState(["sequences", "currentMethod"]) },
   methods: {
     /** Confirm with the user that they want to reset the state to default */
     confirmClear() {
