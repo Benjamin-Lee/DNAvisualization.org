@@ -19,9 +19,8 @@
             visualization.
           </p>
         </b-col>
-        <b-col md="4" class="d-flex align-items-center flex-wrap">
-          <!-- <p>A Project of</p> -->
-          <div class="clearfix">
+        <b-col md="5" lg="4" class="d-flex align-items-center flex-wrap">
+          <div class="clearfix mt-4 my-md-0">
             <p class="h6 text-center pb-2">Brought to you by</p>
             <a href="https://iqt.org/labs" target="_blank">
               <b-img
