@@ -1,6 +1,8 @@
 <template>
   <div v-if="transformedData.length > 0">
-    <!-- eslint-disable vue/attribute-hyphenation-->
+    <b-alert show variant="warning" class="d-sm-none" dismissible>
+      This web app is best used on a larger device.
+    </b-alert>
     <VuePlotly
       ref="plotly"
       :data="transformedData"
@@ -10,7 +12,6 @@
       @doubleclick="resetZoom"
     ></VuePlotly>
     <TheToolbar></TheToolbar>
-    <!-- eslint-enable vue/attribute-hyphenation-->
   </div>
 </template>
 <script>
