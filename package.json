@@ -8,7 +8,7 @@
     "asbuild": "asc plugins/assembly/index.ts -b static/optimized.wasm --sourceMap -O3",
     "dev": "npm run asbuild && nuxt",
     "start": "nuxt start",
-    "generate": "nuxt generate",
+    "generate": "npm run asbuild && nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --ignore-pattern static/ .",
     "fix": "npm run lint -- --fix"
   },
