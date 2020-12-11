@@ -14,10 +14,10 @@
         >
           <b-form-checkbox
             v-for="(sequence, index) in sequences"
-            :key="Object.getOwnPropertyNames(sequence)[index]"
-            :value="Object.getOwnPropertyNames(sequence)[index]"
+            :key="index"
+            :value="index"
           >
-            {{ Object.getOwnPropertyNames(sequence)[index] }}
+            {{ index }}
           </b-form-checkbox>
         </b-form-checkbox-group>
       </b-modal>
