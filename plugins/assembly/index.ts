@@ -363,3 +363,48 @@ export function x_randic(length: i32): Float64Array {
 
   return x_vals;
 }
+
+export function downsample(transformed: Float64Array): Float64Array {
+  const downsampleFactor = transformed.length / 1000.0
+  const overview = new Float64Array(1000)
+  for (let index = 0; index < 1000; index++) {
+    unchecked(
+      (overview[index] = transformed[i32(Math.floor(index * downsampleFactor))])
+    )
+  }
+  return overview
+}
+
+export function getOverview(
+  transformed: Float64Array,
+  xMin: i32,
+  xMax: i32,
+  coordsPerBase: i32
+): Float64Array {
+  const sliced = transformed.subarray(
+    xMin * coordsPerBase,
+    xMax * coordsPerBase + 1
+  )
+  if (sliced.length <= 1000) {
+    return sliced
+  } else {
+    return downsample(sliced)
+  }
+}
+
+export function getRangeIndices(
+  transformedX: Float64Array,
+  xMin: i32,
+  xMax: i32
+): Array<f64> {
+  const indices = new Array<f64>()
+  for (let index = 0; index < transformedX.length; index++) {
+    if (
+      xMin < unchecked(transformedX[index]) &&
+      unchecked(transformedX[index]) < xMax
+    ) {
+      indices.push(index)
+    }
+  }
+  return indices
+}

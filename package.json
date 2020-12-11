@@ -5,7 +5,8 @@
   "author": "Benjamin Lee",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "asbuild": "asc plugins/assembly/index.ts -b static/optimized.wasm --sourceMap -O3",
+    "dev": "npm run asbuild && nuxt",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --ignore-pattern static/ .",
