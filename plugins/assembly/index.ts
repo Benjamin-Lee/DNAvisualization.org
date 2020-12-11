@@ -51,8 +51,8 @@ export function squiggle(sequence: string, length: i32): Float64Array {
 
   let result = new Float64Array(4 * length + 2)
 
-  let yCoord = 0.0
-  let xCoord = 0.0
+  let yCoord: f64 = 0.0
+  let xCoord: f64 = 0.0
 
   for (let i = 0; i < length; i++) {
     unchecked((result[2 * i + 1] = xCoord + 0.5))
@@ -248,7 +248,7 @@ export function y_yau_bp(sequence: string, length: i32): Float64Array {
   sequence = sequence.toUpperCase()
 
   let y_vals = new Float64Array(length + 1)
-  let yCoord = 0.0
+  let yCoord: f64 = 0.0
   for (let i = 1; i <= length; i++) {
     switch (sequence.charCodeAt(i - 1)) {
       case 0x41: // "A"
@@ -283,10 +283,10 @@ export function yau(sequence: string, length: i32): Float64Array {
 
   let result = new Float64Array(2 * length + 2)
 
-  let onehalfsqrt3 = 3 ** 0.5 / 2
+  let onehalfsqrt3: f64 = 3 ** 0.5 / 2
 
-  let xCoord = 0.0
-  let yCoord = 0.0
+  let xCoord: f64 = 0.0
+  let yCoord: f64 = 0.0
   for (let i = 1; i <= length; i++) {
     switch (sequence.charCodeAt(i - 1)) {
       case 0x41: // "A"
@@ -365,46 +365,56 @@ export function x_randic(length: i32): Float64Array {
 }
 
 export function downsample(transformed: Float64Array): Float64Array {
-  const downsampleFactor = transformed.length / 1000.0
+  const downsampleFactor = f64(transformed.length) / f64(1000.0)
   const overview = new Float64Array(1000)
   for (let index = 0; index < 1000; index++) {
     unchecked(
-      (overview[index] = transformed[i32(Math.floor(index * downsampleFactor))])
+      (overview[index] =
+        transformed[i32(Math.floor(f64(index) * downsampleFactor))])
     )
   }
   return overview
 }
 
-export function getOverview(
+/** Compute an overview of an array.
+ *
+ * @param transformed The array to get an overview of
+ * @param xMin The low end of the x-range
+ * @param xMax The high end of the x-range
+ * @param coordsPerBase How many coordinates each base of the sequence is represented by
+ */
+export function getOverviewInRange(
   transformed: Float64Array,
-  xMin: i32,
-  xMax: i32,
+  xMin: f64,
+  xMax: f64,
   coordsPerBase: i32
 ): Float64Array {
+  // Slice the array to only contain the x-coordinates of interest
   const sliced = transformed.subarray(
-    xMin * coordsPerBase,
-    xMax * coordsPerBase + 1
+    i32(xMin) * coordsPerBase,
+    i32(xMax) * coordsPerBase + 1
   )
+
+  // Return a new array containing just the sliced region
   if (sliced.length <= 1000) {
-    return sliced
+    let x = new Float64Array(sliced.length)
+    for (let i = 0; i < sliced.length; i++) {
+      unchecked((x[i] = sliced[i]))
+    }
+    return x
   } else {
+    // Otherwise, if the range is too big, we have to downsample
     return downsample(sliced)
   }
 }
 
-export function getRangeIndices(
-  transformedX: Float64Array,
-  xMin: i32,
-  xMax: i32
-): Array<f64> {
-  const indices = new Array<f64>()
-  for (let index = 0; index < transformedX.length; index++) {
-    if (
-      xMin < unchecked(transformedX[index]) &&
-      unchecked(transformedX[index]) < xMax
-    ) {
-      indices.push(index)
-    }
+/**
+ * The same as getOverviewInRange but insensitive to
+ */
+export function getOverview(transformed: Float64Array): Float64Array {
+  if (transformed.length <= 1000) {
+    return transformed
+  } else {
+    return downsample(transformed)
   }
-  return indices
 }
