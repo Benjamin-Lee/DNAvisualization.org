@@ -12,6 +12,7 @@
     "fix": "npm run lint -- --fix"
   },
   "dependencies": {
+    "@assemblyscript/loader": "^0.17.7",
     "@nuxtjs/axios": "^5.12.3",
     "@statnett/vue-plotly": "^0.3.2",
     "biojs-io-fasta": "^0.1.17",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",
     "@nuxtjs/eslint-module": "^3.0.1",
+    "assemblyscript": "^0.17.7",
     "babel-eslint": "^10.0.1",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",

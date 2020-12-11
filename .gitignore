@@ -94,3 +94,7 @@ sw.*
 
 # Don't track generated paper files
 /paper/outfile.*
+
+# we don't want to track compiled binaries
+*.wasm
+*.wasm.map

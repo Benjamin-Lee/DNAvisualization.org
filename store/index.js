@@ -1,5 +1,6 @@
 import Vue from "vue"
 import * as dnaviz from "dnaviz"
+
 export const state = () => ({
   sequences: {},
   currentMethod: "squiggle",
@@ -35,6 +36,9 @@ export const mutations = {
   setSequences(state, sequences) {
     Vue.set(state, "sequences", sequences)
   },
+  saveFunctions(state, { functions }) {
+    state.functions = functions
+  },
 }
 
 /**
@@ -62,6 +66,8 @@ export const actions = {
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
       commit("insertSequence", { description, sequence })
     }
+    console.log("transformed with wasm", state.functions.asSquiggle(sequence))
+
     commit("insertTransformedSequence", {
       description,
       method: state.currentMethod,
@@ -148,5 +154,101 @@ export const actions = {
         })
       }
     }
+  },
+  initializeWasm({ commit }) {
+    if (!process.browser) {
+      return
+    }
+    const imports = {
+      /* imports go here */
+    }
+
+    const loader = require("@assemblyscript/loader")
+
+    loader.instantiate(fetch("/optimized.wasm"), imports).then((response) => {
+      const {
+        __retain,
+        __newString,
+        __getFloat64Array,
+        __release,
+      } = response.exports
+      const toSave = {}
+      toSave.asYau = function asYau(seq) {
+        const inStrPtr = __retain(__newString(seq))
+        const outArrPtr = response.exports.yau(inStrPtr, seq.length)
+        const resultArr = __getFloat64Array(outArrPtr)
+        __release(outArrPtr)
+        __release(inStrPtr)
+        return resultArr
+      }
+
+      toSave.asQi = function asQi(seq) {
+        const inStrPtr = __retain(__newString(seq))
+        const xPtr = response.exports.x_qi(seq.length)
+        const yPtr = response.exports.y_qi(inStrPtr, seq.length)
+        const x = __getFloat64Array(xPtr)
+        const y = __getFloat64Array(yPtr)
+        // console.log(y);
+        __release(xPtr)
+        __release(yPtr)
+        __release(inStrPtr)
+        return [x, y]
+      }
+
+      toSave.asYauBp = function asYauBp(seq) {
+        const inStrPtr = __retain(__newString(seq))
+        const xPtr = response.exports.x_yau_bp(seq.length)
+        const yPtr = response.exports.y_yau_bp(inStrPtr, seq.length)
+        const x = __getFloat64Array(xPtr)
+        const y = __getFloat64Array(yPtr)
+        __release(xPtr)
+        __release(yPtr)
+        __release(inStrPtr)
+        return [x, y]
+      }
+
+      toSave.asRandic = function asRandic(seq) {
+        const inStrPtr = __retain(__newString(seq))
+        const xPtr = response.exports.x_randic(seq.length)
+        const yPtr = response.exports.y_randic(inStrPtr, seq.length)
+        const x = __getFloat64Array(xPtr)
+        const y = __getFloat64Array(yPtr)
+        __release(xPtr)
+        __release(yPtr)
+        __release(inStrPtr)
+        return [x, y]
+      }
+
+      toSave.asSquiggleTwoArrayOutput = function asSquiggleTwoArrayOutput(seq) {
+        const inStrPtr = __retain(__newString(seq))
+        const xPtr = response.exports.x_squiggle(seq.length)
+        const yPtr = response.exports.y_squiggle(inStrPtr, seq.length)
+        const x = __getFloat64Array(xPtr)
+        const y = __getFloat64Array(yPtr)
+        __release(xPtr)
+        __release(yPtr)
+        __release(inStrPtr)
+        return [x, y]
+      }
+
+      toSave.asSquiggle = function asSquiggle(seq) {
+        const inStrPtr = __retain(__newString(seq))
+        const outArrPtr = response.exports.squiggle(inStrPtr, seq.length)
+        const resultArr = __getFloat64Array(outArrPtr)
+        __release(outArrPtr)
+        __release(inStrPtr)
+        return resultArr
+      }
+
+      toSave.asGates = function asGates(seq) {
+        const inStrPtr = __retain(__newString(seq))
+        const outArrPtr = response.exports.gates(inStrPtr, seq.length)
+        const resultArr = __getFloat64Array(outArrPtr)
+        __release(outArrPtr)
+        __release(inStrPtr)
+        return resultArr
+      }
+      commit("saveFunctions", { functions: toSave })
+    })
   },
 }
