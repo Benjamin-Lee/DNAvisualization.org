@@ -364,6 +364,67 @@ export function x_randic(length: i32): Float64Array {
   return x_vals
 }
 
+export function x_yau_int(maxPoints: i32, xMin: i32, xMax: i32): Int32Array {
+  let result = new Int32Array(maxPoints)
+  const downsampleFactor = f64(xMax - xMin) / f64(1000.0)
+  let runningValue = 0
+
+  for (let i = 0; i < 1000; i++) {
+    result[i] = xMin + i32(Math.floor(f64(i) * downsampleFactor))
+  }
+  return result
+}
+
+export function y_yau_int(
+  sequence: string,
+  length: i32,
+  maxPoints: i32,
+  xMin: i32,
+  xMax: i32,
+  lastX: i32,
+  lastY: i32
+): Int32Array {
+  const result = new Int32Array(length < maxPoints ? length : maxPoints)
+  const downsampleFactor = f64(xMax - xMin + 1) / 1000.0
+  let runningValue = lastY
+
+  let insertedPoints: i32 = 0
+
+  for (let i = lastX; i < xMax - lastX; i++) {
+    switch (sequence.charCodeAt(i)) {
+      case 0x41: // "A"
+        runningValue -= 2
+        break
+      case 0x43: // "C"
+        runningValue += 1
+        break
+      case 0x54:
+      case 0x55: // "T" && "U"
+        runningValue += 2
+        break
+      case 0x47: // "G"
+        runningValue -= 1
+        break
+      default:
+        throw new Error("non-atgcu base")
+    }
+    if (i < xMin) {
+      continue
+    } else if (
+      (maxPoints < length &&
+        i - xMin === Math.floor(insertedPoints * downsampleFactor)) ||
+      length < maxPoints
+    ) {
+      unchecked((result[insertedPoints] = runningValue))
+      // if (insertedPoints === maxPoints) {
+      //   return result
+      // }
+      insertedPoints += 1
+    }
+  }
+  return result
+}
+
 export function downsample(transformed: Float64Array): Float64Array {
   const downsampleFactor = f64(transformed.length) / f64(1000.0)
   const overview = new Float64Array(1000)
