@@ -52,13 +52,9 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex"
 export default {
-  methods: {
-    ...mapActions(["initializeWasm"]),
-  },
   created() {
-    this.initializeWasm()
+    this.$store.dispatch("wasm/instantiate")
   },
 }
 </script>

@@ -3,7 +3,7 @@ import Vue from "vue"
 
 export const state = () => ({
   sequences: {},
-  currentMethod: "squiggle",
+  currentMethod: "yau_bp",
 })
 
 export const mutations = {
@@ -21,11 +21,14 @@ export const mutations = {
   /**
    * Given a sequence already in `state`, save its transformed coordinates for the given method.
    */
-  insertTransformedSequence(state, { description, method, xPtr, yPtr }) {
-    Vue.set(state.sequences[description].visualization, [method], {
-      xPtr,
-      yPtr,
-    })
+  insertTransformedSequence(state, { description, method, xPtr, yPtr, arr }) {
+    if (xPtr !== undefined && yPtr !== undefined) {
+      state.sequences[description].visualization[method] = { xPtr, yPtr }
+    } else if (arr !== undefined) {
+      state.sequences[description].visualization[method] = arr
+    } else {
+      throw new Error("Didn't get ptrs or array")
+    }
   },
   updateOverview(state, { description, method, overview }) {
     Vue.set(state.sequences[description].overview, [method], overview)
@@ -38,9 +41,6 @@ export const mutations = {
    */
   setSequences(state, sequences) {
     Vue.set(state, "sequences", sequences)
-  },
-  savewasm(state, { wasm }) {
-    state.wasm = wasm
   },
 }
 
@@ -56,13 +56,7 @@ export const actions = {
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
       commit("insertSequence", { description, sequence })
     }
-    const ptrs = state.wasm[state.currentMethod](sequence)
-    commit("insertTransformedSequence", {
-      description,
-      method: state.currentMethod,
-      xPtr: ptrs[0],
-      yPtr: ptrs[1],
-    })
+    dispatch("wasm/transform", { description, sequence })
     dispatch("computeOverview", { description })
   },
   computeOverview({ commit, state }, { description, xMin, xMax }) {
@@ -123,86 +117,5 @@ export const actions = {
         })
       }
     }
-  },
-  initializeWasm({ commit }) {
-    if (!process.browser) {
-      return
-    }
-    const imports = {}
-
-    const loader = require("@assemblyscript/loader")
-
-    loader.instantiate(fetch("/optimized.wasm"), imports).then((response) => {
-      const {
-        __retain,
-        __newString,
-        __getFloat64Array,
-        __release,
-      } = response.exports
-      const wasm = {}
-      wasm.asYau = function asYau(seq) {
-        const inStrPtr = __retain(__newString(seq))
-        const outArrPtr = response.exports.yau(inStrPtr, seq.length)
-        const resultArr = __getFloat64Array(outArrPtr)
-        // __release(outArrPtr)
-        __release(inStrPtr)
-        return resultArr
-      }
-      wasm.qi = function asQi(seq) {
-        const inStrPtr = __retain(__newString(seq))
-        const xPtr = response.exports.x_qi(seq.length)
-        const yPtr = response.exports.y_qi(inStrPtr, seq.length)
-        __release(inStrPtr)
-        return [xPtr, yPtr]
-      }
-      wasm.yau_bp = function asYauBp(seq) {
-        const inStrPtr = __retain(__newString(seq))
-        const xPtr = response.exports.x_yau_bp(seq.length)
-        const yPtr = response.exports.y_yau_bp(inStrPtr, seq.length)
-        __release(inStrPtr)
-        return [xPtr, yPtr]
-      }
-      wasm.randic = function asRandic(seq) {
-        const inStrPtr = __retain(__newString(seq))
-        const xPtr = response.exports.x_randic(seq.length)
-        const yPtr = response.exports.y_randic(inStrPtr, seq.length)
-        __release(inStrPtr)
-        return [xPtr, yPtr]
-      }
-      wasm.squiggle = function asSquiggle(seq) {
-        const inStrPtr = __retain(__newString(seq))
-        const xPtr = response.exports.x_squiggle(seq.length)
-        const yPtr = response.exports.y_squiggle(inStrPtr, seq.length)
-        __release(inStrPtr)
-        return [xPtr, yPtr]
-      }
-      wasm.downsample = function downsample(arrPtr) {
-        const downsampledArrPtr = response.exports.downsample(arrPtr)
-        const resultArr = __getFloat64Array(downsampledArrPtr)
-        __release(downsampledArrPtr)
-        return resultArr
-      }
-      wasm.getOverview = function getOverview(
-        arrPtr,
-        xMin,
-        xMax,
-        coordsPerBase
-      ) {
-        const overviewArrPtr =
-          xMin !== undefined && xMax !== undefined
-            ? response.exports.getOverviewInRange(
-                arrPtr,
-                xMin,
-                xMax,
-                coordsPerBase
-              )
-            : response.exports.getOverview(arrPtr)
-
-        const resultArr = __getFloat64Array(overviewArrPtr)
-        __release(overviewArrPtr)
-        return resultArr
-      }
-      commit("savewasm", { wasm })
-    })
   },
 }
