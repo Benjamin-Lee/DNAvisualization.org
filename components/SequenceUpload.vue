@@ -6,6 +6,7 @@
       placeholder="Choose File"
       drop-placeholder="Drop file here..."
       accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt"
+      :file-name-formatter="placeholderText"
     ></b-form-file>
   </div>
 </template>
@@ -39,6 +40,11 @@ export default {
       reader.readAsText(val)
     },
   },
+  methods: {
+    placeholderText(files) {
+      return `Choose File`
+    }
+  }
 }
 </script>
 
