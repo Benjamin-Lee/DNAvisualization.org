@@ -51,10 +51,3 @@
     </b-container>
   </div>
 </template>
-<script>
-export default {
-  created() {
-    this.$store.dispatch("wasm/instantiate")
-  },
-}
-</script>

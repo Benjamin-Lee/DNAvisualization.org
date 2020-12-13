@@ -154,4 +154,8 @@ export const actions = {
       }
     }
   },
+  /** On page load, set up WASM */
+  nuxtClientInit({ dispatch }) {
+    dispatch("wasm/instantiate")
+  },
 }

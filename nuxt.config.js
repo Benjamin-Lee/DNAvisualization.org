@@ -48,6 +48,7 @@ export default {
     "bootstrap-vue/nuxt",
     // Doc: https://axios.nuxtjs.org/usage
     "@nuxtjs/axios",
+    "nuxt-client-init-module",
   ],
   /*
    ** Axios module configuration
