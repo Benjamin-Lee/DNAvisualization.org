@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "asbuild:untouched": "asc index.ts --target debug",
+    "asbuild:optimized": "asc index.ts --target release",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
+  },
+  "dependencies": {
+    "@assemblyscript/loader": "^0.17.7"
+  },
+  "devDependencies": {
+    "assemblyscript": "^0.17.7"
+  }
+}

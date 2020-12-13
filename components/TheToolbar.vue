@@ -113,6 +113,7 @@ export default {
           "Same as Randic, except with dinucleotides instead of bases. Not recommended.",
         gates:
           "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
+        yau_int: "experimental",
       },
     }
   },

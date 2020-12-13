@@ -1,8 +1,9 @@
 import Vue from "vue"
-import * as dnaviz from "dnaviz"
+// import * as dnaviz from "dnaviz"
+
 export const state = () => ({
   sequences: {},
-  currentMethod: "squiggle",
+  currentMethod: "yau_int",
 })
 
 export const mutations = {
@@ -20,8 +21,14 @@ export const mutations = {
   /**
    * Given a sequence already in `state`, save its transformed coordinates for the given method.
    */
-  insertTransformedSequence(state, { description, method, visualization }) {
-    Vue.set(state.sequences[description].visualization, [method], visualization)
+  insertTransformedSequence(state, { description, method, xPtr, yPtr, arr }) {
+    if (xPtr !== undefined && yPtr !== undefined) {
+      state.sequences[description].visualization[method] = { xPtr, yPtr }
+    } else if (arr !== undefined) {
+      state.sequences[description].visualization[method] = arr
+    } else {
+      throw new Error("Didn't get ptrs or array")
+    }
   },
   updateOverview(state, { description, method, overview }) {
     Vue.set(state.sequences[description].overview, [method], overview)
@@ -38,12 +45,12 @@ export const mutations = {
 }
 
 /**
- * Downsample the array to hold 1,000 points
+ * Downsample a pair of arrays to hold n points
  */
-function downsample(transformed) {
-  const downsampleFactor = transformed[0].length / 1000
-  const overview = [new Array(1000), new Array(1000)]
-  for (let index = 0; index < 1000; index++) {
+function downsample(transformed, nPoints) {
+  const downsampleFactor = transformed[0].length / nPoints
+  const overview = [new Array(nPoints), new Array(nPoints)]
+  for (let index = 0; index < nPoints; index++) {
     overview[0][index] = transformed[0][Math.floor(index * downsampleFactor)]
     overview[1][index] = transformed[1][Math.floor(index * downsampleFactor)]
   }
@@ -59,64 +66,61 @@ export const actions = {
   // TODO: add a check to prevent duplicate transformation
   transformSequence({ commit, state, dispatch }, { description, sequence }) {
     // We need to check that
+    sequence = sequence.toUpperCase()
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
       commit("insertSequence", { description, sequence })
     }
-    commit("insertTransformedSequence", {
-      description,
-      method: state.currentMethod,
-      visualization: dnaviz[state.currentMethod](sequence),
-    })
+    dispatch("wasm/transform", { description, sequence })
     dispatch("computeOverview", { description })
   },
   computeOverview({ commit, state }, { description, xMin, xMax }) {
     let visualization =
       state.sequences[description].visualization[state.currentMethod]
 
-    // In this case, we're trying to compute the overview of the sequence in a given range
+    // We're zooming in
     if (xMin !== undefined && xMax !== undefined) {
-      let inRange
-
-      // squiggle uses two points per base pair
-      if (state.currentMethod === "squiggle") {
-        inRange = [
-          visualization[0].slice(xMin * 2, xMax * 2 + 1),
-          visualization[1].slice(xMin * 2, xMax * 2 + 1),
-        ]
+      // first, we need to find how many points we've already saved in the range
+      const inRange = [[], []]
+      for (let i = 0; i < visualization[0].length; i++) {
+        if (xMin < visualization[0][i] && visualization[0][i] < xMax) {
+          inRange[0].push(visualization[0][i])
+          inRange[1].push(visualization[1][i])
+        } else if (visualization[0][i] > xMax) {
+          break
+        }
       }
-      // These are a one-to-one mapping from bp to coordinate
-      else if (["yau_bp", "qi", "randic"].includes(state.currentMethod)) {
-        inRange = [
-          visualization[0].slice(xMin, xMax + 1),
-          visualization[1].slice(xMin, xMax + 1),
-        ]
-      }
-      // For these, the x-range does tell you how many points to expect
-      else {
-        inRange = [[], []]
-        for (let index = 0; index < visualization[0].length; index++) {
-          if (
-            xMin < visualization[0][index] &&
-            visualization[0][index] < xMax
-          ) {
-            inRange[0].push(visualization[0][index])
-            inRange[1].push(visualization[1][index])
-          }
-
-          // For Gates, we don't even know if that's the last x coord to expect
-          if (visualization[0][index] > xMax && state.currentMethod === "yau") {
-            break
-          }
+      // if we have more than 1k points, we're good to downsample
+      // if not, we need to compute points in the x range
+      if (inRange[0].length < 1000) {
+        // get the subsequence in the range
+        const seqInRange = state.sequences[description].sequence.slice(
+          Math.floor(xMin),
+          Math.floor(xMax)
+        )
+        // transform it
+        // TODO: downsample to 10k before reading
+        const ptrs = state.wasm[state.currentMethod](seqInRange)
+        if (state.currentMethod === "yau_int") {
+          inRange[0] = state.wasm.getInt32Array(ptrs[0])
+          inRange[1] = state.wasm.getInt32Array(ptrs[1])
+        } else {
+          inRange[0] = state.wasm.getFloat64Array(ptrs[0])
+          inRange[1] = state.wasm.getFloat64Array(ptrs[1])
+        }
+        // don't forget to free memory!
+        ptrs.forEach((ptr) => state.wasm.release(ptr))
+        // fix the x offset
+        for (let i = 0; i < inRange[0].length; i++) {
+          inRange[0][i] += Math.floor(xMin)
         }
       }
       visualization = inRange
     }
-
-    // If there are still too many data points, downsample
+    // if we have too many points, downsample
     const overview =
-      visualization[0].length < 1000 || state.currentMethod === "gates"
-        ? visualization
-        : downsample(visualization)
+      visualization[0].length > 1000
+        ? downsample(visualization, 1000)
+        : visualization
 
     commit("updateOverview", {
       description,
@@ -125,8 +129,9 @@ export const actions = {
     })
   },
   /** Resets the state of the application to default */
-  clearState({ commit }) {
+  clearState({ commit, dispatch }) {
     commit("setSequences", {})
+    dispatch("wasm/instantiate")
   },
   /**
    * Change the current visualization method.
@@ -148,5 +153,9 @@ export const actions = {
         })
       }
     }
+  },
+  /** On page load, set up WASM */
+  nuxtClientInit({ dispatch }) {
+    dispatch("wasm/instantiate")
   },
 }

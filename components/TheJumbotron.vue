@@ -67,6 +67,30 @@ export default {
     },
     ...mapState(["sequences"]),
   },
+  watch: {
+    uploadedFile(val) {
+      if (!val) {
+        return
+      }
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        if (e.target.result.length === 0 && e.target.result.total === 0) {
+          this.$bvModal.msgBoxOk("This file is empty. Please try again.")
+          this.uploadedFile = null
+        } else if (e.target.result.length === 0) {
+          this.$bvModal.msgBoxOk("This file is too large to be parsed.")
+          this.uploadedFile = null
+        }
+        for (const sequence of fastaParse(e.target.result)) {
+          this.$store.dispatch("transformSequence", {
+            description: sequence.name,
+            sequence: sequence.seq,
+          })
+        }
+      }
+      reader.readAsText(val)
+    },
+  },
   methods: {
     transformPastedSequences() {
       for (const sequence of fastaParse(this.pastedSequences)) {
