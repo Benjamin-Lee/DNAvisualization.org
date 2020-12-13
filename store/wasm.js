@@ -1,8 +1,4 @@
-// const MAX_MEMORY_BITS = 1 * 10 ** 8 * 2 * 64 + 1 * 10 ** 8 * 16 // determined by 100M base sequence working with 2 f64s per base
-
-export const state = () => ({
-  // bitsStored: 0,
-})
+export const state = () => ({})
 
 export const mutations = {
   saveFunctions(state, { wasm }) {
@@ -10,12 +6,6 @@ export const mutations = {
       state[key] = wasm[key]
     }
   },
-  // incBits(state, { bits }) {
-  //   state.bitsStored += bits
-  // },
-  // decBits(state, { bits }) {
-  //   state.bitsStored -= bits
-  // },
 }
 
 export const actions = {
