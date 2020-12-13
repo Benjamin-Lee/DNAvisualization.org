@@ -1,6 +1,6 @@
 <template>
   <b-row class="bg-light border rounded">
-    <b-col>
+    <b-col cols="7">
       <b-button variant="outline-secondary" @click="confirmClear">
         Clear
       </b-button>
@@ -14,10 +14,10 @@
         >
           <b-form-checkbox
             v-for="(sequence, index) in sequences"
-            :key="Object.getOwnPropertyNames(sequence)[index]"
-            :value="Object.getOwnPropertyNames(sequence)[index]"
+            :key="index"
+            :value="index"
           >
-            {{ Object.getOwnPropertyNames(sequence)[index] }}
+            {{ index }}
           </b-form-checkbox>
         </b-form-checkbox-group>
       </b-modal>
@@ -55,6 +55,7 @@
           ></b-form-input>
         </form>
       </b-modal>
+      <SequenceUpload></SequenceUpload>
     </b-col>
     <b-col>
       <b-button-toolbar key-nav aria-label="Toolbar with button groups">
@@ -80,8 +81,9 @@
 
 <script>
 import { mapState, mapActions } from "vuex"
-
+import SequenceUpload from "./SequenceUpload"
 export default {
+  components: { SequenceUpload },
   data: () => {
     return {
       downloadType: null,
