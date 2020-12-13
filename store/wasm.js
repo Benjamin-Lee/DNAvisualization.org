@@ -73,24 +73,11 @@ export const actions = {
         return [xPtr, yPtr]
       }
       wasm.yau_int = function yauInt(seq, xMin, xMax) {
-        console.log(
-          __getInt32Array(response.exports.x_yau_int(1000, xMin, xMax))
-        )
         const inStrPtr = __retain(__newString(seq))
-
-        console.log(
-          __getInt32Array(
-            response.exports.y_yau_int(
-              inStrPtr,
-              seq.length,
-              1000,
-              xMin,
-              xMax,
-              0,
-              0
-            )
-          )
-        )
+        const xPtr = response.exports.x_yau_int(seq.length)
+        const yPtr = response.exports.y_yau_int(inStrPtr, seq.length)
+        __release(inStrPtr)
+        return [xPtr, yPtr]
       }
       wasm.downsample = function downsample(arrPtr) {
         const downsampledArrPtr = response.exports.downsample(arrPtr)
@@ -102,8 +89,24 @@ export const actions = {
         arrPtr,
         xMin,
         xMax,
-        coordsPerBase
+        coordsPerBase,
+        method
       ) {
+        if (method === "yau_int") {
+          const overviewArrPtr =
+            xMin !== undefined && xMax !== undefined
+              ? response.exports.getOverviewInRange_i32(
+                  arrPtr,
+                  xMin,
+                  xMax,
+                  coordsPerBase
+                )
+              : response.exports.getOverview_i32(arrPtr)
+
+          const resultArr = __getInt32Array(overviewArrPtr)
+          __release(overviewArrPtr)
+          return resultArr
+        }
         const overviewArrPtr =
           xMin !== undefined && xMax !== undefined
             ? response.exports.getOverviewInRange(

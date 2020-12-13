@@ -364,33 +364,23 @@ export function x_randic(length: i32): Float64Array {
   return x_vals
 }
 
-export function x_yau_int(maxPoints: i32, xMin: i32, xMax: i32): Int32Array {
-  let result = new Int32Array(maxPoints)
-  const downsampleFactor = f64(xMax - xMin) / f64(1000.0)
-  let runningValue = 0
+export function x_yau_int(length: i32): Int32Array {
+  let x_vals = new Int32Array(length + 1)
+  let xCoord: i32 = 0
 
-  for (let i = 0; i < 1000; i++) {
-    result[i] = xMin + i32(Math.floor(f64(i) * downsampleFactor))
+  for (let i = 0; i < length; i++) {
+    unchecked((x_vals[i] = xCoord))
+    xCoord++
   }
-  return result
+
+  return x_vals
 }
 
-export function y_yau_int(
-  sequence: string,
-  length: i32,
-  maxPoints: i32,
-  xMin: i32,
-  xMax: i32,
-  lastX: i32,
-  lastY: i32
-): Int32Array {
-  const result = new Int32Array(length < maxPoints ? length : maxPoints)
-  const downsampleFactor = f64(xMax - xMin + 1) / 1000.0
-  let runningValue = lastY
+export function y_yau_int(sequence: string, length: i32): Int32Array {
+  const result = new Int32Array(length + 1)
+  let runningValue = 0
 
-  let insertedPoints: i32 = 0
-
-  for (let i = lastX; i < xMax - lastX; i++) {
+  for (let i = 0; i < length; i++) {
     switch (sequence.charCodeAt(i)) {
       case 0x41: // "A"
         runningValue -= 2
@@ -408,19 +398,8 @@ export function y_yau_int(
       default:
         throw new Error("non-atgcu base")
     }
-    if (i < xMin) {
-      continue
-    } else if (
-      (maxPoints < length &&
-        i - xMin === Math.floor(insertedPoints * downsampleFactor)) ||
-      length < maxPoints
-    ) {
-      unchecked((result[insertedPoints] = runningValue))
-      // if (insertedPoints === maxPoints) {
-      //   return result
-      // }
-      insertedPoints += 1
-    }
+
+    unchecked((result[i + 1] = runningValue))
   }
   return result
 }
@@ -428,6 +407,17 @@ export function y_yau_int(
 export function downsample(transformed: Float64Array): Float64Array {
   const downsampleFactor = f64(transformed.length) / f64(1000.0)
   const overview = new Float64Array(1000)
+  for (let index = 0; index < 1000; index++) {
+    unchecked(
+      (overview[index] =
+        transformed[i32(Math.floor(f64(index) * downsampleFactor))])
+    )
+  }
+  return overview
+}
+export function downsample_i32(transformed: Int32Array): Int32Array {
+  const downsampleFactor = f64(transformed.length) / f64(1000.0)
+  const overview = new Int32Array(1000)
   for (let index = 0; index < 1000; index++) {
     unchecked(
       (overview[index] =
@@ -468,6 +458,30 @@ export function getOverviewInRange(
     return downsample(sliced)
   }
 }
+export function getOverviewInRange_i32(
+  transformed: Int32Array,
+  xMin: f64,
+  xMax: f64,
+  coordsPerBase: i32
+): Int32Array {
+  // Slice the array to only contain the x-coordinates of interest
+  const sliced = transformed.subarray(
+    i32(xMin) * coordsPerBase,
+    i32(xMax) * coordsPerBase + 1
+  )
+
+  // Return a new array containing just the sliced region
+  if (sliced.length <= 1000) {
+    let x = new Int32Array(sliced.length)
+    for (let i = 0; i < sliced.length; i++) {
+      unchecked((x[i] = sliced[i]))
+    }
+    return x
+  } else {
+    // Otherwise, if the range is too big, we have to downsample
+    return downsample_i32(sliced)
+  }
+}
 
 /**
  * The same as getOverviewInRange but insensitive to
@@ -477,5 +491,12 @@ export function getOverview(transformed: Float64Array): Float64Array {
     return transformed
   } else {
     return downsample(transformed)
+  }
+}
+export function getOverview_i32(transformed: Int32Array): Int32Array {
+  if (transformed.length <= 1000) {
+    return transformed
+  } else {
+    return downsample_i32(transformed)
   }
 }

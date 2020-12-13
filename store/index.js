@@ -3,7 +3,7 @@ import Vue from "vue"
 
 export const state = () => ({
   sequences: {},
-  currentMethod: "yau_bp",
+  currentMethod: "yau_int",
 })
 
 export const mutations = {
@@ -53,6 +53,7 @@ export const actions = {
   // TODO: add a check to prevent duplicate transformation
   transformSequence({ commit, state, dispatch }, { description, sequence }) {
     // We need to check that
+    sequence = sequence.toUpperCase()
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
       commit("insertSequence", { description, sequence })
     }
@@ -60,37 +61,28 @@ export const actions = {
     dispatch("computeOverview", { description })
   },
   computeOverview({ commit, state }, { description, xMin, xMax }) {
-    let visualization =
+    const visualization =
       state.sequences[description].visualization[state.currentMethod]
-    // In this case, we're trying to compute the overview of the sequence in a given range
-    if (xMin !== undefined && xMax !== undefined) {
-      let inRange
-
-      // squiggle uses two points per base pair
-      if (state.currentMethod === "squiggle") {
-        inRange = [
-          state.wasm.getOverview(visualization.xPtr, xMin, xMax, 2),
-          state.wasm.getOverview(visualization.yPtr, xMin, xMax, 2),
-        ]
-      }
-      // These are a one-to-one mapping from bp to coordinate
-      else if (["yau_bp", "qi", "randic"].includes(state.currentMethod)) {
-        inRange = [
-          state.wasm.getOverview(visualization.xPtr, xMin, xMax, 1),
-          state.wasm.getOverview(visualization.yPtr, xMin, xMax, 1),
-        ]
-      }
-      visualization = inRange
-    } else {
-      visualization = [
-        state.wasm.getOverview(visualization.xPtr),
-        state.wasm.getOverview(visualization.yPtr),
-      ]
-    }
+    const overview = [
+      state.wasm.getOverview(
+        visualization.xPtr,
+        xMin,
+        xMax,
+        state.currentMethod === "squiggle" ? 2 : 1,
+        state.currentMethod
+      ),
+      state.wasm.getOverview(
+        visualization.yPtr,
+        xMin,
+        xMax,
+        state.currentMethod === "squiggle" ? 2 : 1,
+        state.currentMethod
+      ),
+    ]
     commit("updateOverview", {
       description,
       method: state.currentMethod,
-      overview: visualization,
+      overview,
     })
   },
   /** Resets the state of the application to default */
