@@ -42,9 +42,9 @@ export default {
   },
   methods: {
     placeholderText(files) {
-      return `Choose File`
-    }
-  }
+      return `Choose a file or drop it here...`
+    },
+  },
 }
 </script>
 
