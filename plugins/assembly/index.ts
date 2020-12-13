@@ -368,7 +368,7 @@ export function x_yau_int(length: i32): Int32Array {
   let x_vals = new Int32Array(length + 1)
   let xCoord: i32 = 0
 
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < length + 1; i++) {
     unchecked((x_vals[i] = xCoord))
     xCoord++
   }
