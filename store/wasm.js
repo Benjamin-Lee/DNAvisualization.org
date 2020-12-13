@@ -79,19 +79,7 @@ export const actions = {
         __release(inStrPtr)
         return [xPtr, yPtr]
       }
-      wasm.downsample = function downsample(arrPtr) {
-        const downsampledArrPtr = response.exports.downsample(arrPtr)
-        const resultArr = __getFloat64Array(downsampledArrPtr)
-        __release(downsampledArrPtr)
-        return resultArr
-      }
-      wasm.getOverview = function getOverview(
-        arrPtr,
-        xMin,
-        xMax,
-        coordsPerBase,
-        method
-      ) {
+      wasm.getOverview = function getOverview(arrPtr, xMin, xMax, method) {
         if (method === "yau_int") {
           const overviewArrPtr =
             xMin !== undefined && xMax !== undefined
@@ -99,7 +87,7 @@ export const actions = {
                   arrPtr,
                   xMin,
                   xMax,
-                  coordsPerBase
+                  method === "squiggle" ? 2 : 1
                 )
               : response.exports.getOverview_i32(arrPtr)
 
@@ -113,7 +101,7 @@ export const actions = {
                 arrPtr,
                 xMin,
                 xMax,
-                coordsPerBase
+                method === "squiggle" ? 2 : 1
               )
             : response.exports.getOverview(arrPtr)
 
@@ -122,64 +110,31 @@ export const actions = {
         return resultArr
       }
       wasm.getFloat64Array = __getFloat64Array
+      wasm.getInt32Array = __getInt32Array
+
       wasm.release = __release
       commit("saveFunctions", { wasm })
     })
   },
-  moveFromLinearMemory({ rootState, commit }, { description, method }) {
-    const ptrs = rootState.sequences[description].visualization[method]
-    const arr = [
-      rootState.wasm.getFloat64Array(ptrs.xPtr),
-      rootState.wasm.getFloat64Array(ptrs.yPtr),
-    ]
-    commit(
-      "insertTransformedSequence",
-      { description, method, arr },
-      { root: true }
+  transform({ commit, dispatch, rootState, state }, { description }) {
+    // perform the transformation
+    const ptrs = state[rootState.currentMethod](
+      rootState.sequences[description].sequence
     )
-    rootState.wasm.release(ptrs.xPtr)
-    rootState.wasm.release(ptrs.yPtr)
-  },
-  // collect({ rootState, commit, dispatch }, { bitsNeeded }) {
-  //   let bitsFreed = 0
-
-  //   // first, try to remove all of the visualizations for methods not in use
-  //   for (const description in rootState.sequences) {
-  //     for (const method in rootState.sequences[description].visualization) {
-  //       if (method !== rootState.currentMethod) {
-  //         console.log("evicting", description, method)
-  //         dispatch("moveFromLinearMemory", { description, method })
-
-  //         bitsFreed += rootState.sequences[description].sequence.length * 2 * 64
-  //         if (bitsFreed >= bitsNeeded) {
-  //           return
-  //         }
-  //       }
-  //     }
-  //   }
-  // },
-  transform({ commit, dispatch, rootState, state }, { description, sequence }) {
-    // if (
-    //   state.bitsStored + 2 * sequence.length * 64 + sequence.length * 16 >
-    //   MAX_MEMORY_BITS
-    // ) {
-    //   console.log("collecting")
-    //   dispatch("collect", {
-    //     bitsNeeded: 2 * sequence.length * 64 + sequence.length * 16,
-    //   })
-    // }
-    // commit("incBits", { bits: 2 * sequence.length * 64 })
-    const ptrs = state[rootState.currentMethod](sequence)
+    // get a 10k element overview of the sequence
+    const downsampled = [
+      state.getOverview(ptrs[0], undefined, undefined, rootState.currentMethod),
+      state.getOverview(ptrs[1], undefined, undefined, rootState.currentMethod),
+    ]
+    ptrs.forEach((ptr) => state.release(ptr))
     commit(
       "insertTransformedSequence",
       {
         description,
         method: rootState.currentMethod,
-        xPtr: ptrs[0],
-        yPtr: ptrs[1],
+        arr: downsampled,
       },
       { root: true }
     )
-    // state.yau_int(sequence, 0, sequence.length)
   },
 }

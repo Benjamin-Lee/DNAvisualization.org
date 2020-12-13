@@ -404,10 +404,13 @@ export function y_yau_int(sequence: string, length: i32): Int32Array {
   return result
 }
 
-export function downsample(transformed: Float64Array): Float64Array {
-  const downsampleFactor = f64(transformed.length) / f64(1000.0)
-  const overview = new Float64Array(1000)
-  for (let index = 0; index < 1000; index++) {
+export function downsample(
+  transformed: Float64Array,
+  nPoints: i32
+): Float64Array {
+  const downsampleFactor = f64(transformed.length) / f64(nPoints)
+  const overview = new Float64Array(nPoints)
+  for (let index = 0; index < nPoints; index++) {
     unchecked(
       (overview[index] =
         transformed[i32(Math.floor(f64(index) * downsampleFactor))])
@@ -415,10 +418,13 @@ export function downsample(transformed: Float64Array): Float64Array {
   }
   return overview
 }
-export function downsample_i32(transformed: Int32Array): Int32Array {
-  const downsampleFactor = f64(transformed.length) / f64(1000.0)
-  const overview = new Int32Array(1000)
-  for (let index = 0; index < 1000; index++) {
+export function downsample_i32(
+  transformed: Int32Array,
+  nPoints: i32
+): Int32Array {
+  const downsampleFactor = f64(transformed.length) / f64(nPoints)
+  const overview = new Int32Array(nPoints)
+  for (let index = 0; index < nPoints; index++) {
     unchecked(
       (overview[index] =
         transformed[i32(Math.floor(f64(index) * downsampleFactor))])
@@ -455,7 +461,7 @@ export function getOverviewInRange(
     return x
   } else {
     // Otherwise, if the range is too big, we have to downsample
-    return downsample(sliced)
+    return downsample(sliced, 1000)
   }
 }
 export function getOverviewInRange_i32(
@@ -479,7 +485,7 @@ export function getOverviewInRange_i32(
     return x
   } else {
     // Otherwise, if the range is too big, we have to downsample
-    return downsample_i32(sliced)
+    return downsample_i32(sliced, 1000)
   }
 }
 
@@ -487,16 +493,16 @@ export function getOverviewInRange_i32(
  * The same as getOverviewInRange but insensitive to
  */
 export function getOverview(transformed: Float64Array): Float64Array {
-  if (transformed.length <= 1000) {
+  if (transformed.length <= 10000) {
     return transformed
   } else {
-    return downsample(transformed)
+    return downsample(transformed, 10000)
   }
 }
 export function getOverview_i32(transformed: Int32Array): Int32Array {
-  if (transformed.length <= 1000) {
+  if (transformed.length <= 10000) {
     return transformed
   } else {
-    return downsample_i32(transformed)
+    return downsample_i32(transformed, 10000)
   }
 }
