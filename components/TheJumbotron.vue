@@ -80,8 +80,11 @@ export default {
       }
       const reader = new FileReader()
       reader.onload = (e) => {
-        if (e.target.result.length === 0) {
+        if (e.target.result.length === 0 && e.target.result.total === 0) {
           this.$bvModal.msgBoxOk("This file is empty. Please try again.")
+          this.uploadedFile = null
+        } else if (e.target.result.length === 0) {
+          this.$bvModal.msgBoxOk("This file is too large to be parsed.")
           this.uploadedFile = null
         }
         for (const sequence of fastaParse(e.target.result)) {
