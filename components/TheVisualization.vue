@@ -20,15 +20,21 @@ import debounce from "lodash/debounce"
 
 export default {
   data: () => {
-    return { zoomed: false, xMin: undefined, xMax: undefined }
+    return {
+      zoomed: false,
+      xMin: undefined,
+      xMax: undefined,
+      graphTitle: "",
+    }
   },
   computed: {
     layout() {
       const result = {
-        title:
-          this.transformedData.length === 1
-            ? `Visualization of ${this.transformedData[0].name} via the ${this.currentMethod} method`
-            : `DNA Sequence Visualization via the ${this.currentMethod} method`,
+        title: this.graphTitle
+          ? this.graphTitle
+          : this.transformedData.length === 1
+          ? `Visualization of ${this.transformedData[0].name} via the ${this.currentMethod} method`
+          : `DNA Sequence Visualization via the ${this.currentMethod} method`,
         // the default bootstrap stack font stack
         font: {
           family:
@@ -124,6 +130,13 @@ export default {
           description,
         })
       }
+    },
+    setGraphTitle(newTitle) {
+      this.graphTitle = newTitle
+
+      this.$nextTick(() => {
+        this.$refs.plotly.newPlot()
+      })
     },
     ...mapActions(["computeOverview"]),
   },

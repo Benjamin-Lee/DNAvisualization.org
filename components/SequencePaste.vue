@@ -41,6 +41,9 @@ export default {
           file: "Pasted Sequences",
         })
       }
+      this.$nextTick(() => {
+        this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
+      })
     },
   },
 }

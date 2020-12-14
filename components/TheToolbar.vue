@@ -46,9 +46,21 @@
             </b-button>
             <b-button
               v-b-tooltip.hover
+              v-b-modal.title-modal
               variant="outline-secondary"
               title="Change title"
             >
+              <b-modal
+                id="title-modal"
+                title="Change Title"
+                variant="outline-secondary"
+                @ok="editTitle"
+              >
+                <b-form-input
+                  v-model="newGraphTitle"
+                  placeholder="Enter your new title"
+                ></b-form-input>
+              </b-modal>
               <b-icon-gear></b-icon-gear>
             </b-button>
             <b-button
@@ -141,6 +153,7 @@ export default {
           "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
       },
       deleteFiles: [],
+      newGraphTitle: "",
     }
   },
   computed: { ...mapState(["sequences", "currentMethod"]) },
@@ -161,6 +174,10 @@ export default {
             this.clearState()
           }
         })
+    },
+    editTitle(bvModalEvt) {
+      this.$root.$refs.TheVisualization.setGraphTitle(this.newGraphTitle)
+      this.$bvModal.hide("modal-prevent-closing")
     },
     ...mapActions(["clearState", "changeMethod"]),
   },

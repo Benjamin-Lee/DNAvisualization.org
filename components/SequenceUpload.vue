@@ -39,6 +39,9 @@ export default {
         }
         reader.readAsText(file)
       }
+      this.$nextTick(() => {
+        this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
+      })
     },
   },
   methods: {
