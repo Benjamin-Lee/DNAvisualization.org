@@ -1,6 +1,6 @@
 <template>
   <b-row class="bg-light border rounded py-2" align-h="around">
-    <b-col cols="12" sm="6" lg="3" class="text-center pb-1 pb-lg-0">
+    <b-col cols="12" sm="6" lg="3" class="text-center pb-2 pb-lg-0">
       <b-row>
         <b-col class="pb-1">Options</b-col>
       </b-row>
