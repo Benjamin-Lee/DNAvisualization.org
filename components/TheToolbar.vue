@@ -21,40 +21,11 @@
           </b-form-checkbox>
         </b-form-checkbox-group>
       </b-modal>
-      <b-button v-b-modal.save-modal variant="outline-secondary">Save</b-button>
-      <b-modal
-        id="save-modal"
-        ref="modal"
-        title="Save Options"
-        @show="resetModal"
-        @hidden="resetModal"
-        @ok="handleOk"
-      >
-        <form ref="form" @submit.stop.prevent="handleSubmit">
-          <b-form-group label="Choose Download Type" label-for="download-type">
-            <b-form-select
-              id="download-type"
-              v-model="downloadType"
-              :options="fileTypeOptions"
-              size="sm"
-              class="mt-3"
-              required
-            ></b-form-select>
-          </b-form-group>
-          <label for="width-range">Choose Width</label>
-          <b-form-input
-            id="width-range"
-            v-model="width"
-            type="number"
-          ></b-form-input>
-          <label for="height-range">Choose Height</label>
-          <b-form-input
-            id="height-range"
-            v-model="height"
-            type="number"
-          ></b-form-input>
-        </form>
-      </b-modal>
+
+      <b-button v-b-modal.save-modal variant="outline-secondary">
+        Save <TheSaveModal></TheSaveModal>
+      </b-button>
+
       <SequenceUpload></SequenceUpload>
     </b-col>
     <b-col>
@@ -86,20 +57,6 @@ export default {
   components: { SequenceUpload },
   data: () => {
     return {
-      downloadType: null,
-      width: null,
-      height: null,
-      deleteFiles: [],
-      fileTypeOptions: [
-        {
-          value: null,
-          text: "-- Select a download method --",
-          disabled: true,
-        },
-        { value: "png", text: "Download as PNG" },
-        { value: "jpeg", text: "Download as JPEG" },
-        { value: "svg", text: "Download as SVG" },
-      ],
       methods: {
         squiggle:
           "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
@@ -115,6 +72,7 @@ export default {
           "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
         yau_int: "experimental",
       },
+      deleteFiles: [],
     }
   },
   computed: { ...mapState(["sequences", "currentMethod"]) },
@@ -135,35 +93,6 @@ export default {
             this.clearState()
           }
         })
-    },
-    saveImg(downloadType, width, height) {
-      this.$root.$refs.TheVisualization.$refs.plotly.downloadImage({
-        format: downloadType,
-        width,
-        height,
-        filename: "dnavisualization-" + new Date().toISOString(),
-      })
-    },
-    handleOk(bvModalEvt) {
-      // Prevent modal from closing
-      bvModalEvt.preventDefault()
-      // Trigger submit handler
-      if (
-        this.downloadType == null ||
-        this.height == null ||
-        this.width == null
-      ) {
-        return
-      }
-      this.saveImg(this.downloadType, this.width, this.height)
-      this.$nextTick(() => {
-        this.$bvModal.hide("modal-prevent-closing")
-      })
-    },
-    resetModal() {
-      this.downloadType = null
-      this.width = 1000
-      this.height = 400
     },
     ...mapActions(["clearState", "changeMethod"]),
   },
