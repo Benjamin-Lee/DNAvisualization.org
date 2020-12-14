@@ -72,7 +72,14 @@ GACGTTT..."
       rows="4"
       class="my-3"
     ></b-form-textarea>
-    <b-button variant="outline-secondary" @click="transformPastedSequences">
+    <!-- The disabled state does the most basic FASTA validation -->
+    <b-button
+      variant="outline-secondary"
+      :disabled="
+        !pastedSequences.includes('>') || !pastedSequences.includes('\n')
+      "
+      @click="transformPastedSequences"
+    >
       submit
     </b-button>
   </b-jumbotron>
