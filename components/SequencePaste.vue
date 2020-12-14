@@ -42,7 +42,9 @@ export default {
         })
       }
       this.$nextTick(() => {
-        this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
+        if (this.$root.$refs.TheVisualization.$refs.plotly !== undefined) {
+          this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
+        }
       })
     },
   },
