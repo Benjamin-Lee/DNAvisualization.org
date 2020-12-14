@@ -78,7 +78,14 @@ export default {
       "FormGroupPlugin",
       "FormCheckboxPlugin",
     ],
-    components: ["BIconDownload"],
+    components: [
+      "BIconDownload",
+      "BIconTrash",
+      "BIconGear",
+      "BIconFileEarmarkPlus",
+      "BIconTextIndentLeft",
+      "BIconFileEarmarkText",
+    ],
   },
   /*
    ** Build configuration

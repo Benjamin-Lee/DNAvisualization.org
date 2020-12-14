@@ -1,51 +1,116 @@
 <template>
-  <b-row class="bg-light border rounded">
-    <b-col cols="7">
-      <b-button variant="outline-secondary" @click="confirmClear">
-        Clear
-      </b-button>
-      <b-button v-b-modal.del-modal variant="outline-secondary"
-        >Remove Files</b-button
-      >
-      <b-modal id="del-modal" title="Remove Files" variant="outline-secondary">
-        <b-form-checkbox-group
-          id="deletion-checkbox-group"
-          v-model="deleteFiles"
-        >
-          <b-form-checkbox
-            v-for="(sequence, index) in sequences"
-            :key="index"
-            :value="index"
-          >
-            {{ index }}
-          </b-form-checkbox>
-        </b-form-checkbox-group>
-      </b-modal>
-
-      <b-button v-b-modal.save-modal variant="outline-secondary">
-        Save <TheSaveModal></TheSaveModal>
-      </b-button>
-
-      <SequenceUpload></SequenceUpload>
+  <b-row class="bg-light border rounded py-2" align-h="around">
+    <b-col cols="12" sm="6" lg="3" class="text-center pb-1 pb-lg-0">
+      <b-row>
+        <b-col class="pb-1">Options</b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-button-group class="w-100">
+            <b-button
+              v-b-modal.del-modal
+              v-b-tooltip.hover
+              variant="outline-secondary"
+              title="Delete sequences"
+            >
+              <b-icon-trash></b-icon-trash>
+              <b-modal
+                id="del-modal"
+                title="Remove Files"
+                variant="outline-secondary"
+              >
+                <b-form-checkbox-group
+                  id="deletion-checkbox-group"
+                  v-model="deleteFiles"
+                >
+                  <b-form-checkbox
+                    v-for="(sequence, index) in sequences"
+                    :key="index"
+                    :value="index"
+                  >
+                    {{ index }}
+                  </b-form-checkbox>
+                  <b-button variant="outline-secondary" @click="confirmClear">
+                    Clear
+                  </b-button>
+                </b-form-checkbox-group>
+              </b-modal></b-button
+            >
+            <b-button
+              v-b-modal.save-modal
+              v-b-tooltip.hover
+              title="Save Image or Data"
+              variant="outline-secondary"
+            >
+              <b-icon-download></b-icon-download> <TheSaveModal></TheSaveModal>
+            </b-button>
+            <b-button
+              v-b-tooltip.hover
+              variant="outline-secondary"
+              title="Change title"
+            >
+              <b-icon-gear></b-icon-gear>
+            </b-button>
+            <b-button
+              v-b-tooltip.hover
+              variant="outline-secondary"
+              title="Add sequence or file"
+            >
+              <b-icon-file-earmark-plus></b-icon-file-earmark-plus>
+            </b-button> </b-button-group
+        ></b-col>
+      </b-row>
     </b-col>
-    <b-col>
-      <b-button-toolbar key-nav aria-label="Toolbar with button groups">
-        <b-button-group class="mx-1">
-          <b-button
-            v-for="(description, method) in methods"
-            :id="method"
-            :key="method"
-            v-b-tooltip.hover
-            :variant="
-              currentMethod == method ? 'secondary' : 'outline-secondary'
-            "
-            :title="description"
-            @click="changeMethod({ method: method })"
-          >
-            {{ method }}
-          </b-button>
-        </b-button-group>
-      </b-button-toolbar>
+
+    <b-col cols="12" sm="6" lg="2" class="text-center" order-lg="3">
+      <b-row>
+        <b-col class="pb-1">Legend Mode</b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-button-group class="w-100">
+            <b-button
+              v-b-tooltip.hover
+              title="Plot each sequence in its own color with its own legend entry."
+              variant="outline-secondary"
+            >
+              <b-icon-text-indent-left></b-icon-text-indent-left>
+            </b-button>
+            <b-button
+              v-b-tooltip.hover
+              title="Plot each file in its own color with its own legend entry."
+              variant="outline-secondary"
+            >
+              <b-icon-file-earmark-text></b-icon-file-earmark-text>
+            </b-button>
+          </b-button-group>
+        </b-col>
+      </b-row>
+    </b-col>
+    <b-col cols="12" lg="6" xl="5" class="text-center">
+      <b-row>
+        <b-col class="pb-1">Visualization Method</b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-button-group class="w-100">
+            <b-button
+              v-for="(description, method) in methods"
+              :id="method"
+              :key="method"
+              v-b-tooltip.hover
+              class="text-capitalize"
+              :variant="
+                currentMethod == method ? 'secondary' : 'outline-secondary'
+              "
+              :title="description"
+              @click="changeMethod({ method: method })"
+            >
+              {{ method.replace("_", "-") }}
+            </b-button>
+          </b-button-group>
+        </b-col>
+      </b-row>
     </b-col>
   </b-row>
 </template>
@@ -60,17 +125,13 @@ export default {
       methods: {
         squiggle:
           "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
-        yau:
-          "Bases plotted along a unit vector. Captures GC skew. x-coordinates do not map to base position. No support for non-ATGC bases.",
-        yau_bp:
-          "Same as Yau but projected such that all vectors have lengths in the x-axis of 1 (so that x-coordinates are the same as base positions). No support for non-ATGC bases.",
+        yau_int: "experimental",
         randic:
           "Like tablature, with As, Ts, Cs, and Gs assigned a y-coordinate. No support for non-ATGC bases. Not recommended.",
         qi:
           "Same as Randic, except with dinucleotides instead of bases. Not recommended.",
         gates:
           "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
-        yau_int: "experimental",
       },
       deleteFiles: [],
     }
