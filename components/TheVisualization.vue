@@ -41,6 +41,11 @@ export default {
             '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !default',
         },
         yaxis: { fixedrange: true },
+        xaxis: {
+          title: {
+            text: this.currentMethod !== "gates" ? "Position (bp)" : "C-G axis",
+          },
+        },
         // legend: { orientation: "h", xanchor: "center", x: 0.5 },
       }
       if (this.currentMethod === "randic") {
@@ -48,6 +53,7 @@ export default {
           tickmode: "array", // If "array", the placement of the ticks is set via `tickvals` and the tick text is `ticktext`.
           tickvals: [0, 1, 2, 3],
           ticktext: ["A", "T", "G", "C"],
+          ...result.yaxis,
         }
       } else if (this.currentMethod === "qi") {
         result.yaxis = {
@@ -73,7 +79,14 @@ export default {
           ],
           ...result.yaxis,
         }
-      } else result.yaxis = { ...result.yaxis }
+      } else if (this.currentMethod === "gates") {
+        result.yaxis = {
+          title: {
+            text: this.currentMethod !== "gates" ? "" : "A-T axis",
+          },
+          ...result.yaxis,
+        }
+      }
       return result
     },
     transformedData() {
