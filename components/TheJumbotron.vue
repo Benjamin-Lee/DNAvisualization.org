@@ -33,12 +33,18 @@
           variant="outline-secondary"
           block
           menu-class="w-100"
-          @click="transformExampleSequences"
+          @click="transformExample('hbb')"
         >
-          <b-dropdown-item href="#">Hemoglobin &beta; (444 bp)</b-dropdown-item>
-          <b-dropdown-item href="#">SARS-CoV-2 (29,903 bp)</b-dropdown-item>
-          <b-dropdown-item href="#">Titin (104,301 bp)</b-dropdown-item>
-          <b-dropdown-item href="#">
+          <b-dropdown-item @click="transformExample('hbb')">
+            Hemoglobin &beta; (444 bp)
+          </b-dropdown-item>
+          <b-dropdown-item @click="transformExample('sars-cov-2')">
+            SARS-CoV-2 (29,903 bp)
+          </b-dropdown-item>
+          <b-dropdown-item @click="transformExample('titin')">
+            Titin (104,301 bp)
+          </b-dropdown-item>
+          <b-dropdown-item @click="transformExample('bsub')">
             <i>Bacillus subtilis</i> (4,146,839 bp)
           </b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
@@ -78,11 +84,7 @@ import SequenceUpload from "./SequenceUpload"
 export default {
   components: { SequenceUpload },
   data() {
-    return {
-      pastedSequences: "",
-      exampleSequences:
-        ">HumanB-globin\nATGGTGCATCTGACTCCTGAGGAGAAGTCTGCCGTTACTGCCCTGTGGGGCAAGGTGAACGTGGATGAAGTTGGTGGTGAGGCCCTGGGCAGGCTGCTGGTGGTCTACCCTTGGACCCAGAGGTTCTTTGAGTCCTTTGGGGATCTGTCCACTCCTGATGCTGTTATGGGCAACCCTAAGGTGAAGGCTCATGGCAAGAAAGTGCTCGGTGCCTTTAGTGATGGCCTGGCTCACCTGGACAACCTCAAGGGCACCTTTGCCACACTGAGTGAGCTGCACTGTGACAAGCTGCACGTGGATCCTGAGAACTTCAGGCTCCTGGGCAACGTGCTGGTCTGTGTGCTGGCCCATCACTTTGGCAAAGAATTCACCCCACCAGTGCAGGCTGCCTATCAGAAAGTGGTGGCTGGTGTGGCTAATGCCCTGGCCCACAAGTATCACTAA",
-    }
+    return { pastedSequences: "" }
   },
   computed: {
     sequenceCount() {
@@ -123,13 +125,17 @@ export default {
         })
       }
     },
-    transformExampleSequences() {
-      for (const sequence of fastaParse(this.exampleSequences)) {
-        this.$store.dispatch("transformSequence", {
-          description: sequence.name,
-          sequence: sequence.seq,
+    transformExample(example) {
+      fetch(`/examples/${example}.fasta`)
+        .then((x) => x.text())
+        .then((text) => {
+          for (const sequence of fastaParse(text)) {
+            this.$store.dispatch("transformSequence", {
+              description: sequence.name,
+              sequence: sequence.seq,
+            })
+          }
         })
-      }
     },
   },
 }
