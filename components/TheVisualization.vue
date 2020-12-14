@@ -24,16 +24,11 @@ export default {
   },
   computed: {
     layout() {
-      if (this.graphTitle.trim().length === 0) {
-        this.changeTitle({
-          title:
-            this.transformedData.length === 1
-              ? `Visualization of ${this.transformedData[0].name} via the ${this.currentMethod} method`
-              : `DNA Sequence Visualization via the ${this.currentMethod} method`,
-        })
-      }
       const result = {
-        title: this.graphTitle,
+        title:
+          this.transformedData.length === 1
+            ? `Visualization of ${this.transformedData[0].name} via the ${this.currentMethod} method`
+            : `DNA Sequence Visualization via the ${this.currentMethod} method`,
         // the default bootstrap stack font stack
         font: {
           family:
@@ -86,7 +81,7 @@ export default {
       }
       return x
     },
-    ...mapState(["sequences", "currentMethod", "graphTitle"]),
+    ...mapState(["sequences", "currentMethod"]),
   },
   created() {
     // Allow TheToolbar to talk directly to Plotly
@@ -130,7 +125,7 @@ export default {
         })
       }
     },
-    ...mapActions(["computeOverview", "changeTitle"]),
+    ...mapActions(["computeOverview"]),
   },
 }
 </script>

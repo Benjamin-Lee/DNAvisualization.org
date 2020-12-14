@@ -4,7 +4,6 @@ import Vue from "vue"
 export const state = () => ({
   sequences: {},
   currentMethod: "yau_int",
-  graphTitle: "",
 })
 
 export const mutations = {
@@ -43,9 +42,6 @@ export const mutations = {
    */
   setSequences(state, sequences) {
     Vue.set(state, "sequences", sequences)
-  },
-  setTitle(state, { title }) {
-    state.graphTitle = title
   },
 }
 
@@ -140,9 +136,6 @@ export const actions = {
   clearState({ commit, dispatch }) {
     commit("setSequences", {})
     dispatch("wasm/instantiate")
-  },
-  changeTitle({ commit }, { title }) {
-    commit("setTitle", { title })
   },
   /**
    * Change the current visualization method.
