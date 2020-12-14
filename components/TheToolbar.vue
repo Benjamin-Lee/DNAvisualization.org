@@ -74,6 +74,7 @@
           </b-button-group>
           <b-modal id="add-modal" title="Add Files" variant="outline-secondary">
             <SequenceUpload></SequenceUpload>
+            <SequencePaste></SequencePaste>
           </b-modal>
         </b-col>
       </b-row>
@@ -135,8 +136,9 @@
 <script>
 import { mapState, mapActions } from "vuex"
 import SequenceUpload from "./SequenceUpload"
+import SequencePaste from "./SequencePaste"
 export default {
-  components: { SequenceUpload },
+  components: { SequenceUpload, SequencePaste },
   data: () => {
     return {
       title: "",
