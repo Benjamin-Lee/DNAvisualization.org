@@ -65,7 +65,11 @@
     <b-form-textarea
       id="paste-sequence"
       v-model="pastedSequences"
-      :placeholder="'>Description line goes here\nATGCAGA...\n>Optionally, another sequence can follow\nGACGTTT...'"
+      :placeholder="`>Description line goes here${' '.repeat(
+        250
+      )}ATGCAGA...${' '.repeat(
+        250
+      )}>Optionally, another sequence can follow${' '.repeat(250)}GACGTTT...`"
       rows="4"
       class="my-3"
     ></b-form-textarea>
