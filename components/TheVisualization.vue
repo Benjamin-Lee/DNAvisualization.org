@@ -34,20 +34,8 @@ export default {
           family:
             '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !default',
         },
-        // add a watermark in the bottom right
-        annotations: [
-          {
-            text: "BD Lee, et al. (2019). DNAvisualization.org.",
-            x: 1.0,
-            y: -0.15,
-            yref: "paper",
-            xref: "paper",
-            xanchor: "right",
-            showarrow: false,
-            font: { size: 10, color: "6c757d" },
-          },
-        ],
         yaxis: { fixedrange: true },
+        legend: { orientation: "h", xanchor: "center", x: 0.5 },
       }
       if (this.currentMethod === "randic") {
         result.yaxis = {
