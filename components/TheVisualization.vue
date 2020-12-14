@@ -41,7 +41,7 @@ export default {
             '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif !default',
         },
         yaxis: { fixedrange: true },
-        legend: { orientation: "h", xanchor: "center", x: 0.5 },
+        // legend: { orientation: "h", xanchor: "center", x: 0.5 },
       }
       if (this.currentMethod === "randic") {
         result.yaxis = {
