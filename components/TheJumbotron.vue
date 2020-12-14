@@ -65,10 +65,7 @@
     <b-form-textarea
       id="paste-sequence"
       v-model="pastedSequences"
-      placeholder=">Description line goes here
-ATGCAGA...
->Optionally, another sequence can follow
-GACGTTT..."
+      :placeholder="'>Description line goes here\nATGCAGA...\n>Optionally, another sequence can follow\nGACGTTT...'"
       rows="4"
       class="my-3"
     ></b-form-textarea>
@@ -80,7 +77,7 @@ GACGTTT..."
       "
       @click="transformPastedSequences"
     >
-      Submit
+      submit
     </b-button>
   </b-jumbotron>
 </template>
