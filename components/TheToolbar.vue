@@ -46,19 +46,36 @@
             </b-button>
             <b-button
               v-b-tooltip.hover
+              v-b-modal.title-modal
               variant="outline-secondary"
               title="Change title"
             >
               <b-icon-gear></b-icon-gear>
             </b-button>
+            <b-modal
+              id="title-modal"
+              title="Change Title"
+              variant="outline-secondary"
+              @ok="editTitle"
+            >
+              <b-form-input
+                v-model="title"
+                placeholder="Enter your new title"
+              ></b-form-input>
+            </b-modal>
             <b-button
               v-b-tooltip.hover
+              v-b-modal.add-modal
               variant="outline-secondary"
               title="Add sequence or file"
             >
               <b-icon-file-earmark-plus></b-icon-file-earmark-plus>
-            </b-button> </b-button-group
-        ></b-col>
+            </b-button>
+          </b-button-group>
+          <b-modal id="add-modal" title="Add Files" variant="outline-secondary">
+            <SequenceUpload></SequenceUpload>
+          </b-modal>
+        </b-col>
       </b-row>
     </b-col>
 
@@ -122,6 +139,7 @@ export default {
   components: { SequenceUpload },
   data: () => {
     return {
+      title: "",
       methods: {
         squiggle:
           "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
@@ -155,7 +173,15 @@ export default {
           }
         })
     },
-    ...mapActions(["clearState", "changeMethod"]),
+    editTitle(bvModalEvt) {
+      this.changeTitle({
+        title: this.title,
+      })
+      this.$nextTick(() => {
+        this.$bvModal.hide("modal-prevent-closing")
+      })
+    },
+    ...mapActions(["clearState", "changeMethod", "changeTitle"]),
   },
 }
 </script>

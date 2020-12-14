@@ -4,6 +4,7 @@ import Vue from "vue"
 export const state = () => ({
   sequences: {},
   currentMethod: "yau_int",
+  graphTitle: "",
 })
 
 export const mutations = {
@@ -11,9 +12,10 @@ export const mutations = {
    * Save a sequence and its description.
    * Note that the transformed visualization is *not* included.
    */
-  insertSequence(state, { description, sequence }) {
+  insertSequence(state, { description, sequence, file }) {
     Vue.set(state.sequences, description, {
       sequence,
+      file,
       visualization: {},
       overview: {},
     })
@@ -42,6 +44,9 @@ export const mutations = {
   setSequences(state, sequences) {
     Vue.set(state, "sequences", sequences)
   },
+  setTitle(state, { title }) {
+    state.graphTitle = title
+  },
 }
 
 /**
@@ -64,11 +69,14 @@ export const actions = {
    * method's data, it will be modified. Otherwise, the sequence will be transformed and added.
    */
   // TODO: add a check to prevent duplicate transformation
-  transformSequence({ commit, state, dispatch }, { description, sequence }) {
+  transformSequence(
+    { commit, state, dispatch },
+    { description, sequence, file }
+  ) {
     // We need to check that
     sequence = sequence.toUpperCase()
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
-      commit("insertSequence", { description, sequence })
+      commit("insertSequence", { description, sequence, file })
     }
     dispatch("wasm/transform", { description, sequence })
     dispatch("computeOverview", { description })
@@ -132,6 +140,9 @@ export const actions = {
   clearState({ commit, dispatch }) {
     commit("setSequences", {})
     dispatch("wasm/instantiate")
+  },
+  changeTitle({ commit }, { title }) {
+    commit("setTitle", { title })
   },
   /**
    * Change the current visualization method.

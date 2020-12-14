@@ -33,6 +33,7 @@ export default {
             this.$store.dispatch("transformSequence", {
               description: sequence.name,
               sequence: sequence.seq,
+              file: file.name
             })
           }
         }
