@@ -1,14 +1,11 @@
 <template>
-  <div>
-    <b-form-file
-      v-model="uploadedFile"
-      class="w-50"
-      placeholder="Choose File"
-      drop-placeholder="Drop file here..."
-      accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt"
-      :file-name-formatter="placeholderText"
-    ></b-form-file>
-  </div>
+  <b-form-file
+    v-model="uploadedFile"
+    :placeholder="placeholderText()"
+    drop-placeholder="Drop file here..."
+    accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt"
+    :file-name-formatter="placeholderText"
+  ></b-form-file>
 </template>
 
 <script>

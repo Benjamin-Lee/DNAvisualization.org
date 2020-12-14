@@ -12,21 +12,44 @@
       It uses utility classes for typography and spacing to space content out
       within the larger container.
     </p>
-
+    <!-- Choose which sequence you want to download -->
+    <b-modal id="my-modal" title="Download Example Sequences" hide-footer>
+      <ul>
+        <li><a href="/examples/hbb.fasta">Hemoglobin &beta; (444 bp)</a></li>
+        <li><a href="/examples/sars-cov-2.fasta">SARS-CoV-2 (29,903 bp)</a></li>
+        <li><a href="/examples/titin.fasta">Titin (104,301 bp)</a></li>
+        <li>
+          <a href="/examples/GCA_000293765.1_ASM29376v1_genomic.fasta">
+            <i>Bacillus subtilis</i> (4,146,839 bp)
+          </a>
+        </li>
+      </ul>
+    </b-modal>
     <b-row>
-      <b-col cols="2">
+      <b-col sm="4" lg="3">
         <b-dropdown
           split
-          text="Load Example"
+          text="Use Example"
           variant="outline-secondary"
+          block
+          menu-class="w-100"
           @click="transformExampleSequences"
         >
-          <b-dropdown-item href="#">Sars-Cov-2</b-dropdown-item>
-          <b-dropdown-item href="#">HDV</b-dropdown-item>
-          <b-dropdown-item href="#">HCV</b-dropdown-item>
+          <b-dropdown-item href="#">Hemoglobin &beta; (444 bp)</b-dropdown-item>
+          <b-dropdown-item href="#">SARS-CoV-2 (29,903 bp)</b-dropdown-item>
+          <b-dropdown-item href="#">Titin (104,301 bp)</b-dropdown-item>
+          <b-dropdown-item href="#">
+            <i>Bacillus subtilis</i> (4,146,839 bp)
+          </b-dropdown-item>
+          <b-dropdown-divider></b-dropdown-divider>
+
+          <b-dropdown-item v-b-modal.my-modal>
+            <b-icon-download></b-icon-download>
+            Download examples
+          </b-dropdown-item>
         </b-dropdown>
       </b-col>
-      <b-col class="pl-0">
+      <b-col sm="8" lg="9" class="mt-3 mt-sm-0">
         <SequenceUpload></SequenceUpload>
       </b-col>
     </b-row>
