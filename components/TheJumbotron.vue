@@ -29,7 +29,7 @@
       <b-col sm="4" lg="3">
         <b-dropdown
           split
-          text="Use Example"
+          text="Use example"
           variant="outline-secondary"
           block
           menu-class="w-100"
@@ -80,7 +80,7 @@ GACGTTT..."
       "
       @click="transformPastedSequences"
     >
-      submit
+      Submit
     </b-button>
   </b-jumbotron>
 </template>
