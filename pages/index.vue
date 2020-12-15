@@ -4,7 +4,7 @@
     <b-container class="mt-3">
       <TheVisualization></TheVisualization>
     </b-container>
-    <b-container class="my-5 px-md-0 px-lg-5">
+    <b-container class="mt-5 px-md-0 px-lg-5">
       <b-row align-h="between">
         <b-col md="7" xs="12">
           <h1 class="h4">Overview</h1>
@@ -37,7 +37,7 @@
           <p class="my-4">
             If you use this tool in your research, please cite it as:
           </p>
-          <p class="bg-light rounded p-3 border">
+          <p class="bg-light rounded p-3 border my-4">
             Benjamin D. Lee, Michael A. Timony, Pablo Ruiz,
             DNAvisualization.org: a serverless web tool for DNA sequence
             visualization, Nucleic Acids Research, Volume 47, Issue W1, 02 July
