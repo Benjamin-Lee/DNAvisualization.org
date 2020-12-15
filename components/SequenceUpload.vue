@@ -36,6 +36,7 @@ export default {
               file: file.name,
             })
           }
+          this.$store.dispatch("wasm/instantiate")
         }
         reader.readAsText(file)
       }

@@ -137,9 +137,8 @@ export const actions = {
     })
   },
   /** Resets the state of the application to default */
-  clearState({ commit, dispatch }) {
+  clearState({ commit }) {
     commit("setSequences", { sequences: {} })
-    dispatch("wasm/instantiate")
   },
   /**
    * Change the current visualization method.
