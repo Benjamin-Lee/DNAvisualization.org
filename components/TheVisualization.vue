@@ -52,7 +52,7 @@ export default {
         result.yaxis = {
           tickmode: "array", // If "array", the placement of the ticks is set via `tickvals` and the tick text is `ticktext`.
           tickvals: [0, 1, 2, 3],
-          ticktext: ["A", "T", "G", "C"],
+          ticktext: ["C", "G", "T", "A"],
           ...result.yaxis,
         }
       } else if (this.currentMethod === "qi") {
