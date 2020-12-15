@@ -17,7 +17,7 @@
               <b-modal
                 id="del-modal"
                 title="Remove Files"
-                variant="outline-secondary"
+                cancel-variant="outline-secondary"
               >
                 <b-form-checkbox-group
                   id="deletion-checkbox-group"
@@ -53,13 +53,13 @@
               <b-modal
                 id="title-modal"
                 title="Change Title"
-                variant="outline-secondary"
+                cancel-variant="outline-secondary"
                 @ok="editTitle"
               >
                 <b-form @submit.prevent.stop="editTitle">
                   <b-form-input
-                    autofocus
                     v-model="newGraphTitle"
+                    autofocus
                     placeholder="Enter your new title"
                   ></b-form-input>
                 </b-form>
@@ -75,7 +75,11 @@
               <b-icon-file-earmark-plus></b-icon-file-earmark-plus>
             </b-button>
           </b-button-group>
-          <b-modal id="add-modal" title="Add Files" variant="outline-secondary">
+          <b-modal
+            id="add-modal"
+            title="Add Files"
+            cancel-variant="outline-secondary"
+          >
             <SequenceUpload></SequenceUpload>
             <SequencePaste></SequencePaste>
           </b-modal>
@@ -166,7 +170,7 @@ export default {
       this.$bvModal
         .msgBoxConfirm('Clicking "OK" will delete all transformed sequences.', {
           title: "Are you sure?",
-          okVariant: "outline-danger",
+          okVariant: "danger",
           cancelVariant: "outline-secondary",
           footerClass: "p-2",
           hideHeaderClose: false,
