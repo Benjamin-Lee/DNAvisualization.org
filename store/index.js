@@ -4,6 +4,7 @@ import Vue from "vue"
 export const state = () => ({
   sequences: {},
   currentMethod: "yau_int",
+  legendMode: "sequence",
 })
 
 export const mutations = {
@@ -40,8 +41,11 @@ export const mutations = {
   /**
    * Overwrite the entire `sequences` object in `state`
    */
-  setSequences(state, sequences) {
+  setSequences(state, { sequences }) {
     Vue.set(state, "sequences", sequences)
+  },
+  setLegendMode(state, mode) {
+    state.legendMode = mode
   },
 }
 
@@ -134,7 +138,7 @@ export const actions = {
   },
   /** Resets the state of the application to default */
   clearState({ commit, dispatch }) {
-    commit("setSequences", {})
+    commit("setSequences", { sequences: {} })
     dispatch("wasm/instantiate")
   },
   /**

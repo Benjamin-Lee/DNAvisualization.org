@@ -17,6 +17,7 @@
 <script>
 import { mapState, mapActions } from "vuex"
 import debounce from "lodash/debounce"
+const ColorHash = require("color-hash")
 
 export default {
   data: () => {
@@ -91,16 +92,46 @@ export default {
     },
     transformedData() {
       const x = []
+      const seenLegendGroups = []
+      /** We need a little hash function to ensure similar filenames don't come too close.
+       *
+       * Taken from: https://stackoverflow.com/a/8831937
+       */
+      function tinyHash(x) {
+        let hash = 0
+        let chr
+        for (let i = 0; i < x.length; i++) {
+          chr = x.charCodeAt(i)
+          hash = (hash << 5) - hash + chr
+          hash |= 0 // Convert to 32bit integer
+        }
+        return hash
+      }
+      // In file mode, we use ColorHash to create a mapping from a filename to a color
+      const colorHash = new ColorHash({ saturation: [0.75, 0.85] })
       for (const key in this.sequences) {
-        x.push({
+        const keyData = {
           x: this.sequences[key].overview[this.currentMethod][0],
           y: this.sequences[key].overview[this.currentMethod][1],
-          name: key,
-        })
+          name: this.legendMode === "file" ? this.sequences[key].file : key,
+          legendgroup: this.sequences[key].file,
+        }
+        if (this.legendMode === "file") {
+          keyData.showlegend = !seenLegendGroups.includes(
+            this.sequences[key].file
+          )
+          keyData.line = {
+            color: colorHash.hex(tinyHash(this.sequences[key].file)),
+          }
+        }
+        x.push(keyData)
+        if (!seenLegendGroups.includes(this.sequences[key].file)) {
+          seenLegendGroups.push(this.sequences[key].file)
+        }
       }
       return x
     },
-    ...mapState(["sequences", "currentMethod"]),
+    ...mapState(["sequences", "currentMethod", "legendMode"]),
   },
   created() {
     // Allow TheToolbar to talk directly to Plotly

@@ -103,14 +103,20 @@
             <b-button
               v-b-tooltip.hover
               title="Plot each sequence in its own color with its own legend entry."
-              variant="outline-secondary"
+              :variant="
+                legendMode === 'sequence' ? 'secondary' : 'outline-secondary'
+              "
+              @click="setLegendMode('sequence')"
             >
               <b-icon-text-indent-left></b-icon-text-indent-left>
             </b-button>
             <b-button
               v-b-tooltip.hover
               title="Plot each file in its own color with its own legend entry."
-              variant="outline-secondary"
+              :variant="
+                legendMode === 'file' ? 'secondary' : 'outline-secondary'
+              "
+              @click="setLegendMode('file')"
             >
               <b-icon-file-earmark-text></b-icon-file-earmark-text>
             </b-button>
@@ -147,7 +153,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex"
+import { mapState, mapActions, mapMutations } from "vuex"
 import SequenceUpload from "./SequenceUpload"
 import SequencePaste from "./SequencePaste"
 export default {
@@ -169,7 +175,7 @@ export default {
       newGraphTitle: "",
     }
   },
-  computed: { ...mapState(["sequences", "currentMethod"]) },
+  computed: { ...mapState(["sequences", "currentMethod", "legendMode"]) },
   methods: {
     /** Confirm with the user that they want to reset the state to default */
     confirmClear() {
@@ -193,6 +199,7 @@ export default {
       this.$bvModal.hide("title-modal")
     },
     ...mapActions(["clearState", "changeMethod"]),
+    ...mapMutations(["setLegendMode"]),
   },
 }
 </script>
