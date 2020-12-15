@@ -56,10 +56,13 @@
                 variant="outline-secondary"
                 @ok="editTitle"
               >
-                <b-form-input
-                  v-model="newGraphTitle"
-                  placeholder="Enter your new title"
-                ></b-form-input>
+                <b-form @submit.prevent.stop="editTitle">
+                  <b-form-input
+                    autofocus
+                    v-model="newGraphTitle"
+                    placeholder="Enter your new title"
+                  ></b-form-input>
+                </b-form>
               </b-modal>
               <b-icon-gear></b-icon-gear>
             </b-button>
@@ -177,7 +180,7 @@ export default {
     },
     editTitle(bvModalEvt) {
       this.$root.$refs.TheVisualization.setGraphTitle(this.newGraphTitle)
-      this.$bvModal.hide("modal-prevent-closing")
+      this.$bvModal.hide("title-modal")
     },
     ...mapActions(["clearState", "changeMethod"]),
   },
