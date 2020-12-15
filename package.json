@@ -18,7 +18,7 @@
     "@statnett/vue-plotly": "^0.3.2",
     "biojs-io-fasta": "^0.1.17",
     "bootstrap": "^4.5.3",
-    "bootstrap-vue": "^2.20.1",
+    "bootstrap-vue": "^2.21.0",
     "dnaviz": "^1.0.0-0",
     "nuxt": "^2.14.11",
     "nuxt-client-init-module": "^0.1.9",
