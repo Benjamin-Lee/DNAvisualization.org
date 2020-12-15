@@ -87,7 +87,13 @@
       </b-row>
     </b-col>
 
-    <b-col cols="12" sm="6" lg="2" class="text-center" order-lg="3">
+    <b-col
+      cols="12"
+      sm="6"
+      lg="2"
+      class="pb-2 pb-lg-0 text-center"
+      order-lg="3"
+    >
       <b-row>
         <b-col class="pb-1">Legend Mode</b-col>
       </b-row>
