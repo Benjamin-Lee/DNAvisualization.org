@@ -5,7 +5,7 @@
   "author": "Benjamin Lee",
   "private": true,
   "scripts": {
-    "asbuild": "asc plugins/assembly/index.ts -b static/optimized.wasm --sourceMap -O3",
+    "asbuild": "asc plugins/assembly/index.ts -b static/wasm/optimized.wasm --sourceMap -O3",
     "dev": "npm run asbuild && nuxt",
     "start": "npm run generate && nuxt start",
     "generate": "npm run asbuild && nuxt generate",
