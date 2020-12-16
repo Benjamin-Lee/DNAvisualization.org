@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <b-container class="my-3">
     <div>
       <h1 class="title">About</h1>
       <p>
@@ -43,5 +43,5 @@
         >
       </div>
     </div>
-  </div>
+  </b-container>
 </template>
