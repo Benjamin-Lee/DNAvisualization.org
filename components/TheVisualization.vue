@@ -138,6 +138,10 @@ export default {
     // Allow TheToolbar to talk directly to Plotly
     this.$root.$refs.TheVisualization = this
     this.debouncedZoom = debounce((e) => {
+      if (e["xaxis.autorange"] === true) {
+        this.resetZoom()
+        return
+      }
       if (
         e["xaxis.range[0]"] !== undefined &&
         e["xaxis.range[1]"] !== undefined
@@ -153,12 +157,12 @@ export default {
         for (const description in this.sequences) {
           this.computeOverview({
             description,
-            xMin: e["xaxis.range[0]"],
-            xMax: e["xaxis.range[1]"],
+            xMin: Math.max(e["xaxis.range[0]"], 0),
+            xMax: Math.max(e["xaxis.range[1]"], 1),
           })
         }
-        this.xMin = e["xaxis.range[0]"]
-        this.xMax = e["xaxis.range[1]"]
+        this.xMin = Math.max(e["xaxis.range[0]"], 0)
+        this.xMax = Math.max(e["xaxis.range[1]"], 1)
       }
     }, 50)
   },
