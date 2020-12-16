@@ -7,7 +7,7 @@
       ref="plotly"
       :data="transformedData"
       :layout="layout"
-      :options="{ displayModeBar: false, showTips: false, responsive: true }"
+      :options="{ showTips: false, responsive: true }"
       @relayout="zoom"
       @doubleclick="resetZoom"
     ></VuePlotly>
@@ -114,12 +114,13 @@ export default {
           x: this.sequences[key].overview[this.currentMethod][0],
           y: this.sequences[key].overview[this.currentMethod][1],
           name: this.legendMode === "file" ? this.sequences[key].file : key,
-          legendgroup: this.sequences[key].file,
         }
         if (this.legendMode === "file") {
           keyData.showlegend = !seenLegendGroups.includes(
             this.sequences[key].file
           )
+          keyData.legendgroup = this.sequences[key].file
+
           keyData.line = {
             color: colorHash.hex(tinyHash(this.sequences[key].file)),
           }
