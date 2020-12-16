@@ -18,17 +18,18 @@
                 id="del-modal"
                 title="Remove Files"
                 variant="outline-secondary"
+                @ok="handleDelete"
               >
                 <b-form-checkbox-group
                   id="deletion-checkbox-group"
-                  v-model="deleteFiles"
+                  v-model="deleteSequences"
                 >
                   <b-form-checkbox
-                    v-for="(sequence, index) in sequences"
-                    :key="index"
-                    :value="index"
+                    v-for="(value, description) in sequences"
+                    :key="description"
+                    :value="description"
                   >
-                    {{ index }}
+                    {{ description }}
                   </b-form-checkbox>
                   <b-button variant="outline-secondary" @click="confirmClear">
                     Clear
@@ -134,7 +135,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex"
+import { mapState, mapActions, mapMutations } from "vuex"
 import SequenceUpload from "./SequenceUpload"
 import SequencePaste from "./SequencePaste"
 export default {
@@ -152,7 +153,7 @@ export default {
         gates:
           "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
       },
-      deleteFiles: [],
+      deleteSequences: [],
       newGraphTitle: "",
     }
   },
@@ -179,7 +180,17 @@ export default {
       this.$root.$refs.TheVisualization.setGraphTitle(this.newGraphTitle)
       this.$bvModal.hide("modal-prevent-closing")
     },
+    handleDelete(bvModalEvt) {
+      for (const description of this.deleteSequences) {
+        console.log(description)
+        this.removeSequence({
+          description,
+        })
+      }
+      this.$bvModal.hide("modal-prevent-closing")
+    },
     ...mapActions(["clearState", "changeMethod"]),
+    ...mapMutations(["removeSequence"]),
   },
 }
 </script>

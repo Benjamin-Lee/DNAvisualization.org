@@ -3,15 +3,10 @@
     <template #header>Turn DNA into graphs.</template>
 
     <template #lead>
-      This is a simple hero unit, a simple jumbotron-style component for calling
-      extra attention to featured content or information.
+      DNAvisualization.org turns DNA sequences into gorgeous, interactive
+      two-dimensional visualizations to enable their exploration.
     </template>
     <hr class="my-4" />
-
-    <p>
-      It uses utility classes for typography and spacing to space content out
-      within the larger container.
-    </p>
     <!-- Choose which sequence you want to download -->
     <b-modal id="my-modal" title="Download Example Sequences" hide-footer>
       <ul>
