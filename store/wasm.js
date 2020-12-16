@@ -26,25 +26,10 @@ export const actions = {
         __release,
       } = response.exports
       const wasm = {}
-      wasm.asYau = function asYau(seq) {
-        const inStrPtr = __retain(__newString(seq))
-        const outArrPtr = response.exports.yau(inStrPtr, seq.length)
-        const resultArr = __getFloat64Array(outArrPtr)
-        // __release(outArrPtr)
-        __release(inStrPtr)
-        return resultArr
-      }
       wasm.qi = function asQi(seq) {
         const inStrPtr = __retain(__newString(seq))
         const xPtr = response.exports.x_qi(seq.length)
         const yPtr = response.exports.y_qi(inStrPtr, seq.length)
-        __release(inStrPtr)
-        return [xPtr, yPtr]
-      }
-      wasm.yau_bp = function asYauBp(seq) {
-        const inStrPtr = __retain(__newString(seq))
-        const xPtr = response.exports.x_yau_bp(seq.length)
-        const yPtr = response.exports.y_yau_bp(inStrPtr, seq.length)
         __release(inStrPtr)
         return [xPtr, yPtr]
       }
