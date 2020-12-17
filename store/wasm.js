@@ -92,6 +92,8 @@ export const actions = {
         wasm.release = __release
         commit("saveFunctions", { wasm })
       })
+      // if we have an error, disable wasm
+      .catch(() => commit("disableWasm", {}, { root: true }))
   },
   transform({ commit, dispatch, rootState, state }, { description }) {
     // perform the transformation

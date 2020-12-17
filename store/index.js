@@ -48,6 +48,9 @@ export const mutations = {
   setLegendMode(state, mode) {
     state.legendMode = mode
   },
+  disableWasm(state) {
+    state.useWasm = false
+  },
 }
 
 export const actions = {
@@ -164,7 +167,29 @@ export const actions = {
     }
   },
   /** On page load, set up WASM */
-  nuxtClientInit({ dispatch }) {
-    dispatch("wasm/instantiate")
+  nuxtClientInit({ dispatch, commit }) {
+    const supported = (() => {
+      try {
+        if (
+          typeof WebAssembly === "object" &&
+          typeof WebAssembly.instantiate === "function"
+        ) {
+          const module = new WebAssembly.Module(
+            // eslint-disable-next-line
+            Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00)
+          )
+          if (module instanceof WebAssembly.Module)
+            return (
+              new WebAssembly.Instance(module) instanceof WebAssembly.Instance
+            )
+        }
+      } catch (e) {}
+      return false
+    })()
+    if (supported) {
+      dispatch("wasm/instantiate")
+    } else {
+      commit("disableWasm")
+    }
   },
 }
