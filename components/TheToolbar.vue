@@ -20,21 +20,29 @@
                 variant="outline-secondary"
                 @ok="handleDelete"
               >
-                <b-form-checkbox-group
-                  id="deletion-checkbox-group"
-                  v-model="deleteSequences"
-                >
-                  <b-form-checkbox
-                    v-for="(value, description) in sequences"
-                    :key="description"
-                    :value="description"
+                <b-tabs content-class="mt-3">
+                  <b-tab
+                    v-for="(seqs, files) in files"
+                    :key="files"
+                    :title="files"
                   >
-                    {{ description }}
-                  </b-form-checkbox>
+                    <b-form-checkbox-group
+                      id="deletion-checkbox-group"
+                      v-model="deleteSequences"
+                    >
+                      <b-form-checkbox
+                        v-for="description in seqs"
+                        :key="description"
+                        :value="description"
+                      >
+                        {{ description }}
+                      </b-form-checkbox>
+                    </b-form-checkbox-group>
+                  </b-tab>
                   <b-button variant="outline-secondary" @click="confirmClear">
                     Clear
                   </b-button>
-                </b-form-checkbox-group>
+                </b-tabs>
               </b-modal></b-button
             >
             <b-button
@@ -142,6 +150,7 @@ export default {
   components: { SequenceUpload, SequencePaste },
   data: () => {
     return {
+      files: {},
       methods: {
         squiggle:
           "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
@@ -158,6 +167,17 @@ export default {
     }
   },
   computed: { ...mapState(["sequences", "currentMethod"]) },
+  watch: {
+    sequences() {
+      for (const sequence in this.sequences) {
+        if (sequence in this.files) {
+          this.files.sequence.file.push(sequence)
+        } else {
+          this.files.sequence.file = [sequence]
+        }
+      }
+    },
+  },
   methods: {
     /** Confirm with the user that they want to reset the state to default */
     confirmClear() {
