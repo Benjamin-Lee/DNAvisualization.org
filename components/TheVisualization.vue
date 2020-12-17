@@ -87,6 +87,8 @@ export default {
           },
           ...result.yaxis,
         }
+      } else {
+        result.yaxis = { ticks: "", showticklabels: false, ...result.yaxis }
       }
       return result
     },
