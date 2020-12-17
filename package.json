@@ -20,7 +20,7 @@
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.0",
     "color-hash": "^1.0.3",
-    "dnaviz": "^1.1.0",
+    "dnaviz": "^1.1.1",
     "nuxt": "^2.14.11",
     "nuxt-client-init-module": "^0.1.9",
     "plotly.js": "^1.58.2"

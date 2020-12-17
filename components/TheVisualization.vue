@@ -83,7 +83,7 @@ export default {
       } else if (this.currentMethod === "gates") {
         result.yaxis = {
           title: {
-            text: this.currentMethod !== "gates" ? "" : "A-T axis",
+            text: "A-T axis",
           },
           ...result.yaxis,
         }
@@ -153,16 +153,22 @@ export default {
           return
         }
         this.zoomed = true
+        this.xMin =
+          this.currentMethod !== "gates"
+            ? Math.max(e["xaxis.range[0]"], 0)
+            : e["xaxis.range[0]"]
+        this.xMax =
+          this.currentMethod !== "gates"
+            ? Math.max(e["xaxis.range[1]"], 1)
+            : e["xaxis.range[1]"]
 
         for (const description in this.sequences) {
           this.computeOverview({
             description,
-            xMin: Math.max(e["xaxis.range[0]"], 0),
-            xMax: Math.max(e["xaxis.range[1]"], 1),
+            xMin: this.xMin,
+            xMax: this.xMax,
           })
         }
-        this.xMin = Math.max(e["xaxis.range[0]"], 0)
-        this.xMax = Math.max(e["xaxis.range[1]"], 1)
       }
     }, 50)
   },
