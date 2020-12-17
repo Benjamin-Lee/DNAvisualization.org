@@ -1,5 +1,7 @@
+import { anyToJson } from "bio-parsers";
 import Vue from "vue"
 // import * as dnaviz from "dnaviz"
+
 
 export const state = () => ({
   sequences: {},
@@ -69,6 +71,22 @@ export const actions = {
    * method's data, it will be modified. Otherwise, the sequence will be transformed and added.
    */
   // TODO: add a check to prevent duplicate transformation
+
+  
+  // uses async TeselaGen parser before dispatching to transformSequence
+  async parseSequence(
+    {dispatch},
+    {result, file}
+  ){
+    for (const sequence of await anyToJson(result)) {
+      dispatch("transformSequence", {
+        description: sequence.parsedSequence.name,
+        sequence: sequence.parsedSequence.sequence,
+        file: file.name,
+      })
+    }
+  },
+
   transformSequence(
     { commit, state, dispatch },
     { description, sequence, file }

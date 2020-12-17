@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { parse as fastaParse } from "biojs-io-fasta"
 export default {
   data() {
     return {
@@ -29,16 +28,11 @@ export default {
             this.$bvModal.msgBoxOk("This file is empty. Please try again.")
             this.uploadedFiles = null
           }
-          for (const sequence of fastaParse(e.target.result)) {
-            this.$store.dispatch("transformSequence", {
-              description: sequence.name,
-              sequence: sequence.seq,
-              file: file.name,
-            })
-          }
+          this.$store.dispatch("parseSequence", {result: e.target.result, file})
           this.$store.dispatch("wasm/instantiate")
         }
         reader.readAsText(file)
+        
       }
       this.$nextTick(() => {
         if (this.$root.$refs.TheVisualization.$refs.plotly !== undefined) {
@@ -51,6 +45,11 @@ export default {
     placeholderText(files) {
       return `Choose files or drop them here...`
     },
+
+    async parseSequence(result){
+      return await anyToJson(result)
+    },
+
   },
 }
 </script>
