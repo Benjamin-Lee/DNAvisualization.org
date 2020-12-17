@@ -162,14 +162,15 @@ export default {
     return {
       methods: {
         squiggle:
-          "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
-        yau_int: "experimental",
+          "(Default) Shows variations in GC-content and supports non-ATGC bases. Good performance.",
+        yau_int:
+          "Shows variation pyrimidine-purine ratio and supports non-ATGC bases. Best performance and scalabe to large seqeunces.",
         randic:
           "Like tablature, with As, Ts, Cs, and Gs assigned a y-coordinate. No support for non-ATGC bases. Not recommended.",
         qi:
-          "Same as Randic, except with dinucleotides instead of bases. Not recommended.",
+          "Same as Randić, except with dinucleotides instead of bases. Not recommended.",
         gates:
-          "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
+          "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively. Weak performance, not support for non-ATGC bases, and incapable of distinguishing between cycles.",
       },
       deleteFiles: [],
       newGraphTitle: "",
