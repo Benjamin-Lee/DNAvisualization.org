@@ -143,7 +143,12 @@
               :title="description"
               @click="changeMethod({ method: method })"
             >
-              {{ method.replace("_", "-").replace("randic", "randić") }}
+              {{
+                method
+                  .replace("_", "-")
+                  .replace("randic", "randić")
+                  .replace("yau-int", "yau")
+              }}
             </b-button>
           </b-button-group>
         </b-col>
