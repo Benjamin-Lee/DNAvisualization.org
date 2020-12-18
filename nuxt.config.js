@@ -77,6 +77,7 @@ export default {
       "FormInputPlugin",
       "FormGroupPlugin",
       "FormCheckboxPlugin",
+      "TabsPlugin",
       "FormPlugin",
     ],
     components: [

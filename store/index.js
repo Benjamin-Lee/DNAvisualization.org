@@ -33,6 +33,9 @@ export const mutations = {
       throw new Error("Didn't get ptrs or array")
     }
   },
+  removeSequence(state, { description }) {
+    Vue.delete(state.sequences, description)
+  },
   updateOverview(state, { description, method, overview }) {
     Vue.set(state.sequences[description].overview, [method], overview)
   },

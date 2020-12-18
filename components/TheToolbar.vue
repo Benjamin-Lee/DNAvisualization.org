@@ -17,23 +17,48 @@
               <b-modal
                 id="del-modal"
                 title="Remove Files"
+                @ok="handleDelete"
                 cancel-variant="outline-secondary"
               >
-                <b-form-checkbox-group
-                  id="deletion-checkbox-group"
-                  v-model="deleteFiles"
-                >
-                  <b-form-checkbox
-                    v-for="(sequence, index) in sequences"
-                    :key="index"
-                    :value="index"
-                  >
-                    {{ index }}
-                  </b-form-checkbox>
-                  <b-button variant="outline-secondary" @click="confirmClear">
-                    Clear
-                  </b-button>
-                </b-form-checkbox-group>
+                <b-tabs content-class="mt-3">
+                  <b-tab title="Files">
+                    <b-form-checkbox-group
+                      id="deletion-checkbox-group"
+                      v-model="deleteFiles"
+                    >
+                      <b-form-checkbox
+                        v-for="(value, file) in files"
+                        :key="file"
+                        :value="file"
+                      >
+                        {{ file }}
+                      </b-form-checkbox>
+                    </b-form-checkbox-group>
+                  </b-tab>
+                  <b-tab title="Sequences">
+                    <b-form-checkbox-group
+                      id="deletion-checkbox-group"
+                      v-model="deleteSequences"
+                    >
+                      <div
+                        v-for="(value, file) in files"
+                        :key="file"
+                        :value="file"
+                      >
+                        <b-form-checkbox
+                          v-for="sequence in value"
+                          :key="sequence"
+                          :value="sequence"
+                        >
+                          {{ sequence }}
+                        </b-form-checkbox>
+                      </div>
+                    </b-form-checkbox-group>
+                  </b-tab>
+                </b-tabs>
+                <b-button variant="outline-secondary" @click="confirmClear">
+                  Delete All
+                </b-button>
               </b-modal></b-button
             >
             <b-button
@@ -177,11 +202,26 @@ export default {
         gates:
           "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively. Weak performance, not support for non-ATGC bases, and incapable of distinguishing between cycles.",
       },
+      deleteSequences: [],
       deleteFiles: [],
       newGraphTitle: "",
     }
   },
-  computed: { ...mapState(["sequences", "currentMethod", "legendMode"]) },
+  computed: {
+    files() {
+      const results = {}
+      for (const description in this.sequences) {
+        const file = this.sequences[description].file
+        if (Object.prototype.hasOwnProperty.call(results, file)) {
+          results[file].push(description)
+        } else {
+          results[file] = [description]
+        }
+      }
+      return results
+    },
+    ...mapState(["sequences", "currentMethod", "legendMode"]),
+  },
   methods: {
     /** Confirm with the user that they want to reset the state to default */
     confirmClear() {
@@ -204,8 +244,26 @@ export default {
       this.$root.$refs.TheVisualization.setGraphTitle(this.newGraphTitle)
       this.$bvModal.hide("title-modal")
     },
+    handleDelete(bvModalEvt) {
+      for (const description of this.deleteSequences) {
+        console.log(description)
+        this.removeSequence({
+          description,
+        })
+      }
+      for (const file of this.deleteFiles) {
+        for (const description of this.files[file]) {
+          this.removeSequence({
+            description,
+          })
+        }
+      }
+      this.deleteSequences = []
+      this.deleteFiles = []
+      this.$bvModal.hide("modal-prevent-closing")
+    },
     ...mapActions(["clearState", "changeMethod"]),
-    ...mapMutations(["setLegendMode"]),
+    ...mapMutations(["removeSequence", "setLegendMode"]),
   },
 }
 </script>
