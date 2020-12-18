@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column sticky-footer-wrapper min-vh-100">
     <b-navbar toggleable="lg" variant="light" class="rounded border-bottom">
-      <b-navbar-brand to="/">
+      <b-navbar-brand to="/" @click="clearSequences">
         <img
           src="/images/logo.svg"
           style="max-height: 40px"
@@ -49,6 +49,19 @@
     </footer>
   </div>
 </template>
+
+<script>
+import { mapActions } from "vuex"
+export default {
+  methods: {
+    clearSequences() {
+      this.clearState()
+    },
+    ...mapActions(["clearState"]),
+  },
+}
+</script>
+
 <style>
 .navbar-light .navbar-nav .nav-link {
   color: #495057;
