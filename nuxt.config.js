@@ -87,6 +87,7 @@ export default {
       "BIconFileEarmarkPlus",
       "BIconTextIndentLeft",
       "BIconFileEarmarkText",
+      "BIconQuestionCircle",
     ],
   },
   /*

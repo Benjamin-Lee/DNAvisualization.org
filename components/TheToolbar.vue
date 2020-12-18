@@ -151,7 +151,15 @@
     </b-col>
     <b-col cols="12" lg="6" xl="5" class="text-center">
       <b-row>
-        <b-col class="pb-1">Visualization Method</b-col>
+        <b-col class="pb-1"
+          >Visualization Method
+          <span
+            v-b-tooltip.hover
+            title="Some methods have been disabled. Possible reasons are too great sequence length or the presence of ambiguous nucleotides."
+          >
+            <b-icon-question-circle></b-icon-question-circle>
+          </span>
+        </b-col>
       </b-row>
       <b-row>
         <b-col>
@@ -166,6 +174,7 @@
                 currentMethod == method ? 'secondary' : 'outline-secondary'
               "
               :title="description"
+              :disabled="disabledMethods.includes(method)"
               @click="changeMethod({ method: method })"
             >
               {{
@@ -219,6 +228,20 @@ export default {
         }
       }
       return results
+    },
+    hasAmbiguous() {
+      for (const description in this.sequences) {
+        if (this.sequences[description].hasAmbiguous) {
+          return true
+        }
+      }
+      return false
+    },
+    disabledMethods() {
+      if (this.hasAmbiguous) {
+        return ["randic", "qi", "gates"]
+      }
+      return []
     },
     ...mapState(["sequences", "currentMethod", "legendMode"]),
   },

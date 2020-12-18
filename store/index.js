@@ -14,10 +14,11 @@ export const mutations = {
    * Save a sequence and its description.
    * Note that the transformed visualization is *not* included.
    */
-  insertSequence(state, { description, sequence, file }) {
+  insertSequence(state, { description, sequence, file, hasAmbiguous }) {
     Vue.set(state.sequences, description, {
       sequence,
       file,
+      hasAmbiguous,
       visualization: {},
       overview: {},
     })
@@ -68,6 +69,15 @@ export const actions = {
   // uses async TeselaGen parser before dispatching to transformSequence
   async parseSequence({ dispatch }, { unparsed, file }) {
     for (const sequence of await anyToJson(unparsed)) {
+      let hasAmbiguous = false
+      for (const base of sequence.parsedSequence.sequence) {
+        if (
+          !["A", "T", "G", "C", "U", "a", "t", "g", "c", "u"].includes(base)
+        ) {
+          hasAmbiguous = true
+          break
+        }
+      }
       dispatch("transformSequence", {
         description:
           sequence.parsedSequence.description !== undefined
@@ -77,18 +87,19 @@ export const actions = {
             : sequence.parsedSequence.name,
         sequence: sequence.parsedSequence.sequence,
         file,
+        hasAmbiguous,
       })
     }
   },
 
   transformSequence(
     { commit, state, dispatch },
-    { description, sequence, file }
+    { description, sequence, file, hasAmbiguous }
   ) {
     // We need to check that
     sequence = sequence.toUpperCase()
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
-      commit("insertSequence", { description, sequence, file })
+      commit("insertSequence", { description, sequence, file, hasAmbiguous })
     }
     dispatch(
       state.useWasm && state.currentMethod !== "gates"
