@@ -23,9 +23,7 @@
     "dnaviz": "^1.0.0-0",
     "nuxt": "^2.14.11",
     "nuxt-client-init-module": "^0.1.9",
-    "plotly.js": "^1.58.2",
-    "ve-range-utils": "^2.5.8",
-    "ve-sequence-utils": "^4.0.3"
+    "plotly.js": "^1.58.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",
