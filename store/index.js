@@ -7,6 +7,7 @@ export const state = () => ({
   currentMethod: "yau_int",
   legendMode: "sequence",
   useWasm: true,
+  showSpinner: false,
 })
 
 export const mutations = {
@@ -56,6 +57,12 @@ export const mutations = {
   disableWasm(state) {
     state.useWasm = false
   },
+  showSpinner(state) {
+    state.showSpinner = true
+  },
+  hideSpinner(state) {
+    state.showSpinner = false
+  },
 }
 
 export const actions = {
@@ -97,9 +104,13 @@ export const actions = {
     { description, sequence, file, hasAmbiguous }
   ) {
     // We need to check that
-    sequence = sequence.toUpperCase()
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
-      commit("insertSequence", { description, sequence, file, hasAmbiguous })
+      commit("insertSequence", {
+        description,
+        sequence: sequence.toUpperCase(),
+        file,
+        hasAmbiguous,
+      })
     }
     dispatch(
       state.useWasm && state.currentMethod !== "gates"
@@ -107,7 +118,6 @@ export const actions = {
         : "dnaviz/transform",
       {
         description,
-        sequence,
       }
     )
     dispatch("computeOverview", { description })
@@ -197,6 +207,7 @@ export const actions = {
         })
       }
     }
+    commit("hideSpinner")
   },
   /** On page load, set up WASM */
   nuxtClientInit({ dispatch, commit }) {

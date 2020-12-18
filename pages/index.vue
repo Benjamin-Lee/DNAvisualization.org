@@ -1,5 +1,24 @@
 <template>
   <div>
+    <b-modal
+      id="loading-modal"
+      v-model="showSpinner"
+      hide-footer
+      header-close-content=""
+      no-close-on-backdrop
+      no-close-on-esc
+      :title="
+        'Visualizing in your browser with ' +
+        (useWasm ? 'WebAssembly' : 'JavaScript')
+      "
+    >
+      <div class="text-center">
+        <b-spinner
+          label="Loading..."
+          style="width: 3rem; height: 3rem"
+        ></b-spinner>
+      </div>
+    </b-modal>
     <TheJumbotron></TheJumbotron>
     <b-container class="mt-3">
       <TheVisualization></TheVisualization>
@@ -51,3 +70,14 @@
     </b-container>
   </div>
 </template>
+<script>
+import { mapState } from "vuex"
+export default {
+  computed: {
+    ...mapState(["useWasm", "showSpinner"]),
+  },
+  async created() {
+    await this.$nextTick()
+  },
+}
+</script>
