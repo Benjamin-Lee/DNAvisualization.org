@@ -53,8 +53,6 @@
         <SequenceUpload></SequenceUpload>
       </b-col>
     </b-row>
-
-    <p class="mt-3">Or paste a FASTA-formatted sequence:</p>
     <label for="paste-sequence" class="sr-only">Paste sequence:</label>
     <SequencePaste id="paste-sequence"></SequencePaste>
   </b-jumbotron>

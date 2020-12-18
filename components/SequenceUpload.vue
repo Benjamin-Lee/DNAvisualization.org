@@ -3,7 +3,7 @@
     v-model="uploadedFiles"
     :placeholder="placeholderText()"
     drop-placeholder="Drop file(s) here..."
-    accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt"
+    accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt, .gbk, .gb"
     :file-name-formatter="placeholderText"
     multiple
   ></b-form-file>

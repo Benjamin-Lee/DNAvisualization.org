@@ -70,7 +70,11 @@ export const actions = {
     for (const sequence of await anyToJson(unparsed)) {
       dispatch("transformSequence", {
         description:
-          sequence.parsedSequence.description || sequence.parsedSequence.name,
+          sequence.parsedSequence.description !== undefined
+            ? sequence.parsedSequence.name +
+              " " +
+              sequence.parsedSequence.description
+            : sequence.parsedSequence.name,
         sequence: sequence.parsedSequence.sequence,
         file,
       })
