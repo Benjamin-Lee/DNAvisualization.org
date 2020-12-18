@@ -27,7 +27,6 @@
           text="Use example"
           variant="outline-secondary"
           block
-          menu-class="w-100"
           @click="transformExample('hbb')"
         >
           <b-dropdown-item @click="transformExample('hbb')">

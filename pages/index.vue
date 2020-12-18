@@ -37,11 +37,11 @@
           <p class="my-4">
             If you use this tool in your research, please cite it as:
           </p>
-          <p class="bg-light rounded p-3 border">
+          <p class="bg-light rounded p-3 border mt-4 mb-0">
             Benjamin D. Lee, Michael A. Timony, Pablo Ruiz,
             DNAvisualization.org: a serverless web tool for DNA sequence
-            visualization, Nucleic Acids Research, Volume 47, Issue W1, 02 July
-            2019, Pages W20–W25,
+            visualization, <i>Nucleic Acids Research</i>, Volume 47, Issue W1,
+            02 July 2019, Pages W20–W25,
             <a href="https://doi.org/10.1093/nar/gkz404">
               https://doi.org/10.1093/nar/gkz404
             </a>

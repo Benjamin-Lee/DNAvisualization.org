@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <b-container class="my-3">
     <div>
       <h1 class="title">Instructions</h1>
 
@@ -136,5 +136,5 @@
         tool.
       </p>
     </div>
-  </div>
+  </b-container>
 </template>

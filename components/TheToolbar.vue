@@ -17,8 +17,8 @@
               <b-modal
                 id="del-modal"
                 title="Remove Files"
-                variant="outline-secondary"
                 @ok="handleDelete"
+                cancel-variant="outline-secondary"
               >
                 <b-tabs content-class="mt-3">
                   <b-tab title="Files">
@@ -78,13 +78,16 @@
               <b-modal
                 id="title-modal"
                 title="Change Title"
-                variant="outline-secondary"
+                cancel-variant="outline-secondary"
                 @ok="editTitle"
               >
-                <b-form-input
-                  v-model="newGraphTitle"
-                  placeholder="Enter your new title"
-                ></b-form-input>
+                <b-form @submit.prevent.stop="editTitle">
+                  <b-form-input
+                    v-model="newGraphTitle"
+                    autofocus
+                    placeholder="Enter your new title"
+                  ></b-form-input>
+                </b-form>
               </b-modal>
               <b-icon-gear></b-icon-gear>
             </b-button>
@@ -97,7 +100,11 @@
               <b-icon-file-earmark-plus></b-icon-file-earmark-plus>
             </b-button>
           </b-button-group>
-          <b-modal id="add-modal" title="Add Files" variant="outline-secondary">
+          <b-modal
+            id="add-modal"
+            title="Add Files"
+            cancel-variant="outline-secondary"
+          >
             <SequenceUpload></SequenceUpload>
             <SequencePaste></SequencePaste>
           </b-modal>
@@ -105,7 +112,13 @@
       </b-row>
     </b-col>
 
-    <b-col cols="12" sm="6" lg="2" class="text-center" order-lg="3">
+    <b-col
+      cols="12"
+      sm="6"
+      lg="2"
+      class="pb-2 pb-lg-0 text-center"
+      order-lg="3"
+    >
       <b-row>
         <b-col class="pb-1">Legend Mode</b-col>
       </b-row>
@@ -115,14 +128,20 @@
             <b-button
               v-b-tooltip.hover
               title="Plot each sequence in its own color with its own legend entry."
-              variant="outline-secondary"
+              :variant="
+                legendMode === 'sequence' ? 'secondary' : 'outline-secondary'
+              "
+              @click="setLegendMode('sequence')"
             >
               <b-icon-text-indent-left></b-icon-text-indent-left>
             </b-button>
             <b-button
               v-b-tooltip.hover
               title="Plot each file in its own color with its own legend entry."
-              variant="outline-secondary"
+              :variant="
+                legendMode === 'file' ? 'secondary' : 'outline-secondary'
+              "
+              @click="setLegendMode('file')"
             >
               <b-icon-file-earmark-text></b-icon-file-earmark-text>
             </b-button>
@@ -149,7 +168,12 @@
               :title="description"
               @click="changeMethod({ method: method })"
             >
-              {{ method.replace("_", "-") }}
+              {{
+                method
+                  .replace("_", "-")
+                  .replace("randic", "randić")
+                  .replace("yau-int", "yau")
+              }}
             </b-button>
           </b-button-group>
         </b-col>
@@ -168,14 +192,15 @@ export default {
     return {
       methods: {
         squiggle:
-          "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
-        yau_int: "experimental",
+          "(Default) Shows variations in GC-content and supports non-ATGC bases. Good performance.",
+        yau_int:
+          "Shows variation pyrimidine-purine ratio and supports non-ATGC bases. Best performance and scalabe to large seqeunces.",
         randic:
           "Like tablature, with As, Ts, Cs, and Gs assigned a y-coordinate. No support for non-ATGC bases. Not recommended.",
         qi:
-          "Same as Randic, except with dinucleotides instead of bases. Not recommended.",
+          "Same as Randić, except with dinucleotides instead of bases. Not recommended.",
         gates:
-          "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
+          "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively. Weak performance, not support for non-ATGC bases, and incapable of distinguishing between cycles.",
       },
       deleteSequences: [],
       deleteFiles: [],
@@ -195,7 +220,7 @@ export default {
       }
       return results
     },
-    ...mapState(["sequences", "currentMethod"]),
+    ...mapState(["sequences", "currentMethod", "legendMode"]),
   },
   methods: {
     /** Confirm with the user that they want to reset the state to default */
@@ -203,7 +228,7 @@ export default {
       this.$bvModal
         .msgBoxConfirm('Clicking "OK" will delete all transformed sequences.', {
           title: "Are you sure?",
-          okVariant: "outline-danger",
+          okVariant: "danger",
           cancelVariant: "outline-secondary",
           footerClass: "p-2",
           hideHeaderClose: false,
@@ -217,7 +242,7 @@ export default {
     },
     editTitle(bvModalEvt) {
       this.$root.$refs.TheVisualization.setGraphTitle(this.newGraphTitle)
-      this.$bvModal.hide("modal-prevent-closing")
+      this.$bvModal.hide("title-modal")
     },
     handleDelete(bvModalEvt) {
       for (const description of this.deleteSequences) {
@@ -238,7 +263,7 @@ export default {
       this.$bvModal.hide("modal-prevent-closing")
     },
     ...mapActions(["clearState", "changeMethod"]),
-    ...mapMutations(["removeSequence"]),
+    ...mapMutations(["removeSequence", "setLegendMode"]),
   },
 }
 </script>
