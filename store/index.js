@@ -1,11 +1,12 @@
 import { anyToJson } from "bio-parsers"
 import Vue from "vue"
-// import * as dnaviz from "dnaviz"
-
+import * as dnaviz from "dnaviz"
+import { downsample } from "./helpers"
 export const state = () => ({
   sequences: {},
   currentMethod: "yau_int",
   legendMode: "sequence",
+  useWasm: true,
 })
 
 export const mutations = {
@@ -48,19 +49,9 @@ export const mutations = {
   setLegendMode(state, mode) {
     state.legendMode = mode
   },
-}
-
-/**
- * Downsample a pair of arrays to hold n points
- */
-function downsample(transformed, nPoints) {
-  const downsampleFactor = transformed[0].length / nPoints
-  const overview = [new Array(nPoints), new Array(nPoints)]
-  for (let index = 0; index < nPoints; index++) {
-    overview[0][index] = transformed[0][Math.floor(index * downsampleFactor)]
-    overview[1][index] = transformed[1][Math.floor(index * downsampleFactor)]
-  }
-  return overview
+  disableWasm(state) {
+    state.useWasm = false
+  },
 }
 
 export const actions = {
@@ -92,7 +83,15 @@ export const actions = {
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
       commit("insertSequence", { description, sequence, file })
     }
-    dispatch("wasm/transform", { description, sequence })
+    dispatch(
+      state.useWasm && state.currentMethod !== "gates"
+        ? "wasm/transform"
+        : "dnaviz/transform",
+      {
+        description,
+        sequence,
+      }
+    )
     dispatch("computeOverview", { description })
   },
   computeOverview({ commit, state }, { description, xMin, xMax }) {
@@ -102,7 +101,7 @@ export const actions = {
     // We're zooming in
     if (xMin !== undefined && xMax !== undefined) {
       // first, we need to find how many points we've already saved in the range
-      const inRange = [[], []]
+      let inRange = [[], []]
       for (let i = 0; i < visualization[0].length; i++) {
         if (xMin < visualization[0][i] && visualization[0][i] < xMax) {
           inRange[0].push(visualization[0][i])
@@ -111,6 +110,7 @@ export const actions = {
           break
         }
       }
+
       // if we have more than 1k points, we're good to downsample
       // if not, we need to compute points in the x range
       if (inRange[0].length < 1000) {
@@ -121,16 +121,21 @@ export const actions = {
         )
         // transform it
         // TODO: downsample to 10k before reading
-        const ptrs = state.wasm[state.currentMethod](seqInRange)
-        if (state.currentMethod === "yau_int") {
-          inRange[0] = state.wasm.getInt32Array(ptrs[0])
-          inRange[1] = state.wasm.getInt32Array(ptrs[1])
+        if (state.useWasm && state.currentMethod !== "gates") {
+          const ptrs = state.wasm[state.currentMethod](seqInRange)
+          if (state.currentMethod === "yau_int") {
+            inRange[0] = state.wasm.getInt32Array(ptrs[0])
+            inRange[1] = state.wasm.getInt32Array(ptrs[1])
+          } else {
+            inRange[0] = state.wasm.getFloat64Array(ptrs[0])
+            inRange[1] = state.wasm.getFloat64Array(ptrs[1])
+          }
+          // don't forget to free memory!
+          ptrs.forEach((ptr) => state.wasm.release(ptr))
         } else {
-          inRange[0] = state.wasm.getFloat64Array(ptrs[0])
-          inRange[1] = state.wasm.getFloat64Array(ptrs[1])
+          inRange = dnaviz[state.currentMethod](seqInRange)
         }
-        // don't forget to free memory!
-        ptrs.forEach((ptr) => state.wasm.release(ptr))
+
         // fix the x offset
         for (let i = 0; i < inRange[0].length; i++) {
           inRange[0][i] += Math.floor(xMin)
@@ -176,7 +181,29 @@ export const actions = {
     }
   },
   /** On page load, set up WASM */
-  nuxtClientInit({ dispatch }) {
-    dispatch("wasm/instantiate")
+  nuxtClientInit({ dispatch, commit }) {
+    const supported = (() => {
+      try {
+        if (
+          typeof WebAssembly === "object" &&
+          typeof WebAssembly.instantiate === "function"
+        ) {
+          const module = new WebAssembly.Module(
+            // eslint-disable-next-line
+            Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00)
+          )
+          if (module instanceof WebAssembly.Module)
+            return (
+              new WebAssembly.Instance(module) instanceof WebAssembly.Instance
+            )
+        }
+      } catch (e) {}
+      return false
+    })()
+    if (supported) {
+      dispatch("wasm/instantiate")
+    } else {
+      commit("disableWasm")
+    }
   },
 }

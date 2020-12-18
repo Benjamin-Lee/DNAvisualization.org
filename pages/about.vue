@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <b-container class="my-3">
     <div>
       <h1 class="title">About</h1>
       <p>
@@ -17,8 +17,9 @@
       <p>If you use this tool in your research, please cite it as:</p>
       <p class="bg-light rounded p-3 border">
         Benjamin D. Lee, Michael A. Timony, Pablo Ruiz, DNAvisualization.org: a
-        serverless web tool for DNA sequence visualization, Nucleic Acids
-        Research, Volume 47, Issue W1, 02 July 2019, Pages W20–W25,
+        serverless web tool for DNA sequence visualization,
+        <i>Nucleic Acids Research</i>, Volume 47, Issue W1, 02 July 2019, Pages
+        W20–W25,
         <a href="https://doi.org/10.1093/nar/gkz404">
           https://doi.org/10.1093/nar/gkz404
         </a>
@@ -43,5 +44,5 @@
         >
       </div>
     </div>
-  </div>
+  </b-container>
 </template>

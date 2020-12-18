@@ -83,10 +83,12 @@ export default {
       } else if (this.currentMethod === "gates") {
         result.yaxis = {
           title: {
-            text: this.currentMethod !== "gates" ? "" : "A-T axis",
+            text: "A-T axis",
           },
           ...result.yaxis,
         }
+      } else {
+        result.yaxis = { ticks: "", showticklabels: false, ...result.yaxis }
       }
       return result
     },
@@ -138,6 +140,10 @@ export default {
     // Allow TheToolbar to talk directly to Plotly
     this.$root.$refs.TheVisualization = this
     this.debouncedZoom = debounce((e) => {
+      if (e["xaxis.autorange"] === true) {
+        this.resetZoom()
+        return
+      }
       if (
         e["xaxis.range[0]"] !== undefined &&
         e["xaxis.range[1]"] !== undefined
@@ -149,16 +155,22 @@ export default {
           return
         }
         this.zoomed = true
+        this.xMin =
+          this.currentMethod !== "gates"
+            ? Math.max(e["xaxis.range[0]"], 0)
+            : e["xaxis.range[0]"]
+        this.xMax =
+          this.currentMethod !== "gates"
+            ? Math.max(e["xaxis.range[1]"], 1)
+            : e["xaxis.range[1]"]
 
         for (const description in this.sequences) {
           this.computeOverview({
             description,
-            xMin: e["xaxis.range[0]"],
-            xMax: e["xaxis.range[1]"],
+            xMin: this.xMin,
+            xMax: this.xMax,
           })
         }
-        this.xMin = e["xaxis.range[0]"]
-        this.xMax = e["xaxis.range[1]"]
       }
     }, 50)
   },
