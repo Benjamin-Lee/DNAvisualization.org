@@ -104,9 +104,13 @@ export const actions = {
     { description, sequence, file, hasAmbiguous }
   ) {
     // We need to check that
-    sequence = sequence.toUpperCase()
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
-      commit("insertSequence", { description, sequence, file, hasAmbiguous })
+      commit("insertSequence", {
+        description,
+        sequence: sequence.toUpperCase(),
+        file,
+        hasAmbiguous,
+      })
     }
     dispatch(
       state.useWasm && state.currentMethod !== "gates"
@@ -114,7 +118,6 @@ export const actions = {
         : "dnaviz/transform",
       {
         description,
-        sequence,
       }
     )
     dispatch("computeOverview", { description })
