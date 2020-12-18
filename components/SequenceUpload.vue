@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { parse as fastaParse } from "biojs-io-fasta"
 export default {
   data() {
     return {
@@ -29,13 +28,10 @@ export default {
             this.$bvModal.msgBoxOk("This file is empty. Please try again.")
             this.uploadedFiles = null
           }
-          for (const sequence of fastaParse(e.target.result)) {
-            this.$store.dispatch("transformSequence", {
-              description: sequence.name,
-              sequence: sequence.seq,
-              file: file.name,
-            })
-          }
+          this.$store.dispatch("parseSequence", {
+            unparsed: e.target.result,
+            file: file.name,
+          })
           this.$store.dispatch("wasm/instantiate")
         }
         reader.readAsText(file)

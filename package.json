@@ -17,7 +17,7 @@
     "@assemblyscript/loader": "^0.17.9",
     "@nuxtjs/axios": "^5.12.4",
     "@statnett/vue-plotly": "^0.3.2",
-    "biojs-io-fasta": "^0.1.17",
+    "bio-parsers": "^6.2.2",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.1",
     "color-hash": "^1.0.3",
