@@ -17,8 +17,8 @@
               <b-modal
                 id="del-modal"
                 title="Remove Files"
-                @ok="handleDelete"
                 cancel-variant="outline-secondary"
+                @ok="handleDelete"
               >
                 <b-tabs content-class="mt-3">
                   <b-tab title="Files">
@@ -246,7 +246,6 @@ export default {
     },
     handleDelete(bvModalEvt) {
       for (const description of this.deleteSequences) {
-        console.log(description)
         this.removeSequence({
           description,
         })
