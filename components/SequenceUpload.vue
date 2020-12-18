@@ -28,11 +28,13 @@ export default {
             this.$bvModal.msgBoxOk("This file is empty. Please try again.")
             this.uploadedFiles = null
           }
-          this.$store.dispatch("parseSequence", {result: e.target.result, file})
+          this.$store.dispatch("parseSequence", {
+            unparsed: e.target.result,
+            file: file.name,
+          })
           this.$store.dispatch("wasm/instantiate")
         }
         reader.readAsText(file)
-        
       }
       this.$nextTick(() => {
         if (this.$root.$refs.TheVisualization.$refs.plotly !== undefined) {
@@ -45,11 +47,6 @@ export default {
     placeholderText(files) {
       return `Choose files or drop them here...`
     },
-
-    async parseSequence(result){
-      return await anyToJson(result)
-    },
-
   },
 }
 </script>

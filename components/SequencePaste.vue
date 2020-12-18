@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { parse as fastaParse } from "biojs-io-fasta"
 export default {
   data() {
     return {
@@ -34,13 +33,10 @@ export default {
   },
   methods: {
     transformPastedSequences() {
-      for (const sequence of fastaParse(this.pastedSequences)) {
-        this.$store.dispatch("transformSequence", {
-          description: sequence.name,
-          sequence: sequence.seq,
-          file: "Pasted Sequences",
-        })
-      }
+      this.$store.dispatch("parseSequence", {
+        unparsed: this.pastedSequences,
+        file: "Pasted Sequences",
+      })
       this.$nextTick(() => {
         if (this.$root.$refs.TheVisualization.$refs.plotly !== undefined) {
           this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
