@@ -77,6 +77,7 @@ export default {
       "FormInputPlugin",
       "FormGroupPlugin",
       "FormCheckboxPlugin",
+      "TabsPlugin",
       "FormPlugin",
       "SpinnerPlugin",
     ],
@@ -87,6 +88,7 @@ export default {
       "BIconFileEarmarkPlus",
       "BIconTextIndentLeft",
       "BIconFileEarmarkText",
+      "BIconQuestionCircle",
     ],
   },
   /*

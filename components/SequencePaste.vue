@@ -3,19 +3,16 @@
     <b-form-textarea
       id="paste-sequence"
       v-model="pastedSequences"
-      :placeholder="`>Description line goes here${' '.repeat(
-        250
-      )}ATGCAGA...${' '.repeat(
-        250
-      )}>Optionally, another sequence can follow${' '.repeat(250)}GACGTTT...`"
       rows="4"
       class="my-3"
+      placeholder="Paste DNA sequences in FASTA or GenBank format here!"
     ></b-form-textarea>
     <!-- The disabled state does the most basic FASTA validation -->
     <b-button
       variant="outline-secondary"
       :disabled="
-        !pastedSequences.includes('>') || !pastedSequences.includes('\n')
+        (!pastedSequences.includes('>') || !pastedSequences.includes('\n')) &&
+        !pastedSequences.includes('LOCUS')
       "
       @click="transformPastedSequences"
     >
@@ -25,7 +22,6 @@
 </template>
 
 <script>
-import { parse as fastaParse } from "biojs-io-fasta"
 export default {
   data() {
     return {
@@ -34,13 +30,10 @@ export default {
   },
   methods: {
     transformPastedSequences() {
-      for (const sequence of fastaParse(this.pastedSequences)) {
-        this.$store.dispatch("transformSequence", {
-          description: sequence.name,
-          sequence: sequence.seq,
-          file: "Pasted Sequences",
-        })
-      }
+      this.$store.dispatch("parseSequence", {
+        unparsed: this.pastedSequences,
+        file: "Pasted Sequences",
+      })
       this.$nextTick(() => {
         if (this.$root.$refs.TheVisualization.$refs.plotly !== undefined) {
           this.$root.$refs.TheVisualization.$refs.plotly.newPlot()

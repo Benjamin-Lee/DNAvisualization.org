@@ -1,14 +1,14 @@
 <template>
   <div class="d-flex flex-column sticky-footer-wrapper min-vh-100">
     <b-navbar toggleable="lg" variant="light" class="rounded border-bottom">
-      <b-navbar-brand to="/">
+      <b-navbar-brand to="/" @click="clearSequences">
         <img
           src="/images/logo.svg"
           style="max-height: 40px"
           alt="DNAvisualization.org logo"
         />
       </b-navbar-brand>
-      <b-navbar-brand to="/">
+      <b-navbar-brand to="/" @click="clearSequences">
         <img
           src="/images/words.svg"
           style="max-height: 20px"
@@ -21,7 +21,7 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item to="/">Home</b-nav-item>
+          <b-nav-item to="/" @click="clearSequences">Home</b-nav-item>
           <b-nav-item to="/about">About</b-nav-item>
           <b-nav-item to="/instructions">Instructions</b-nav-item>
           <b-nav-item href="mailto:blee@iqt.org?subject=DNAvisualization.org">
@@ -49,6 +49,41 @@
     </footer>
   </div>
 </template>
+
+<script>
+import { mapActions, mapState } from "vuex"
+export default {
+  computed: { ...mapState(["sequences"]) },
+  methods: {
+    clearSequences() {
+      if (
+        this.$route.path === "/" &&
+        Object.keys(this.sequences).length !== 0
+      ) {
+        this.$bvModal
+          .msgBoxConfirm(
+            'Clicking "OK" will delete all transformed sequences.',
+            {
+              title: "Are you sure?",
+              okVariant: "danger",
+              cancelVariant: "outline-secondary",
+              footerClass: "p-2",
+              hideHeaderClose: false,
+              centered: true,
+            }
+          )
+          .then((value) => {
+            if (value === true) {
+              this.clearState()
+            }
+          })
+      }
+    },
+    ...mapActions(["clearState"]),
+  },
+}
+</script>
+
 <style>
 .navbar-light .navbar-nav .nav-link {
   color: #495057;

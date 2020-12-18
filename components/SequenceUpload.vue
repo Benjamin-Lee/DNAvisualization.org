@@ -3,14 +3,13 @@
     v-model="uploadedFiles"
     :placeholder="placeholderText()"
     drop-placeholder="Drop file(s) here..."
-    accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt"
+    accept=".fasta, .fa, .fna, .fas, .frn, .ffn, .txt, .gbk, .gb"
     :file-name-formatter="placeholderText"
     multiple
   ></b-form-file>
 </template>
 
 <script>
-import { parse as fastaParse } from "biojs-io-fasta"
 import { mapMutations } from "vuex"
 
 export default {
@@ -24,6 +23,7 @@ export default {
       if (!files) {
         return
       }
+
       this.showSpinner()
       this.$root.$on("bv::modal::shown", (bvEvent, modalId) => {
         if (modalId !== "loading-modal") {
@@ -36,14 +36,12 @@ export default {
               this.$bvModal.msgBoxOk("This file is empty. Please try again.")
               this.uploadedFiles = null
             }
-            for (const sequence of fastaParse(e.target.result)) {
-              this.$store.dispatch("transformSequence", {
-                description: sequence.name,
-                sequence: sequence.seq,
-                file: file.name,
-              })
-            }
+            this.$store.dispatch("parseSequence", {
+              unparsed: e.target.result,
+              file: file.name,
+            })
             this.$store.dispatch("wasm/instantiate")
+            this.hideSpinner()
             this.$nextTick(() => {
               if (
                 this.$root.$refs.TheVisualization.$refs.plotly !== undefined
@@ -54,7 +52,6 @@ export default {
           }
           reader.readAsText(file)
         }
-        this.hideSpinner()
       })
     },
   },

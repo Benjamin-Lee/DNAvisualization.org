@@ -1,3 +1,4 @@
+import { anyToJson } from "bio-parsers"
 import Vue from "vue"
 import * as dnaviz from "dnaviz"
 import { downsample } from "./helpers"
@@ -14,10 +15,11 @@ export const mutations = {
    * Save a sequence and its description.
    * Note that the transformed visualization is *not* included.
    */
-  insertSequence(state, { description, sequence, file }) {
+  insertSequence(state, { description, sequence, file, hasAmbiguous }) {
     Vue.set(state.sequences, description, {
       sequence,
       file,
+      hasAmbiguous,
       visualization: {},
       overview: {},
     })
@@ -33,6 +35,9 @@ export const mutations = {
     } else {
       throw new Error("Didn't get ptrs or array")
     }
+  },
+  removeSequence(state, { description }) {
+    Vue.delete(state.sequences, description)
   },
   updateOverview(state, { description, method, overview }) {
     Vue.set(state.sequences[description].overview, [method], overview)
@@ -67,14 +72,41 @@ export const actions = {
    * method's data, it will be modified. Otherwise, the sequence will be transformed and added.
    */
   // TODO: add a check to prevent duplicate transformation
+
+  // uses async TeselaGen parser before dispatching to transformSequence
+  async parseSequence({ dispatch }, { unparsed, file }) {
+    for (const sequence of await anyToJson(unparsed)) {
+      let hasAmbiguous = false
+      for (const base of sequence.parsedSequence.sequence) {
+        if (
+          !["A", "T", "G", "C", "U", "a", "t", "g", "c", "u"].includes(base)
+        ) {
+          hasAmbiguous = true
+          break
+        }
+      }
+      dispatch("transformSequence", {
+        description:
+          sequence.parsedSequence.description !== undefined
+            ? sequence.parsedSequence.name +
+              " " +
+              sequence.parsedSequence.description
+            : sequence.parsedSequence.name,
+        sequence: sequence.parsedSequence.sequence,
+        file,
+        hasAmbiguous,
+      })
+    }
+  },
+
   transformSequence(
     { commit, state, dispatch },
-    { description, sequence, file }
+    { description, sequence, file, hasAmbiguous }
   ) {
     // We need to check that
     sequence = sequence.toUpperCase()
     if (!Object.prototype.hasOwnProperty.call(state.sequences, description)) {
-      commit("insertSequence", { description, sequence, file })
+      commit("insertSequence", { description, sequence, file, hasAmbiguous })
     }
     dispatch(
       state.useWasm && state.currentMethod !== "gates"

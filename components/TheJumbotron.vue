@@ -3,15 +3,10 @@
     <template #header>Turn DNA into graphs.</template>
 
     <template #lead>
-      This is a simple hero unit, a simple jumbotron-style component for calling
-      extra attention to featured content or information.
+      DNAvisualization.org turns DNA sequences into gorgeous, interactive
+      two-dimensional visualizations to enable their exploration.
     </template>
     <hr class="my-4" />
-
-    <p>
-      It uses utility classes for typography and spacing to space content out
-      within the larger container.
-    </p>
     <!-- Choose which sequence you want to download -->
     <b-modal id="my-modal" title="Download Example Sequences" hide-footer>
       <ul>
@@ -58,14 +53,11 @@
         <SequenceUpload></SequenceUpload>
       </b-col>
     </b-row>
-
-    <p class="mt-3">Or paste a FASTA-formatted sequence:</p>
     <label for="paste-sequence" class="sr-only">Paste sequence:</label>
     <SequencePaste id="paste-sequence"></SequencePaste>
   </b-jumbotron>
 </template>
 <script>
-import { parse as fastaParse } from "biojs-io-fasta"
 import { mapState } from "vuex"
 import SequenceUpload from "./SequenceUpload"
 import SequencePaste from "./SequencePaste"
@@ -77,42 +69,15 @@ export default {
     },
     ...mapState(["sequences"]),
   },
-  watch: {
-    uploadedFile(val) {
-      if (!val) {
-        return
-      }
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        if (e.target.result.length === 0 && e.target.result.total === 0) {
-          this.$bvModal.msgBoxOk("This file is empty. Please try again.")
-          this.uploadedFile = null
-        } else if (e.target.result.length === 0) {
-          this.$bvModal.msgBoxOk("This file is too large to be parsed.")
-          this.uploadedFile = null
-        }
-        for (const sequence of fastaParse(e.target.result)) {
-          this.$store.dispatch("transformSequence", {
-            description: sequence.name,
-            sequence: sequence.seq,
-          })
-        }
-      }
-      reader.readAsText(val)
-    },
-  },
   methods: {
     transformExample(example) {
       fetch(`/examples/${example}.fasta`)
         .then((x) => x.text())
         .then((text) => {
-          for (const sequence of fastaParse(text)) {
-            this.$store.dispatch("transformSequence", {
-              description: sequence.name,
-              sequence: sequence.seq,
-              file: "Example Sequences",
-            })
-          }
+          this.$store.dispatch("parseSequence", {
+            unparsed: text,
+            file: example + ".fasta",
+          })
         })
     },
   },

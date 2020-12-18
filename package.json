@@ -7,28 +7,31 @@
   "scripts": {
     "asbuild": "asc plugins/assembly/index.ts -b static/wasm/optimized.wasm --sourceMap -O3",
     "dev": "npm run asbuild && nuxt",
+    "dev:noasbuild": "nuxt",
     "start": "npm run generate && nuxt start",
     "generate": "npm run asbuild && nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --ignore-pattern static/ .",
     "fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "@assemblyscript/loader": "^0.17.8",
+    "@assemblyscript/loader": "^0.17.9",
     "@nuxtjs/axios": "^5.12.4",
     "@statnett/vue-plotly": "^0.3.2",
-    "biojs-io-fasta": "^0.1.17",
+    "bio-parsers": "^6.2.2",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.21.1",
     "color-hash": "^1.0.3",
     "dnaviz": "^1.1.1",
     "nuxt": "^2.14.12",
     "nuxt-client-init-module": "^0.1.9",
-    "plotly.js": "^1.58.2"
+    "plotly.js": "^1.58.3",
+    "ve-range-utils": "^2.5.8",
+    "ve-sequence-utils": "^3.3.56"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^5.0.0",
-    "@nuxtjs/eslint-module": "^3.0.1",
-    "assemblyscript": "^0.17.8",
+    "@nuxtjs/eslint-module": "^3.0.2",
+    "assemblyscript": "^0.17.9",
     "babel-eslint": "^10.0.1",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",

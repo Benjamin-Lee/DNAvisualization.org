@@ -18,22 +18,47 @@
                 id="del-modal"
                 title="Remove Files"
                 cancel-variant="outline-secondary"
+                @ok="handleDelete"
               >
-                <b-form-checkbox-group
-                  id="deletion-checkbox-group"
-                  v-model="deleteFiles"
-                >
-                  <b-form-checkbox
-                    v-for="(sequence, index) in sequences"
-                    :key="index"
-                    :value="index"
-                  >
-                    {{ index }}
-                  </b-form-checkbox>
-                  <b-button variant="outline-secondary" @click="confirmClear">
-                    Clear
-                  </b-button>
-                </b-form-checkbox-group>
+                <b-tabs content-class="mt-3">
+                  <b-tab title="Files">
+                    <b-form-checkbox-group
+                      id="deletion-checkbox-group"
+                      v-model="deleteFiles"
+                    >
+                      <b-form-checkbox
+                        v-for="(value, file) in files"
+                        :key="file"
+                        :value="file"
+                      >
+                        {{ file }}
+                      </b-form-checkbox>
+                    </b-form-checkbox-group>
+                  </b-tab>
+                  <b-tab title="Sequences">
+                    <b-form-checkbox-group
+                      id="deletion-checkbox-group"
+                      v-model="deleteSequences"
+                    >
+                      <div
+                        v-for="(value, file) in files"
+                        :key="file"
+                        :value="file"
+                      >
+                        <b-form-checkbox
+                          v-for="sequence in value"
+                          :key="sequence"
+                          :value="sequence"
+                        >
+                          {{ sequence }}
+                        </b-form-checkbox>
+                      </div>
+                    </b-form-checkbox-group>
+                  </b-tab>
+                </b-tabs>
+                <b-button variant="outline-secondary" @click="confirmClear">
+                  Delete All
+                </b-button>
               </b-modal></b-button
             >
             <b-button
@@ -126,7 +151,15 @@
     </b-col>
     <b-col cols="12" lg="6" xl="5" class="text-center">
       <b-row>
-        <b-col class="pb-1">Visualization Method</b-col>
+        <b-col class="pb-1"
+          >Visualization Method
+          <span
+            v-b-tooltip.hover
+            title="Some methods have been disabled. Possible reasons are too great sequence length or the presence of ambiguous nucleotides."
+          >
+            <b-icon-question-circle></b-icon-question-circle>
+          </span>
+        </b-col>
       </b-row>
       <b-row>
         <b-col>
@@ -141,6 +174,7 @@
                 currentMethod == method ? 'secondary' : 'outline-secondary'
               "
               :title="description"
+              :disabled="disabledMethods.includes(method)"
               @click="changeMethod(method)"
             >
               {{
@@ -177,11 +211,40 @@ export default {
         gates:
           "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively. Weak performance, not support for non-ATGC bases, and incapable of distinguishing between cycles.",
       },
+      deleteSequences: [],
       deleteFiles: [],
       newGraphTitle: "",
     }
   },
-  computed: { ...mapState(["sequences", "currentMethod", "legendMode"]) },
+  computed: {
+    files() {
+      const results = {}
+      for (const description in this.sequences) {
+        const file = this.sequences[description].file
+        if (Object.prototype.hasOwnProperty.call(results, file)) {
+          results[file].push(description)
+        } else {
+          results[file] = [description]
+        }
+      }
+      return results
+    },
+    hasAmbiguous() {
+      for (const description in this.sequences) {
+        if (this.sequences[description].hasAmbiguous) {
+          return true
+        }
+      }
+      return false
+    },
+    disabledMethods() {
+      if (this.hasAmbiguous) {
+        return ["randic", "qi", "gates"]
+      }
+      return []
+    },
+    ...mapState(["sequences", "currentMethod", "legendMode"]),
+  },
   methods: {
     /** Confirm with the user that they want to reset the state to default */
     confirmClear() {
@@ -213,8 +276,25 @@ export default {
         this.$store.dispatch("changeMethod", { method })
       })
     },
+    handleDelete(bvModalEvt) {
+      for (const description of this.deleteSequences) {
+        this.removeSequence({
+          description,
+        })
+      }
+      for (const file of this.deleteFiles) {
+        for (const description of this.files[file]) {
+          this.removeSequence({
+            description,
+          })
+        }
+      }
+      this.deleteSequences = []
+      this.deleteFiles = []
+      this.$bvModal.hide("modal-prevent-closing")
+    },
     ...mapActions(["clearState"]),
-    ...mapMutations(["setLegendMode"]),
+    ...mapMutations(["removeSequence", "setLegendMode"]),
   },
 }
 </script>
