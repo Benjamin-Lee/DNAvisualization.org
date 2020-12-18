@@ -104,6 +104,7 @@
             id="add-modal"
             title="Add Files"
             cancel-variant="outline-secondary"
+            hide-footer
           >
             <SequenceUpload></SequenceUpload>
             <SequencePaste></SequencePaste>
