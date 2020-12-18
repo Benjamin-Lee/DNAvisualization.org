@@ -78,6 +78,7 @@ export default {
       "FormGroupPlugin",
       "FormCheckboxPlugin",
       "FormPlugin",
+      "SpinnerPlugin",
     ],
     components: [
       "BIconDownload",

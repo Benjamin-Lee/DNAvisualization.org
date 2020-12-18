@@ -6,6 +6,7 @@ export const state = () => ({
   currentMethod: "yau_int",
   legendMode: "sequence",
   useWasm: true,
+  showSpinner: false,
 })
 
 export const mutations = {
@@ -50,6 +51,12 @@ export const mutations = {
   },
   disableWasm(state) {
     state.useWasm = false
+  },
+  showSpinner(state) {
+    state.showSpinner = true
+  },
+  hideSpinner(state) {
+    state.showSpinner = false
   },
 }
 
@@ -165,6 +172,7 @@ export const actions = {
         })
       }
     }
+    commit("hideSpinner")
   },
   /** On page load, set up WASM */
   nuxtClientInit({ dispatch, commit }) {

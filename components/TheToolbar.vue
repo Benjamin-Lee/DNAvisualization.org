@@ -141,7 +141,7 @@
                 currentMethod == method ? 'secondary' : 'outline-secondary'
               "
               :title="description"
-              @click="changeMethod({ method: method })"
+              @click="changeMethod(method)"
             >
               {{
                 method
@@ -204,7 +204,16 @@ export default {
       this.$root.$refs.TheVisualization.setGraphTitle(this.newGraphTitle)
       this.$bvModal.hide("title-modal")
     },
-    ...mapActions(["clearState", "changeMethod"]),
+    changeMethod(method) {
+      this.$store.commit("showSpinner")
+      this.$root.$on("bv::modal::shown", (bvEvent, modalId) => {
+        if (modalId !== "loading-modal") {
+          return
+        }
+        this.$store.dispatch("changeMethod", { method })
+      })
+    },
+    ...mapActions(["clearState"]),
     ...mapMutations(["setLegendMode"]),
   },
 }
