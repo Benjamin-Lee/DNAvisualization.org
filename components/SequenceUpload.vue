@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex"
+
 export default {
   data() {
     return {
@@ -21,24 +23,34 @@ export default {
       if (!files) {
         return
       }
-      for (const file of files) {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          if (e.target.result.length === 0) {
-            this.$bvModal.msgBoxOk("This file is empty. Please try again.")
-            this.uploadedFiles = null
-          }
-          this.$store.dispatch("parseSequence", {
-            unparsed: e.target.result,
-            file: file.name,
-          })
-          this.$store.dispatch("wasm/instantiate")
+
+      this.showSpinner()
+      this.$root.$on("bv::modal::shown", (bvEvent, modalId) => {
+        if (modalId !== "loading-modal") {
+          return
         }
-        reader.readAsText(file)
-      }
-      this.$nextTick(() => {
-        if (this.$root.$refs.TheVisualization.$refs.plotly !== undefined) {
-          this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
+        for (const file of files) {
+          const reader = new FileReader()
+          reader.onload = (e) => {
+            if (e.target.result.length === 0) {
+              this.$bvModal.msgBoxOk("This file is empty. Please try again.")
+              this.uploadedFiles = null
+            }
+            this.$store.dispatch("parseSequence", {
+              unparsed: e.target.result,
+              file: file.name,
+            })
+            this.$store.dispatch("wasm/instantiate")
+            this.hideSpinner()
+            this.$nextTick(() => {
+              if (
+                this.$root.$refs.TheVisualization.$refs.plotly !== undefined
+              ) {
+                this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
+              }
+            })
+          }
+          reader.readAsText(file)
         }
       })
     },
@@ -47,6 +59,7 @@ export default {
     placeholderText(files) {
       return `Choose files or drop them here...`
     },
+    ...mapMutations(["showSpinner", "hideSpinner"]),
   },
 }
 </script>

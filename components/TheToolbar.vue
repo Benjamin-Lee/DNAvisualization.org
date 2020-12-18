@@ -175,7 +175,7 @@
               "
               :title="description"
               :disabled="disabledMethods.includes(method)"
-              @click="changeMethod({ method: method })"
+              @click="changeMethod(method)"
             >
               {{
                 method
@@ -267,6 +267,15 @@ export default {
       this.$root.$refs.TheVisualization.setGraphTitle(this.newGraphTitle)
       this.$bvModal.hide("title-modal")
     },
+    changeMethod(method) {
+      this.$store.commit("showSpinner")
+      this.$root.$on("bv::modal::shown", (bvEvent, modalId) => {
+        if (modalId !== "loading-modal") {
+          return
+        }
+        this.$store.dispatch("changeMethod", { method })
+      })
+    },
     handleDelete(bvModalEvt) {
       for (const description of this.deleteSequences) {
         this.removeSequence({
@@ -284,7 +293,7 @@ export default {
       this.deleteFiles = []
       this.$bvModal.hide("modal-prevent-closing")
     },
-    ...mapActions(["clearState", "changeMethod"]),
+    ...mapActions(["clearState"]),
     ...mapMutations(["removeSequence", "setLegendMode"]),
   },
 }

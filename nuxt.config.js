@@ -79,6 +79,7 @@ export default {
       "FormCheckboxPlugin",
       "TabsPlugin",
       "FormPlugin",
+      "SpinnerPlugin",
     ],
     components: [
       "BIconDownload",
