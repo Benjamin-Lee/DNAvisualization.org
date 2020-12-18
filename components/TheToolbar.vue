@@ -21,28 +21,44 @@
                 @ok="handleDelete"
               >
                 <b-tabs content-class="mt-3">
-                  <b-tab
-                    v-for="(seqs, files) in files"
-                    :key="files"
-                    :title="files"
-                  >
+                  <b-tab title="Files">
+                    <b-form-checkbox-group
+                      id="deletion-checkbox-group"
+                      v-model="deleteFiles"
+                    >
+                      <b-form-checkbox
+                        v-for="(value, file) in files"
+                        :key="file"
+                        :value="file"
+                      >
+                        {{ file }}
+                      </b-form-checkbox>
+                    </b-form-checkbox-group>
+                  </b-tab>
+                  <b-tab title="Sequences">
                     <b-form-checkbox-group
                       id="deletion-checkbox-group"
                       v-model="deleteSequences"
                     >
-                      <b-form-checkbox
-                        v-for="description in seqs"
-                        :key="description"
-                        :value="description"
+                      <div
+                        v-for="(value, file) in files"
+                        :key="file"
+                        :value="file"
                       >
-                        {{ description }}
-                      </b-form-checkbox>
+                        <b-form-checkbox
+                          v-for="sequence in value"
+                          :key="sequence"
+                          :value="sequence"
+                        >
+                          {{ sequence }}
+                        </b-form-checkbox>
+                      </div>
                     </b-form-checkbox-group>
                   </b-tab>
-                  <b-button variant="outline-secondary" @click="confirmClear">
-                    Clear
-                  </b-button>
                 </b-tabs>
+                <b-button variant="outline-secondary" @click="confirmClear">
+                  Delete All
+                </b-button>
               </b-modal></b-button
             >
             <b-button
@@ -150,7 +166,6 @@ export default {
   components: { SequenceUpload, SequencePaste },
   data: () => {
     return {
-      files: {},
       methods: {
         squiggle:
           "(Recommended) Shows variations in GC-content and supports non-ATGC bases.",
@@ -163,20 +178,24 @@ export default {
           "Bases are plotted as 2D walks in which Ts, As, Cs, and Gs are up, down, left, and right, respectively.",
       },
       deleteSequences: [],
+      deleteFiles: [],
       newGraphTitle: "",
     }
   },
-  computed: { ...mapState(["sequences", "currentMethod"]) },
-  watch: {
-    sequences() {
-      for (const sequence in this.sequences) {
-        if (sequence in this.files) {
-          this.files.sequence.file.push(sequence)
+  computed: {
+    files() {
+      const results = {}
+      for (const description in this.sequences) {
+        const file = this.sequences[description].file
+        if (Object.prototype.hasOwnProperty.call(results, file)) {
+          results[file].push(description)
         } else {
-          this.files.sequence.file = [sequence]
+          results[file] = [description]
         }
       }
+      return results
     },
+    ...mapState(["sequences", "currentMethod"]),
   },
   methods: {
     /** Confirm with the user that they want to reset the state to default */
@@ -207,6 +226,15 @@ export default {
           description,
         })
       }
+      for (const file of this.deleteFiles) {
+        for (const description of this.files[file]) {
+          this.removeSequence({
+            description,
+          })
+        }
+      }
+      this.deleteSequences = []
+      this.deleteFiles = []
       this.$bvModal.hide("modal-prevent-closing")
     },
     ...mapActions(["clearState", "changeMethod"]),
