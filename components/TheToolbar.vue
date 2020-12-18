@@ -154,6 +154,7 @@
         <b-col class="pb-1"
           >Visualization Method
           <span
+            v-if="disabledMethod.length > 0"
             v-b-tooltip.hover
             title="Some methods have been disabled. Possible reasons are too great sequence length or the presence of ambiguous nucleotides."
           >
