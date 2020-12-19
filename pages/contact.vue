@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container class="mb-4">
     <h1 class="mt-4 mb-3">Contact Us</h1>
     <p>
       Having issues? We're happy to help get them resolved. If you think you've

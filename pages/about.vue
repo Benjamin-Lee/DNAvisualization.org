@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container class="mb-4">
     <div>
       <h1 class="mt-4 mb-3">About</h1>
       <p>
