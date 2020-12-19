@@ -7,7 +7,12 @@
       ref="plotly"
       :data="transformedData"
       :layout="layout"
-      :options="{ showTips: false, responsive: true }"
+      :options="{
+        showTips: false,
+        responsive: true,
+        displaylogo: false,
+        modeBarButtonsToRemove: ['toImage', 'autoScale2d', 'toggleSpikelines'],
+      }"
       @relayout="zoom"
       @doubleclick="resetZoom"
     ></VuePlotly>
