@@ -271,29 +271,33 @@ export function y_yau_int(sequence: string, length: i32): Int32Array {
 
 export function x_gc_content(length: i32, gap: i32): Int32Array {
   gap = 100
-  const result = new Int32Array(i32((length / gap) + 1))
+  const result = new Int32Array(i32(length / gap + 1))
   for (let i = 1; i <= i32(length / gap); i++) {
-    unchecked(result[i] = i * gap)
+    unchecked((result[i] = i * gap))
   }
   return result
 }
 
 //? maybe use regex
-export function y_gc_content(sequence: String, length: i32, gap: i32): Float64Array {
+export function y_gc_content(
+  sequence: String,
+  length: i32,
+  gap: i32
+): Float64Array {
   gap = 100
-  const result = new Float64Array(i32((length / gap) + 1))
-  let gc_count = 0;
+  const result = new Float64Array(i32(length / gap + 1))
+  let gc_count = 0
   for (let i = 0; i < i32(length / gap); i++) {
     for (let j = i * gap; j < (i + 1) * gap; j++) {
-      switch (sequence.charCodeAt(i)) {
+      switch (sequence.charCodeAt(j)) {
         case 0x43: // "C"
         case 0x47: // "G"
-          gc_count++;
+          gc_count++
           break
       }
-      unchecked(result[i + 1] = (gc_count / gap))
-      gc_count  = 0
     }
+    unchecked((result[i + 1] = gc_count / gap))
+    gc_count = 0
   }
   return result
 }
