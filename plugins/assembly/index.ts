@@ -269,48 +269,6 @@ export function y_yau_int(sequence: string, length: i32): Int32Array {
   return result
 }
 
-// //calculates the compositional difference between right and left segments
-// export function compositionalDifference(sequence: string, start: i32, end: i32, segPoint: i32) {
-//   // weight coefficients
-//   const w1 = Math.floor(segPoint / end)
-//   const w2 = Math.floor((end - segPoint) / end)
-//   let al = 0
-//   let tl = 0
-//   let gl = 0
-//   let cl = 0
-//   let ar = 0
-//   let tr = 0
-//   let gr = 0
-//   let cr = 0
-
-//   for (let i = start; i < segPoint; i++) {
-//     switch (sequence.charCodeAt(i)) {
-//       case 0x41: // "A"
-//         al++
-//         break
-//       case 0x43: // "C"
-//         runningValue += 1
-//         break
-//       case 0x54:
-//       case 0x55: // "T" && "U"
-//         runningValue += 2
-//         break
-//       case 0x47: // "G"
-//         runningValue -= 1
-//         break
-//     }
-//     unchecked((result[i + 1] = runningValue))
-//   }
-
-// }
-// export function gc_segments(length: i32) {
-//   let start = 0
-//   let end = length
-//   let iter = 5
-//   let phi = 0.618
-
-// }
-
 export function x_gc_content(length: i32, gap: i32): Int32Array {
   gap = 100
   const result = new Int32Array(i32((length / gap) + 1))
@@ -330,7 +288,7 @@ export function y_gc_content(sequence: String, length: i32, gap: i32): Float64Ar
       switch (sequence.charCodeAt(i)) {
         case 0x43: // "C"
         case 0x47: // "G"
-          gc_count = 0;
+          gc_count++;
           break
       }
       unchecked(result[i + 1] = (gc_count / gap))
