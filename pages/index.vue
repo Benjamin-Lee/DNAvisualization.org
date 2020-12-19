@@ -28,14 +28,17 @@
         <b-col md="7" xs="12">
           <h1 class="h4">Overview</h1>
           <p style="text-align: justify; text-justify: inter-word" class="mb-0">
-            Raw DNA sequences, which consist of long strings of letters, are
-            hard for humans to make sense of at a glance. However, there is
-            significant biological meaning contained within them. To reveal this
-            meaning, a number of methods have been proposed to convert raw DNA
-            sequences into two-dimensional visualizations. This website allows
-            you to try several of these methods out on your data with a
-            high-performance parallel-computing backend enabling genome-scale
-            visualization.
+            Raw DNA sequences, which consist of long strings of bases, are hard
+            for humans to make sense of at a glance. However, there is
+            significant biological meaning contained within. To reveal this
+            meaning,
+            <a href="https://squiggle.readthedocs.io/en/latest/methods.html">
+              a number of methods
+            </a>
+            have been proposed to convert raw DNA sequences into two-dimensional
+            visualizations. This website allows you to try several of these
+            methods out on your in your browser. No data leaves your computer,
+            thanks to the power of WebAssembly!
           </p>
         </b-col>
         <b-col md="5" lg="4" class="d-flex align-items-center flex-wrap">

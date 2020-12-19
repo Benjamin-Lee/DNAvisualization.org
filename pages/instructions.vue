@@ -1,7 +1,7 @@
 <template>
-  <b-container class="my-3">
+  <b-container>
     <div>
-      <h1 class="title">Instructions</h1>
+      <h1 class="mt-4 mb-3">Instructions</h1>
 
       <ol>
         <li>
