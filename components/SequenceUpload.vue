@@ -42,13 +42,9 @@ export default {
             })
             this.$store.dispatch("wasm/instantiate")
             this.hideSpinner()
-            this.$nextTick(() => {
-              if (
-                this.$root.$refs.TheVisualization.$refs.plotly !== undefined
-              ) {
-                this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
-              }
-            })
+            if (this.$root.$refs.TheVisualization.$refs.plotly !== undefined) {
+              this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
+            }
           }
           reader.readAsText(file)
         }

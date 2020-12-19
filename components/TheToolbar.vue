@@ -270,13 +270,16 @@ export default {
       this.$bvModal.hide("title-modal")
     },
     changeMethod(method) {
+      // TODO: showing a spinner breaks updating when zooming in after changing
       this.$store.commit("showSpinner")
-      this.$root.$on("bv::modal::shown", (bvEvent, modalId) => {
-        if (modalId !== "loading-modal") {
-          return
-        }
-        this.$store.dispatch("changeMethod", { method })
-      })
+      this.$store.dispatch("changeMethod", { method })
+      this.$store.commit("hideSpinner")
+      // this.$root.$on("bv::modal::shown", (bvEvent, modalId) => {
+      //   if (modalId !== "loading-modal") {
+      //     return
+      //   }
+      // })
+      // this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
     },
     handleDelete(bvModalEvt) {
       for (const description of this.deleteSequences) {
