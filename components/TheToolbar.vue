@@ -202,10 +202,10 @@ export default {
   data: () => {
     return {
       methods: {
-        squiggle:
-          "(Default) Shows variations in GC-content and supports non-ATGC bases. Good performance.",
         yau_int:
-          "Shows variation pyrimidine-purine ratio and supports non-ATGC bases. Best performance and scalabe to large seqeunces.",
+          "(Default) Shows variation pyrimidine-purine ratio and supports non-ATGC bases. Best performance and scalabe to large seqeunces.",
+        squiggle:
+          "Shows variations in GC-content and supports non-ATGC bases. Good performance.",
         randic:
           "Like tablature, with As, Ts, Cs, and Gs assigned a y-coordinate. No support for non-ATGC bases. Not recommended.",
         qi:
