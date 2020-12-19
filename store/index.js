@@ -125,7 +125,7 @@ export const actions = {
   computeOverview({ commit, state }, { description, xMin, xMax }) {
     let visualization =
       state.sequences[description].visualization[state.currentMethod]
-
+    console.log(description, xMin, xMax)
     // We're zooming in
     if (xMin !== undefined && xMax !== undefined) {
       // first, we need to find how many points we've already saved in the range
@@ -141,8 +141,10 @@ export const actions = {
 
       // if we have more than 1k points, we're good to downsample
       // if not, we need to compute points in the x range
+      console.log(inRange)
       if (inRange[0].length < 1000) {
         // get the subsequence in the range
+        console.log("resampling")
         const seqInRange = state.sequences[description].sequence.slice(
           Math.floor(xMin),
           Math.floor(xMax)
@@ -160,13 +162,48 @@ export const actions = {
           }
           // don't forget to free memory!
           ptrs.forEach((ptr) => state.wasm.release(ptr))
-        } else {
+        } else if (state.currentMethod !== "gates") {
           inRange = dnaviz[state.currentMethod](seqInRange)
         }
 
         // fix the x offset
         for (let i = 0; i < inRange[0].length; i++) {
           inRange[0][i] += Math.floor(xMin)
+        }
+        console.log("done x shiftiing")
+        if (["squiggle", "yau_int"].includes(state.currentMethod)) {
+          console.log("y shifting")
+          let lastXCoord
+          for (let i = 0; i < visualization.length; i++) {
+            if (visualization[0][i] < Math.floor(xMin)) {
+              lastXCoord = visualization[0][i]
+            } else {
+              break
+            }
+          }
+          let yOffset
+          const inBetween = state.sequences[description].sequence.slice(
+            lastXCoord,
+            Math.floor(xMin) + 1
+          )
+          if (state.useWasm && state.currentMethod !== "gates") {
+            const ptrs = state.wasm[state.currentMethod](inBetween)
+            if (state.currentMethod === "yau_int") {
+              const yArr = state.wasm.getInt32Array(ptrs[1])
+              yOffset = yArr[yArr.length - 1]
+            } else {
+              const yArr = state.wasm.getFloat64Array(ptrs[1])
+              yOffset = yArr[yArr.length - 1]
+            }
+            // don't forget to free memory!
+            ptrs.forEach((ptr) => state.wasm.release(ptr))
+          } else if (state.currentMethod !== "gates") {
+            const yArr = dnaviz[state.currentMethod](inBetween)[1]
+            yOffset = yArr[yArr.length - 1]
+          }
+          for (let i = 0; i < inRange[1].length; i++) {
+            inRange[1][i] += yOffset
+          }
         }
       }
       visualization = inRange
