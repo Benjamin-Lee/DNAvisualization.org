@@ -56,7 +56,10 @@ export default {
   computed: { ...mapState(["sequences"]) },
   methods: {
     clearSequences() {
-      if ($nuxt.$route.path === "/" && Object.keys(this.sequences).length !== 0) {
+      if (
+        this.$route.path === "/" &&
+        Object.keys(this.sequences).length !== 0
+      ) {
         this.$bvModal
           .msgBoxConfirm(
             'Clicking "OK" will delete all transformed sequences.',

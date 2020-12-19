@@ -42,6 +42,7 @@ export default {
           this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
         }
       })
+      this.$emit("sequenceAdded")
     },
   },
 }
