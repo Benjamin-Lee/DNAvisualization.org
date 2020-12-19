@@ -235,10 +235,27 @@ export default {
       return false
     },
     disabledMethods() {
+      const result = []
       if (this.hasAmbiguous) {
-        return ["randic", "qi", "gates"]
+        result.push(["randic", "qi", "gates"])
       }
-      return []
+
+      // don't let you do anything too crazy with Squiggle
+      let maxSeqLength = 0
+      let totalSeqLength = 0
+      for (const description in this.sequences) {
+        if (this.sequences[description].sequence.length > maxSeqLength) {
+          maxSeqLength = this.sequences[description].sequence.length
+          totalSeqLength += this.sequences[description].sequence.length
+        }
+      }
+      if (maxSeqLength > 40000000 || totalSeqLength > 50000000) {
+        result.push("squiggle")
+      }
+      if (maxSeqLength > 10000000) {
+        result.push("gates")
+      }
+      return result
     },
     ...mapState(["sequences", "currentMethod", "legendMode"]),
   },
