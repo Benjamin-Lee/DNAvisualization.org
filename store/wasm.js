@@ -56,6 +56,13 @@ export const actions = {
           __release(inStrPtr)
           return [xPtr, yPtr]
         }
+        wasm.gc_content = function gcContent(seq, gap) {
+          const inStrPtr = __retain(__newString(seq))
+          const xPtr = response.exports.x_gc_content(seq.length, gap)
+          const yPtr = response.exports.y_gc_content(inStrPtr, seq.length, gap)
+          __release(inStrPtr)
+          return [xPtr, yPtr]
+        }
         wasm.getOverview = function getOverview(arrPtr, xMin, xMax, method) {
           if (method === "yau_int") {
             const overviewArrPtr =
