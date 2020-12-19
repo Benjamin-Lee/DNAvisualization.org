@@ -49,6 +49,7 @@ export default {
           reader.readAsText(file)
         }
       })
+      this.$emit("sequenceAdded")
     },
   },
   methods: {
