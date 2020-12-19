@@ -100,14 +100,9 @@
               <b-icon-file-earmark-plus></b-icon-file-earmark-plus>
             </b-button>
           </b-button-group>
-          <b-modal
-            id="add-modal"
-            title="Add Files"
-            cancel-variant="outline-secondary"
-            hide-footer
-          >
-            <SequenceUpload></SequenceUpload>
-            <SequencePaste></SequencePaste>
+          <b-modal id="add-modal" title="Add Files" hide-footer="true">
+            <SequenceUpload @sequenceAdded="closeAddModal"></SequenceUpload>
+            <SequencePaste @sequenceAdded="closeAddModal"></SequencePaste>
           </b-modal>
         </b-col>
       </b-row>
@@ -296,7 +291,10 @@ export default {
       }
       this.deleteSequences = []
       this.deleteFiles = []
-      this.$bvModal.hide("modal-prevent-closing")
+      this.$bvModal.hide("delModal")
+    },
+    closeAddModal() {
+      this.$bvModal.hide("add-modal")
     },
     ...mapActions(["clearState"]),
     ...mapMutations(["removeSequence", "setLegendMode"]),
