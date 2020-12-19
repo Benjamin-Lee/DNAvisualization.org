@@ -29,13 +29,20 @@ export default {
     }
   },
   computed: {
+    currentMethodDisplayName() {
+      return (
+        this.currentMethod.charAt(0).toUpperCase() + this.currentMethod.slice(1)
+      )
+        .replace("_int", "")
+        .replace("dic", "dić")
+    },
     layout() {
       const result = {
         title: this.graphTitle
           ? this.graphTitle
           : this.transformedData.length === 1
-          ? `Visualization of ${this.transformedData[0].name} via the ${this.currentMethod} method`
-          : `DNA Sequence Visualization via the ${this.currentMethod} method`,
+          ? `Visualization of ${this.transformedData[0].name} via the ${this.currentMethodDisplayName} method`
+          : `DNA sequence visualization via the ${this.currentMethodDisplayName} method`,
         // the default bootstrap stack font stack
         font: {
           family:
