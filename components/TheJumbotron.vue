@@ -1,6 +1,17 @@
 <template>
   <b-jumbotron v-if="sequenceCount === 0" fluid bg-variant="light">
-    <template #header>Turn DNA into graphs.</template>
+    <template #header>
+      <span class="d-none d-sm-block">
+        Turn <img src="images/dna.svg" alt="DNA" />into
+        <img src="images/viz.svg" alt="visualizations" />.
+      </span>
+      <span class="d-block d-sm-none">
+        <span class="d-block">Turn <img src="images/dna.svg" alt="DNA" /></span>
+        <span class="d-block">
+          into <img src="images/viz.svg" alt="visualizations" />.
+        </span>
+      </span>
+    </template>
 
     <template #lead>
       DNAvisualization.org turns DNA sequences into gorgeous, interactive
