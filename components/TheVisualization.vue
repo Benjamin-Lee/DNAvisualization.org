@@ -59,7 +59,6 @@ export default {
             text: this.currentMethod !== "gates" ? "Position (bp)" : "C-G axis",
           },
         },
-        legend: { orientation: "h" },
       }
       if (this.currentMethod === "randic") {
         result.yaxis = {
