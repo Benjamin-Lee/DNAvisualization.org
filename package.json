@@ -24,7 +24,7 @@
     "dnaviz": "^1.1.1",
     "nuxt": "^2.14.12",
     "nuxt-client-init-module": "^0.1.9",
-    "plotly.js": "^1.58.3",
+    "plotly.js": "^1.58.4",
     "ve-range-utils": "^2.5.8",
     "ve-sequence-utils": "^3.3.56"
   },
