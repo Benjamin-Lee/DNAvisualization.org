@@ -2,7 +2,7 @@
   <b-container class="mb-4">
     <div>
       <h1 class="mt-4 mb-3">Instructions</h1>
-      <p>Using this website is easy. First, upload a sequence by:</p>
+      <p>Using this website is easy. Upload a sequence by:</p>
       <ul>
         <li>Clicking the filepicker and uploading a FASTA or GenBank file</li>
         <li>
