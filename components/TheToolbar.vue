@@ -111,7 +111,7 @@
     <b-col
       cols="12"
       sm="6"
-      lg="2"
+      lg="3"
       class="pb-2 pb-lg-0 text-center"
       order-lg="3"
     >
