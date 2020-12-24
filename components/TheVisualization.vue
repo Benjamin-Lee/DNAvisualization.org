@@ -41,13 +41,34 @@ export default {
         .replace("_int", "")
         .replace("dic", "dić")
     },
+    /** Wraps the descriptions of each sequence and adds line breaks for using as legend entries */
+    wrappedDescriptions() {
+      const result = {}
+      for (const description in this.sequences) {
+        let wrappedDescription = ""
+        let currentLine = ""
+        for (const word of description.split(" ")) {
+          // note that lines will be greater than 12 chars, just no new words will be added beyond 12 chars
+          if (currentLine.length > 12) {
+            wrappedDescription += currentLine + "    <br />" // the spaces are needed to prevent it from getting cut off
+            currentLine = ""
+          }
+          currentLine += word + " "
+        }
+        wrappedDescription += currentLine
+        result[description] = wrappedDescription
+      }
+      return result
+    },
     layout() {
       const result = {
         title: this.graphTitle
           ? this.graphTitle
           : this.transformedData.length === 1
-          ? `Visualization of ${this.transformedData[0].name} via the ${this.currentMethodDisplayName} method`
-          : `DNA sequence visualization via the ${this.currentMethodDisplayName} method`,
+          ? `${this.currentMethodDisplayName} Visualization of ${
+              Object.keys(this.sequences)[0]
+            }`
+          : `${this.currentMethodDisplayName} DNA Sequence Visualization`,
         // the default bootstrap stack font stack
         font: {
           family:
@@ -59,7 +80,6 @@ export default {
             text: this.currentMethod !== "gates" ? "Position (bp)" : "C-G axis",
           },
         },
-        legend: { orientation: "h" },
       }
       if (this.currentMethod === "randic") {
         result.yaxis = {
@@ -127,7 +147,10 @@ export default {
         const keyData = {
           x: this.sequences[key].overview[this.currentMethod][0],
           y: this.sequences[key].overview[this.currentMethod][1],
-          name: this.legendMode === "file" ? this.sequences[key].file : key,
+          name:
+            this.legendMode === "file"
+              ? this.sequences[key].file
+              : this.wrappedDescriptions[key],
         }
         if (this.legendMode === "file") {
           keyData.showlegend = !seenLegendGroups.includes(
