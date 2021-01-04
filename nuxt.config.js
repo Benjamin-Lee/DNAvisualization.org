@@ -32,7 +32,10 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: "~plugins/vue-plotly", mode: "client" }],
+  plugins: [
+    { src: "~plugins/vue-plotly", mode: "client" },
+    { src: "~plugins/web-worker.js", ssr: false },
+  ],
   /*
    ** Nuxt.js dev-modules
    */
@@ -95,11 +98,19 @@ export default {
    ** Build configuration
    */
   build: {
+    // TODO Combine extend statements (I don't want to break anything)
     /*
      ** You can extend webpack config here
      */
     extend(config, ctx) {
       config.resolve.alias["plotly.js$"] = "~/plugins/custom-plotly.js"
+      if (ctx.isClient) {
+        config.module.rules.push({
+          test: /\.worker\.js$/,
+          loader: "worker-loader",
+          exclude: /(node_modules)/,
+        })
+      }
     },
     babel: {
       compact: true,

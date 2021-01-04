@@ -6,7 +6,8 @@ export const state = () => ({
   sequences: {},
   currentMethod: "yau_int",
   legendMode: "sequence",
-  useWasm: true,
+  useWasm: false, // default true
+  useWebWorker: false, // default true
   showSpinner: false,
 })
 

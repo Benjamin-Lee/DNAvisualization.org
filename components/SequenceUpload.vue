@@ -19,8 +19,8 @@ export default {
     }
   },
   watch: {
-    uploadedFiles(files) {
-      if (!files) {
+    uploadedFiles() {
+      if (!this.uploadedFiles) {
         return
       }
 
@@ -29,7 +29,7 @@ export default {
         if (modalId !== "loading-modal") {
           return
         }
-        for (const file of files) {
+        for (const file of this.uploadedFiles) {
           const reader = new FileReader()
           reader.onload = (e) => {
             if (e.target.result.length === 0) {
