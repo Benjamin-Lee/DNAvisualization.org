@@ -123,6 +123,14 @@ export default {
       // In file mode, we use ColorHash to create a mapping from a filename to a color
       const colorHash = new ColorHash({ saturation: [0.75, 0.85] })
       for (const key in this.sequences) {
+        if (
+          !Object.prototype.hasOwnProperty.call(
+            this.sequences[key].overview,
+            this.currentMethod
+          )
+        ) {
+          return x
+        }
         const keyData = {
           x: this.sequences[key].overview[this.currentMethod][0],
           y: this.sequences[key].overview[this.currentMethod][1],

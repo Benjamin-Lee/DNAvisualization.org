@@ -1,4 +1,5 @@
-import * as dnaviz from "dnaviz"
+/* eslint-disable */
+import Vuex from "vuex"
 import { downsample } from "./helpers"
 function getOverview(arr) {
   if (arr.length <= 10000) {
@@ -8,22 +9,61 @@ function getOverview(arr) {
   }
 }
 
+import SessionWorker from "./session.worker.js"
+let worker = new SessionWorker()
+let _this
+worker.onmessage = (e) => {
+  let result = getOverview(e.data.result)
+  console.log(_this)
+  _this.store.commit(
+    "insertTransformedSequence",
+    {
+      description,
+      method: rootState.currentMethod,
+      arr: result,
+    },
+    { root: true }
+  )
+  _this.store.dispatch("computeOverview", { description }, { root: true })
+
+}
+
+
+
 export const actions = {
   transform({ commit, dispatch, rootState }, { description }) {
     // perform the transformation
-    let result = dnaviz[rootState.currentMethod](
-      rootState.sequences[description].sequence
-    )
-    // get a 10k element overview of the sequence
-    result = getOverview(result)
-    commit(
-      "insertTransformedSequence",
-      {
-        description,
-        method: rootState.currentMethod,
-        arr: result,
-      },
-      { root: true }
-    )
-  },
+    // const result = dnaviz[rootState.currentMethod](
+    //   rootState.sequences[description].sequence
+    // )
+    // post seq and method to worker
+    _this = this
+    console.log("posting message")
+    worker.postMessage({
+      method: rootState.currentMethod,
+      sequence: rootState.sequences[description].sequence,
+    })
+
+  }
 }
+  // waits for worker to post back
+  // const promise1 = new Promise((resolve, reject) => {
+  //   worker.addEventListener("message", (e) => {
+  //     console.log("It worked somehow??")
+  //     resolve(e.data.result)
+  //   })
+  // })
+  // promise1.then((resObj) => {
+  //   let result = getOverview(resObj.result)
+  //   commit(
+  //     "insertTransformedSequence",
+  //     {
+  //       description,
+  //       method: rootState.currentMethod,
+  //       arr: result,
+  //     },
+  //     { root: true }
+  //   )
+  // })
+
+

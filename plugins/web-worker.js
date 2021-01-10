@@ -1,9 +1,11 @@
-import SessionWorker from "../assets/js/dnaviz.worker.js"
+// /* eslint-disable*/
 
-export default (context, inject) => {
-  inject("worker", {
-    createWorker() {
-      return new SessionWorker()
-    },
-  })
-}
+// import SessionWorker from "~/assets/js/session.worker.js"
+
+// export default (context, inject) => {
+//   inject("worker", {
+//     createWorker() {
+//       return new SessionWorker()
+//     },
+//   })
+// }

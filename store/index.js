@@ -121,7 +121,7 @@ export const actions = {
         description,
       }
     )
-    dispatch("computeOverview", { description })
+    // dispatch("computeOverview", { description })
   },
   computeOverview({ commit, state }, { description, xMin, xMax }) {
     let visualization =
