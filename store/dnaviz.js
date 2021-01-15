@@ -15,16 +15,16 @@ let _this
 worker.onmessage = (e) => {
   let result = getOverview(e.data.result)
   console.log(_this)
-  _this.store.commit(
+  _this.commit(
     "insertTransformedSequence",
     {
-      description,
-      method: rootState.currentMethod,
+      description: e.data.description,
+      method: e.data.method,
       arr: result,
     },
     { root: true }
   )
-  _this.store.dispatch("computeOverview", { description }, { root: true })
+  _this.dispatch("computeOverview", { description: e.data.description }, { root: true })
 
 }
 
@@ -42,6 +42,7 @@ export const actions = {
     worker.postMessage({
       method: rootState.currentMethod,
       sequence: rootState.sequences[description].sequence,
+      description
     })
 
   }
