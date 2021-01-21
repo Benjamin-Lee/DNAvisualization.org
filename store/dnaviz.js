@@ -42,7 +42,8 @@ export const actions = {
     worker.postMessage({
       method: rootState.currentMethod,
       sequence: rootState.sequences[description].sequence,
-      description
+      description,
+      useWasm: true,
     })
 
   }
