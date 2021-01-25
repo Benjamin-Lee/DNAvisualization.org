@@ -25,6 +25,8 @@ export default {
         return
       }
 
+      this.showSpinner()
+
       // read each file and dispatch the parser, which in turn dispatches transformation
       for (const file of files) {
         await new Promise((resolve, reject) => {
@@ -40,6 +42,7 @@ export default {
               file: file.name,
             })
             this.$store.dispatch("wasm/instantiate")
+            this.hideSpinner()
             resolve()
           }
           reader.readAsText(file)
