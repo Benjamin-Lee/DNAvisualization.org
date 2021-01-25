@@ -100,7 +100,7 @@
               <b-icon-file-earmark-plus></b-icon-file-earmark-plus>
             </b-button>
           </b-button-group>
-          <b-modal id="add-modal" title="Add Files" hide-footer="true">
+          <b-modal id="add-modal" title="Add Files" hide-footer>
             <SequenceUpload @sequenceAdded="closeAddModal"></SequenceUpload>
             <SequencePaste @sequenceAdded="closeAddModal"></SequencePaste>
           </b-modal>
@@ -111,7 +111,7 @@
     <b-col
       cols="12"
       sm="6"
-      lg="2"
+      lg="3"
       class="pb-2 pb-lg-0 text-center"
       order-lg="3"
     >

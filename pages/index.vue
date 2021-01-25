@@ -33,8 +33,8 @@
             significant biological meaning contained within. To reveal this
             meaning,
             <a href="https://squiggle.readthedocs.io/en/latest/methods.html">
-              a number of methods
-            </a>
+              a number of methods</a
+            >
             have been proposed to convert raw DNA sequences into two-dimensional
             visualizations. This website allows you to try several of these
             methods out on your in your browser. No data leaves your computer,

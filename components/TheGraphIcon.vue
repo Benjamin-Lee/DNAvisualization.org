@@ -1,0 +1,115 @@
+<template>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    x="0px"
+    y="0px"
+    width="96"
+    height="96"
+    viewBox="0 0 224 224"
+    style="fill: #000000"
+  >
+    <g transform="translate(-33.6,-33.6) scale(1.3,1.3)">
+      <g
+        fill="none"
+        fill-rule="nonzero"
+        stroke="none"
+        stroke-width="1"
+        stroke-linecap="butt"
+        stroke-linejoin="miter"
+        stroke-miterlimit="10"
+        stroke-dasharray=""
+        stroke-dashoffset="0"
+        font-family="none"
+        font-weight="none"
+        font-size="none"
+        text-anchor="none"
+        style="mix-blend-mode: normal"
+      >
+        <path d="M0,224v-224h224v224z" fill="none"></path>
+        <g id="Layer_1">
+          <path
+            d="M28,46.66667c0,-10.26667 8.4,-18.66667 18.66667,-18.66667h130.66667c10.26667,0 18.66667,8.4 18.66667,18.66667v130.66667c0,10.26667 -8.4,18.66667 -18.66667,18.66667h-130.66667c-10.26667,0 -18.66667,-8.4 -18.66667,-18.66667z"
+            fill="f"
+          ></path>
+          <rect
+            x="18"
+            y="10"
+            transform="scale(4.66667,4.66667)"
+            width="2"
+            height="26"
+            fill="f"
+          ></rect>
+          <rect
+            x="26"
+            y="10"
+            transform="scale(4.66667,4.66667)"
+            width="2"
+            height="26"
+            fill="f"
+          ></rect>
+          <rect
+            x="34"
+            y="10"
+            transform="scale(4.66667,4.66667)"
+            width="2"
+            height="26"
+            fill="f"
+          ></rect>
+          <rect
+            x="-30"
+            y="12"
+            transform="rotate(-90) scale(4.66667,4.66667)"
+            width="2"
+            height="26"
+            fill="f"
+          ></rect>
+          <rect
+            x="-22"
+            y="12"
+            transform="rotate(-90) scale(4.66667,4.66667)"
+            width="2"
+            height="26"
+            fill="f"
+          ></rect>
+          <rect
+            x="-14"
+            y="12"
+            transform="rotate(-90) scale(4.66667,4.66667)"
+            width="2"
+            height="26"
+            fill="f"
+          ></rect>
+          <path
+            d="M55.51,174.75267l-8.34867,-4.17667l37.33333,-74.66667c0.672,-1.344 1.946,-2.27733 3.42533,-2.52c1.50733,-0.22867 2.996,0.24733 4.046,1.30667l32.75533,32.75533l34.44,-68.87533l8.34867,4.17667l-37.33333,74.66667c-0.672,1.344 -1.946,2.27733 -3.42533,2.52c-1.50267,0.23333 -2.99133,-0.24733 -4.046,-1.30667l-32.75533,-32.75533z"
+            fill="#be202e"
+          ></path>
+          <circle
+            cx="19"
+            cy="21"
+            transform="scale(4.66667,4.66667)"
+            r="2"
+            fill="#808285"
+          ></circle>
+          <circle
+            cx="27"
+            cy="29"
+            transform="scale(4.66667,4.66667)"
+            r="2"
+            fill="#808285"
+          ></circle>
+          <circle
+            cx="35"
+            cy="13"
+            transform="scale(4.66667,4.66667)"
+            r="2"
+            fill="#808285"
+          ></circle>
+          <path
+            d="M177.33333,177.33333h-130.66667v-130.66667h9.33333v121.33333h121.33333z"
+            fill="#1a1f46"
+          ></path>
+        </g>
+      </g>
+    </g>
+  </svg>
+</template>

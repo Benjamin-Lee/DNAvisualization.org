@@ -36,20 +36,23 @@ export default {
               this.$bvModal.msgBoxOk("This file is empty. Please try again.")
               this.uploadedFiles = null
             }
+            // console.log(file.name, e.target.result)
             this.$store.dispatch("parseSequence", {
               unparsed: e.target.result,
               file: file.name,
             })
             this.$store.dispatch("wasm/instantiate")
-            this.hideSpinner()
-            if (this.$root.$refs.TheVisualization.$refs.plotly !== undefined) {
-              this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
-            }
+            resolve()
           }
           reader.readAsText(file)
-        }
-      })
+        })
+      }
+
+      this.uploadedFiles = null
       this.$emit("sequenceAdded")
+      if (this.$root.$refs.TheVisualization.$refs.plotly !== undefined) {
+        this.$root.$refs.TheVisualization.$refs.plotly.newPlot()
+      }
     },
   },
   methods: {
