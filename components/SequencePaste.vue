@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex"
 export default {
   data() {
     return {
@@ -30,6 +31,7 @@ export default {
   },
   methods: {
     transformPastedSequences() {
+      this.showSpinner()
       this.$store.dispatch("parseSequence", {
         unparsed: this.pastedSequences,
         file: "Pasted Sequences",
@@ -40,7 +42,9 @@ export default {
         }
       })
       this.$emit("sequenceAdded")
+      this.hideSpinner()
     },
+    ...mapMutations(["showSpinner", "hideSpinner"]),
   },
 }
 </script>
