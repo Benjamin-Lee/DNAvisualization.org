@@ -57,7 +57,7 @@
       </p>
       <ul>
         <li>
-          Niu, Xingzhi, et al. "Leveraging 4erverless computing to improve
+          Niu, Xingzhi, et al. "Leveraging serverless computing to improve
           performance for sequence comparison."
           <i
             >Proceedings of the 10th ACM International Conference on
