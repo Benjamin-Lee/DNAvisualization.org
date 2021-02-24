@@ -56,9 +56,18 @@
                     </b-form-checkbox-group>
                   </b-tab>
                 </b-tabs>
-                <b-button variant="outline-secondary" @click="confirmClear">
-                  Delete All
-                </b-button>
+
+                <template #modal-footer="{ cancel, ok }">
+                  <b-button variant="outline-secondary" @click="cancel()">
+                    Cancel
+                  </b-button>
+                  <b-button variant="outline-secondary" @click="confirmClear">
+                    Delete All
+                  </b-button>
+                  <b-button variant="outline-secondary" @click="ok()">
+                    Ok
+                  </b-button>
+                </template>
               </b-modal></b-button
             >
             <b-button
