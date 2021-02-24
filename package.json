@@ -18,7 +18,7 @@
     "@nuxtjs/axios": "^5.12.4",
     "@statnett/vue-plotly": "^0.3.2",
     "bio-parsers": "^7.0.5",
-    "bootstrap": "^4.5.3",
+    "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
     "color-hash": "^1.0.3",
     "dnaviz": "^1.1.1",
